@@ -1,0 +1,21 @@
+{
+    "name": "Universal.Runtime.Systems.Persistence",
+    "rootNamespace": "Universal.Runtime.Systems.Persistence",
+    "references": [
+        "GUID:f9b0cded1581549429733942d2734e65",
+        "GUID:34ea0123fa11de545ace977a55cf69a3",
+        "GUID:33759803a11f4d538227861a78aba30b"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

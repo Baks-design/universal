@@ -1,0 +1,19 @@
+{
+    "name": "Universal.Runtime.Utilities",
+    "rootNamespace": "Universal.Runtime.Utilities",
+    "references": [
+        "GUID:f9b0cded1581549429733942d2734e65"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
