@@ -18,7 +18,6 @@ namespace Universal.Runtime.Systems.Update
     public abstract class AManagedBehaviour : MonoBehaviour, IManagedObject
     {
         protected virtual void OnEnable() => this.RegisterInManager();
-
         protected virtual void OnDisable() => this.UnregisterInManager();
     }
 }

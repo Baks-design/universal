@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Universal.Runtime.Systems.Persistence.Data;
 using Universal.Runtime.Systems.Persistence.Interfaces;
 using Universal.Runtime.Utilities;
+using Universal.Runtime.Utilities.Tools;
 
 namespace Universal.Runtime.Systems.Persistence
 {
@@ -12,8 +12,6 @@ namespace Universal.Runtime.Systems.Persistence
     {
         [SerializeField] GameData gameData;
         IDataService dataService;
-
-        public GameData GameData => gameData;
 
         protected override void Awake()
         {
@@ -40,13 +38,15 @@ namespace Universal.Runtime.Systems.Persistence
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name.Equals(GlobalTags.MenuString)) return;
-
             Bind<EntityPersistence, EntityData>(gameData.EntityData);
         }
 
         void Bind<T, TData>(TData data) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new()
         {
-            var entity = FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
+            var entities = FindObjectsByType<T>(FindObjectsSortMode.None);
+            T entity = null;
+            if (entities.Length > 0)
+                entity = entities[0];
             if (entity != null)
             {
                 data ??= new TData { Id = entity.Id };
@@ -60,7 +60,16 @@ namespace Universal.Runtime.Systems.Persistence
             for (var i = 0; i < entities.Length; i++)
             {
                 var entity = entities[i];
-                var data = datas.FirstOrDefault(d => d.Id == entity.Id);
+                TData data = default;
+                for (var j = 0; j < datas.Count; j++)
+                {
+                    var d = datas[j];
+                    if (d.Id == entity.Id)
+                    {
+                        data = d;
+                        break;
+                    }
+                }
                 if (data == null)
                 {
                     data = new TData { Id = entity.Id };
@@ -88,7 +97,6 @@ namespace Universal.Runtime.Systems.Persistence
             gameData = dataService.Load(gameName);
             if (string.IsNullOrWhiteSpace(gameData.CurrentLevelName))
                 gameData.CurrentLevelName = GlobalTags.DemoString;
-            gameData.EntityData ??= new List<EntityData>();
             SceneManager.LoadScene(gameData.CurrentLevelName);
         }
 

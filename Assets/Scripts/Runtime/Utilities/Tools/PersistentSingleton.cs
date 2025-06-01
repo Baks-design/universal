@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Universal.Runtime.Systems.Update;
 
-namespace Universal.Runtime.Utilities
+namespace Universal.Runtime.Utilities.Tools
 {
     public class PersistentSingleton<T> : AManagedBehaviour where T : Component
     {
@@ -10,7 +10,6 @@ namespace Universal.Runtime.Utilities
 
         public static bool HasInstance => instance != null;
         public static T Current => instance;
-
         public static T Instance
         {
             get
@@ -19,9 +18,7 @@ namespace Universal.Runtime.Utilities
                 {
                     instance = FindAnyObjectByType<T>();
                     if (instance == null)
-                    {
                         instance = new GameObject(typeof(T).Name + "AutoCreated").AddComponent<T>();
-                    }
                 }
                 return instance;
             }
@@ -44,9 +41,7 @@ namespace Universal.Runtime.Utilities
                 enabled = true;
             }
             else if (this != instance)
-            {
                 Destroy(gameObject);
-            }
         }
     }
 }

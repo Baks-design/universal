@@ -9,7 +9,7 @@ namespace Universal.Runtime.Systems.Persistence.Editor
         public override void OnInspectorGUI()
         {
             var saveLoadSystem = (PersistenceManager)target;
-            var gameName = saveLoadSystem.GameData.Name;
+            var gameName = saveLoadSystem.name;
 
             DrawDefaultInspector();
 

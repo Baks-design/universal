@@ -10,6 +10,6 @@ namespace Universal.Runtime.Systems.Update.Interface
         /// Method called every frame for objects registered in <see cref="UpdateManager"/>.
         /// </summary>
         /// <seealso cref="UpdateManager"/>
-        void ManagedLateUpdate();
+        void ManagedLateUpdate(float deltaTime);
     }
 }

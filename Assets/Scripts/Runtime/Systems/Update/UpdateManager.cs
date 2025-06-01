@@ -120,11 +120,13 @@ namespace Universal.Runtime.Systems.Update
             if (!Application.isPlaying && _fixedUpdatableObjects.Count == 0)
                 return;
 
+            var deltaTime = Time.fixedDeltaTime;
+
             for (var i = 0; i < _fixedUpdatableObjects.Count; i++)
             {
                 try
                 {
-                    _fixedUpdatableObjects[i].ManagedFixedUpdate();
+                    _fixedUpdatableObjects[i].ManagedFixedUpdate(deltaTime);
                 }
                 catch (Exception ex)
                 {
@@ -138,11 +140,13 @@ namespace Universal.Runtime.Systems.Update
             if (!Application.isPlaying && _updatableObjects.Count == 0)
                 return;
 
+            var deltaTime = Time.deltaTime;
+
             for (var i = 0; i < _updatableObjects.Count; i++)
             {
                 try
                 {
-                    _updatableObjects[i].ManagedUpdate();
+                    _updatableObjects[i].ManagedUpdate(deltaTime);
                 }
                 catch (Exception ex)
                 {
@@ -156,11 +160,13 @@ namespace Universal.Runtime.Systems.Update
             if (!Application.isPlaying && _lateUpdatableObjects.Count == 0)
                 return;
 
+            var deltaTime = Time.smoothDeltaTime;
+
             for (var i = 0; i < _lateUpdatableObjects.Count; i++)
             {
                 try
                 {
-                    _lateUpdatableObjects[i].ManagedLateUpdate();
+                    _lateUpdatableObjects[i].ManagedLateUpdate(deltaTime);
                 }
                 catch (Exception ex)
                 {

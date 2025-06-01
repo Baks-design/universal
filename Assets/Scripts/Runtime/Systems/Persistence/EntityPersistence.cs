@@ -13,7 +13,6 @@ namespace Universal.Runtime.Systems.Persistence
         [SerializeField, Self] Transform tr;
         [SerializeField] EntityData data;
 
-        public EntityData Data => data;
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 
         public void Bind(EntityData data)
@@ -23,7 +22,7 @@ namespace Universal.Runtime.Systems.Persistence
             tr.SetLocalPositionAndRotation(data.Position, data.Rotation);
         }
 
-        void IUpdatable.ManagedUpdate()
+        void IUpdatable.ManagedUpdate(float _)
         {
             data.Position = tr.localPosition;
             data.Rotation = tr.localRotation;

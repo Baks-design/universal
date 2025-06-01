@@ -1,0 +1,19 @@
+{
+    "name": "Universal.Runtime.Utilities.Tools.ServiceLocator",
+    "rootNamespace": "Universal.Runtime.Utilities.Tools.ServiceLocator",
+    "references": [
+        "GUID:34ea0123fa11de545ace977a55cf69a3"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
