@@ -2,7 +2,8 @@
     "name": "Universal.Runtime.Utilities",
     "rootNamespace": "Universal.Runtime.Utilities",
     "references": [
-        "GUID:f9b0cded1581549429733942d2734e65"
+        "GUID:f9b0cded1581549429733942d2734e65",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [
         "Editor",

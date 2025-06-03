@@ -1,0 +1,17 @@
+{
+    "name": "Universal.Runtime.Components.VFX",
+    "rootNamespace": "Universal.Runtime.Components.VFX",
+    "references": [],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

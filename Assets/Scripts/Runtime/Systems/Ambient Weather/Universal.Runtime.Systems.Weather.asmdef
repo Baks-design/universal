@@ -1,0 +1,23 @@
+{
+    "name": "Universal.Runtime.Systems.Weather",
+    "rootNamespace": "Universal.Runtime.Systems.Weather",
+    "references": [
+        "GUID:34ea0123fa11de545ace977a55cf69a3",
+        "GUID:f9b0cded1581549429733942d2734e65",
+        "GUID:c71e90b7a3c7ffd4bae24760aa788d0a",
+        "GUID:696a0953692949b40bec8730e64e1fdd",
+        "GUID:33759803a11f4d538227861a78aba30b"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

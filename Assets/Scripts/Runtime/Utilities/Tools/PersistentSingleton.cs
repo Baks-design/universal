@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Universal.Runtime.Systems.Update;
+using Universal.Runtime.Systems.ManagedUpdate;
 
 namespace Universal.Runtime.Utilities.Tools
 {

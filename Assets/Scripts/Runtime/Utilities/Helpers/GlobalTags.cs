@@ -1,4 +1,4 @@
-namespace Universal.Runtime.Utilities
+namespace Universal.Runtime.Utilities.Helpers
 {
     public static class GlobalTags
     {
