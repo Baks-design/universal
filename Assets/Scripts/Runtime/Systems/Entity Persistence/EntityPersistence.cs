@@ -18,7 +18,7 @@ namespace Universal.Runtime.Systems.EntityPersistence
             tr.SetLocalPositionAndRotation(data.Position, data.Rotation);
         }
 
-        void IUpdatable.ManagedUpdate(float _)
+        void IUpdatable.ManagedUpdate(float deltaTime, float time)
         {
             data.Position = tr.localPosition;
             data.Rotation = tr.localRotation;

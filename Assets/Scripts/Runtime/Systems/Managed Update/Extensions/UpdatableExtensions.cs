@@ -2,18 +2,34 @@ namespace Universal.Runtime.Systems.ManagedUpdate
 {
     public static class UpdatableExtensions
     {
-        /// <summary>
-        /// Shortcut for <c>UpdateManager.Instance.Register(<paramref name="updatable"/>)</c>.
-        /// </summary>
-        /// <seealso cref="UpdateManager.Register"/>
         public static void RegisterInManager(this IManagedObject updatable)
-        => UpdateManager.Instance.Register(updatable);
+        {
+            if (ApplicationUtils.IsQuitting || updatable == null)
+                return;
 
-        /// <summary>
-        /// Shortcut for <c>UpdateManager.Instance.Unregister(<paramref name="updatable"/>)</c>.
-        /// </summary>
-        /// <seealso cref="UpdateManager.Unregister"/>
+            try
+            {
+                UpdateManager.Instance.Register(updatable);
+            }
+            catch
+            {
+                // Silently handle any instance creation issues
+            }
+        }
+
         public static void UnregisterInManager(this IManagedObject updatable)
-        => UpdateManager.Instance.Unregister(updatable);
+        {
+            if (ApplicationUtils.IsQuitting || updatable == null)
+                return;
+
+            try
+            {
+                UpdateManager.Instance.Unregister(updatable);
+            }
+            catch
+            {
+                // Silently handle any instance creation issues
+            }
+        }
     }
 }

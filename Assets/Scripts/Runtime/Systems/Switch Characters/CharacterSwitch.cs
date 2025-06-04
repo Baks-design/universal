@@ -23,10 +23,18 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             PlayerMapInputProvider.UseAbility.started += OnUseAbility;
         }
 
-        void OnDestroy()
+        protected override void OnDisable()
         {
             PlayerMapInputProvider.SwitchCharacter.started -= OnSwitchCharacter;
             PlayerMapInputProvider.UseAbility.started -= OnUseAbility;
+            base.OnDisable();
+        }
+
+        protected override void OnDestroy()
+        {
+            PlayerMapInputProvider.SwitchCharacter.started -= OnSwitchCharacter;
+            PlayerMapInputProvider.UseAbility.started -= OnUseAbility;
+            base.OnDestroy();
         }
 
         void OnSwitchCharacter(InputAction.CallbackContext context)
@@ -34,34 +42,22 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void OnUseAbility(InputAction.CallbackContext context)
         {
-            if (CharacterManager.Instance.CurrentCharacter == null)
-                return;
-
+            if (CharacterManager.Instance.CurrentCharacter == null) return;
             CharacterManager.Instance.CurrentCharacter.UseAbility();
         }
 
-        void IUpdatable.ManagedUpdate(float deltaTime) => DetectBodies();
+        void IUpdatable.ManagedUpdate(float deltaTime, float time) => DetectBodies();
 
         void DetectBodies()
         {
             if (!CharacterManager.Instance.HasSlotsAvailable) return;
 
-            var getRay = GetMouseRay();
+            var getRay = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             var (isColl, hitInfo) = GamePhysics.SphereCast(
               getRay.origin, getRay.direction, checkradius, 0f, maxDistance, characterLayer);
 
-            if (isColl)
-                if (hitInfo.collider.TryGetComponent(out currentPotential))
-                    CharacterManager.Instance.AddCharacter(currentPotential.Data);
-        }
-
-        static Ray GetMouseRay()
-        {
-            var mainCamera = Camera.main;
-            if (mainCamera == null)
-                return new Ray();
-            var mouseScreenPos = Mouse.current.position.ReadValue();
-            return mainCamera.ScreenPointToRay(mouseScreenPos);
+            if (isColl && hitInfo.collider.TryGetComponent(out currentPotential))
+                CharacterManager.Instance.AddCharacter(currentPotential.Data);
         }
 
         void OnDrawGizmos()

@@ -1,24 +1,8 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Universal.Runtime.Systems.ManagedUpdate
 {
-    /// <summary>
-    /// Singleton MonoBehaviour that calls <see cref="IUpdatable.ManagedUpdate"/>, 
-    /// <see cref="ILateUpdatable.ManagedLateUpdate"/> or <see cref="IFixedUpdatable.ManagedFixedUpdate"/> 
-    /// to registered objects every frame.
-    /// </summary>
-    /// <remarks>
-    /// Any C# object can be registered for updates, including MonoBehaviours, pure C# classes and structs, 
-    /// as long as they implement <see cref="IUpdatable"/>, <see cref="ILateUpdatable"/> or <see cref="IFixedUpdatable"/>.
-    /// Managed methods are called inside a try/catch block, so that exceptions don't stop other objects from updating.
-    /// <br/>
-    /// This class doesn't implement any execution order mechanism, 
-    /// so don't rely on managed methods being executed in any order.
-    /// In fact, the order of executed methods will most likely change during the lifetime of the UpdateManager.
-    /// </remarks>
-    [ExecuteAlways]
     public class UpdateManager : MonoBehaviour
     {
         protected static UpdateManager instance;
@@ -42,13 +26,10 @@ namespace Universal.Runtime.Systems.ManagedUpdate
                 {
                     if (instance == null)
                     {
-                        // First try to find existing instance in scene
                         instance = FindFirstObjectByType<UpdateManager>();
-                        // If none exists, create new one
                         if (instance == null)
                             instance = CreateInstance();
                         else
-                            // Ensure existing instance is properly initialized
                             instance.enabled = instance.HasRegisteredObjects;
                     }
                     return instance;
@@ -57,21 +38,41 @@ namespace Universal.Runtime.Systems.ManagedUpdate
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetStaticFields() => instance = null;
+        static void ResetStaticFields()
+        {
+            lock (_lock)
+            {
+                if (instance != null && !Application.isPlaying)
+                {
+                    instance.Clear();
+                    if (instance.gameObject != null)
+                        DestroyImmediate(instance.gameObject);
+                }
+                instance = null;
+            }
+        }
 
         static UpdateManager CreateInstance()
         {
-            var gameObject = new GameObject(nameof(UpdateManager)) { hideFlags = HideFlags.DontSave };
-#if UNITYEDITOR
+            var gameObject = new GameObject(nameof(UpdateManager))
+            {
+                hideFlags = HideFlags.DontSave
+            };
+
+#if UNITY_EDITOR
             if (!Application.isPlaying)
                 gameObject.hideFlags = HideFlags.HideAndDontSave;
-            else
-                DontDestroyOnLoad(gameObject);
 #endif
+
+            // Always mark as DontDestroyOnLoad in play mode
+            if (Application.isPlaying)
+                DontDestroyOnLoad(gameObject);
+
             return gameObject.AddComponent<UpdateManager>();
         }
 
-#if UNITYEDITOR
+
+#if UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void DestroyEditorUpdateManager()
         {
@@ -85,47 +86,58 @@ namespace Universal.Runtime.Systems.ManagedUpdate
 
         void Awake()
         {
-            if (instance == null)
+            lock (_lock)
             {
-                instance = this;
-#if UNITYEDITOR
-                if (!Application.isPlaying)
-                    hideFlags = HideFlags.HideAndDontSave;
-                else
-                    DontDestroyOnLoad(gameObject);
+                if (instance == null)
+                {
+                    instance = this;
+#if UNITY_EDITOR
+                    if (!Application.isPlaying)
+                        hideFlags = HideFlags.HideAndDontSave;
 #endif
-            }
-            else if (instance != this)
-            {
-                // If another instance exists, destroy this one
-                DestroyImmediate(gameObject);
-                return;
+                    // Ensure persistence in play mode
+                    if (Application.isPlaying)
+                        DontDestroyOnLoad(gameObject);
+                }
+                else if (instance != this)
+                {
+                    DestroyImmediate(gameObject);
+                    return;
+                }
             }
         }
 
         void OnDestroy()
         {
-            if (instance == this)
+            lock (_lock)
             {
-                Clear();
-                instance = null;
+                if (instance == this)
+                {
+                    // Clear all registered objects first
+                    Clear();
+                    instance = null;
+                }
             }
         }
-
         void FixedUpdate()
         {
             if (!Application.isPlaying && fixedUpdatableObjects.Count == 0)
                 return;
 
-            for (var i = 0; i < fixedUpdatableObjects.Count; i++)
+            lock (_lock)
             {
-                try
+                for (var i = 0; i < fixedUpdatableObjects.Count; i++)
                 {
-                    fixedUpdatableObjects[i].ManagedFixedUpdate(Time.fixedDeltaTime);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogException(ex);
+                    try
+                    {
+                        var obj = fixedUpdatableObjects[i];
+                        if (obj != null)
+                            obj.ManagedFixedUpdate(Time.fixedDeltaTime, Time.time);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogException(ex);
+                    }
                 }
             }
         }
@@ -135,15 +147,20 @@ namespace Universal.Runtime.Systems.ManagedUpdate
             if (!Application.isPlaying && updatableObjects.Count == 0)
                 return;
 
-            for (var i = 0; i < updatableObjects.Count; i++)
+            lock (_lock)
             {
-                try
+                for (var i = 0; i < updatableObjects.Count; i++)
                 {
-                    updatableObjects[i].ManagedUpdate(Time.deltaTime);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogException(ex);
+                    try
+                    {
+                        var obj = updatableObjects[i];
+                        if (obj != null)
+                            obj.ManagedUpdate(Time.deltaTime, Time.time);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogException(ex);
+                    }
                 }
             }
         }
@@ -153,15 +170,20 @@ namespace Universal.Runtime.Systems.ManagedUpdate
             if (!Application.isPlaying && lateUpdatableObjects.Count == 0)
                 return;
 
-            for (var i = 0; i < lateUpdatableObjects.Count; i++)
+            lock (_lock)
             {
-                try
+                for (var i = 0; i < lateUpdatableObjects.Count; i++)
                 {
-                    lateUpdatableObjects[i].ManagedLateUpdate(Time.smoothDeltaTime);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogException(ex);
+                    try
+                    {
+                        var obj = lateUpdatableObjects[i];
+                        if (obj != null)
+                            obj.ManagedLateUpdate(Time.smoothDeltaTime, Time.time);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogException(ex);
+                    }
                 }
             }
         }
@@ -170,48 +192,49 @@ namespace Universal.Runtime.Systems.ManagedUpdate
         {
             if (obj == null) return;
 
-            if (obj is IUpdatable updatable && !ContainsObject(updatableObjects, updatable))
-                updatableObjects.Add(updatable);
+            lock (_lock)
+            {
+                if (obj is IUpdatable updatable)
+                    updatableObjects.Add(updatable);
 
-            if (obj is ILateUpdatable lateUpdatable && !ContainsObject(lateUpdatableObjects, lateUpdatable))
-                lateUpdatableObjects.Add(lateUpdatable);
+                if (obj is ILateUpdatable lateUpdatable)
+                    lateUpdatableObjects.Add(lateUpdatable);
 
-            if (obj is IFixedUpdatable fixedUpdatable && !ContainsObject(fixedUpdatableObjects, fixedUpdatable))
-                fixedUpdatableObjects.Add(fixedUpdatable);
+                if (obj is IFixedUpdatable fixedUpdatable)
+                    fixedUpdatableObjects.Add(fixedUpdatable);
 
-            enabled = HasRegisteredObjects;
-        }
-
-        static bool ContainsObject<T>(IReadOnlyList<T> collection, T item)
-        {
-            for (var i = 0; i < collection.Count; i++)
-                if (EqualityComparer<T>.Default.Equals(collection[i], item))
-                    return true;
-            return false;
+                enabled = HasRegisteredObjects;
+            }
         }
 
         public void Unregister(IManagedObject obj)
         {
             if (obj == null) return;
 
-            if (obj is IUpdatable updatable)
-                updatableObjects.Remove(updatable);
+            lock (_lock)
+            {
+                if (obj is IUpdatable updatable)
+                    updatableObjects.Remove(updatable);
 
-            if (obj is ILateUpdatable lateUpdatable)
-                lateUpdatableObjects.Remove(lateUpdatable);
+                if (obj is ILateUpdatable lateUpdatable)
+                    lateUpdatableObjects.Remove(lateUpdatable);
 
-            if (obj is IFixedUpdatable fixedUpdatable)
-                fixedUpdatableObjects.Remove(fixedUpdatable);
+                if (obj is IFixedUpdatable fixedUpdatable)
+                    fixedUpdatableObjects.Remove(fixedUpdatable);
 
-            enabled = HasRegisteredObjects;
+                enabled = HasRegisteredObjects;
+            }
         }
 
         public void Clear()
         {
-            updatableObjects.Clear();
-            lateUpdatableObjects.Clear();
-            fixedUpdatableObjects.Clear();
-            enabled = false;
+            lock (_lock)
+            {
+                updatableObjects.Clear();
+                lateUpdatableObjects.Clear();
+                fixedUpdatableObjects.Clear();
+                enabled = false;
+            }
         }
     }
 }

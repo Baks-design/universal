@@ -12,7 +12,6 @@ namespace Universal.Runtime.Systems.ManagedUpdate
             IsQuitting = false;
             Application.quitting -= OnQuitting;
             Application.quitting += OnQuitting;
-
         }
 
         static void OnQuitting()

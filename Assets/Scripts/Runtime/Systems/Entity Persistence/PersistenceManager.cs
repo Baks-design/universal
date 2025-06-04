@@ -28,11 +28,15 @@ namespace Universal.Runtime.Systems.EntityPersistence
 
         protected override void OnDisable()
         {
-            base.OnDisable();
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            base.OnDisable();
         }
 
-        void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoaded;
+        protected override void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            base.OnDestroy();
+        }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {

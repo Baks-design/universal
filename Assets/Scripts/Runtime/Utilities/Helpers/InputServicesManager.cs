@@ -7,7 +7,7 @@ namespace Universal.Runtime.Utilities.Helpers
         protected override void Awake()
         {
             base.Awake();
-            PlayerMapInputProvider.SetCursor(true);
+            //PlayerMapInputProvider.SetCursor(true);
             PlayerMapInputProvider.InitializeActions();
         }
     }

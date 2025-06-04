@@ -7,7 +7,7 @@ using Universal.Runtime.Utilities.Tools;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
-    public class CharacterManager : PersistentSingleton<CharacterManager> //FIXME: Spawn
+    public class CharacterManager : PersistentSingleton<CharacterManager> //TODO: Make
     {
         [SerializeField, Self] CharacterSwitchVisual characterSwitchVisual;
         [SerializeField, InLineEditor] CharacterDataSO initDataSO;
