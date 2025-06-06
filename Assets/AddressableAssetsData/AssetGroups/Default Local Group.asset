@@ -15,8 +15,13 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 2554508ff134f6c4ca28bfb5f0356d62
   m_SerializeEntries:
-  - m_GUID: 6bfa62bbdb48a7c41831d05584fa7cfe
-    m_Address: Assets/Prefabs/Player.prefab
+  - m_GUID: 3e7d5503186f5544fa465ca3a90130b0
+    m_Address: Assets/Prefabs/Garcian.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7247726a3f6db4d489339436b7c417fc
+    m_Address: Assets/Prefabs/Effect Emitter.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -4,8 +4,8 @@ namespace Universal.Runtime.Systems.VisualEffects
 {
     public class EffectsBuilder
     {
-        readonly VisualEffectsManager visualEffectsManager;
         Vector3 position = Vector3.zero;
+        readonly VisualEffectsManager visualEffectsManager;
 
         public EffectsBuilder(VisualEffectsManager visualEffectsManager)
         => this.visualEffectsManager = visualEffectsManager;

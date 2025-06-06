@@ -1,69 +1,126 @@
-using System.Collections.Generic;
-using KBCore.Refs;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Helpers;
+using UnityEngine.InputSystem;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
-    public class CharacterManager : PersistentSingleton<CharacterManager> //TODO: Make
+    public class CharacterManager : PersistentSingleton<CharacterManager>
     {
-        [SerializeField, Self] CharacterSwitchVisual characterSwitchVisual;
-        [SerializeField, InLineEditor] CharacterDataSO initDataSO;
+        [SerializeField] AssetReference defaultCharacterPrefab;
+        [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
-        int currentIndex = 0;
-        readonly List<CharacterDataSO> charactersStoraged = new(7);
-        readonly List<Character> spawnedCharacters = new(7);
+        List<IPlayableCharacter> characterRoster = new();
+        IPlayableCharacter currentCharacter;
+        const int maxCharacters = 7;
 
-        public bool HasSlotsAvailable => charactersStoraged.Count < 7;
-        public Character CurrentCharacter => spawnedCharacters.Count > 0 ? spawnedCharacters[currentIndex] : null;
-        public int CurrentIndex
+        public List<IPlayableCharacter> CharacterRoster
         {
-            get => currentIndex;
-            set => currentIndex = value;
+            get => characterRoster;
+            set => characterRoster = value;
+        }
+        public GameObject CharacterContainer
+        {
+            get => characterContainer;
+            set => characterContainer = value;
         }
 
-        void Start() => SpawnInitCharacter();
-
-        void SpawnInitCharacter()
+        void Start()
         {
             var randPoint = Random.Range(0, spawnPoints.Length);
-            var newChar = Addressables.InstantiateAsync(
-                initDataSO.prefab,
-                null,
-                spawnPoints[randPoint].transform
-            ).WaitForCompletion();
 
-            if (newChar.TryGetComponent(out Character character))
+            var newChar = Addressables
+                .InstantiateAsync(
+                    defaultCharacterPrefab,
+                    spawnPoints[randPoint].transform.position,
+                    Quaternion.identity,
+                    characterContainer.transform
+                )
+                .WaitForCompletion();
+
+            if (newChar.TryGetComponent(out IPlayableCharacter IPlayableCharacter))
             {
-                charactersStoraged.Add(initDataSO);
-                spawnedCharacters.Add(character);
-                character.Deactivate();
-                SwitchTo(0);
+                AddCharacterToRoster(IPlayableCharacter);
+                SwitchCharacter(0);
             }
         }
 
-        public void NextCharacter()
+        protected override void OnEnable()
         {
-            if (spawnedCharacters.Count == 0)
-                return;
-
-            SwitchTo((currentIndex + 1) % spawnedCharacters.Count);
+            base.OnEnable();
+            PlayerMapInputProvider.SwitchCharacter.started += NextCharacter;
+            PlayerMapInputProvider.SwitchCharacter.started += PreviousCharacter;
         }
 
-        public void SwitchTo(int index)
+        protected override void OnDisable()
         {
-            if (index < 0 || index >= spawnedCharacters.Count || CurrentCharacter == null)
-                return;
-
-            characterSwitchVisual.HandleChangedEffect(index, CurrentCharacter);
+            PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
+            PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
+            base.OnDisable();
         }
 
-        public void AddCharacter(CharacterDataSO item) => charactersStoraged.Add(item);
+        protected override void OnDestroy()
+        {
+            PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
+            PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
+            base.OnDestroy();
+        }
 
-        public void RemoveCharacter(CharacterDataSO item) => charactersStoraged.Remove(item);
+        void NextCharacter(InputAction.CallbackContext context)
+        {
+            if (context.ReadValue<float>() <= 0f || characterRoster.Count == 0) return;
 
-        public void ClearCharacter(CharacterDataSO item) => charactersStoraged.Clear();
+            var currentIndex = characterRoster.IndexOf(currentCharacter);
+            var nextIndex = (currentIndex + 1) % characterRoster.Count;
+            SwitchCharacter(nextIndex);
+        }
+
+        void PreviousCharacter(InputAction.CallbackContext context)
+        {
+            if (context.ReadValue<float>() >= 0f || characterRoster.Count == 0) return;
+
+            var currentIndex = characterRoster.IndexOf(currentCharacter);
+            var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
+            SwitchCharacter(prevIndex);
+        }
+
+        public void AddCharacterToRoster(IPlayableCharacter character)
+        {
+            if (characterRoster.Count >= maxCharacters)
+            {
+                Debug.LogWarning("Character roster is full!");
+                return;
+            }
+            characterRoster.Add(character);
+            character.Deactivate(); // New characters start inactive
+        }
+
+        public void RemoveCharacterFromRoster(int index)
+        {
+            if (index < 0 || index >= characterRoster.Count) return;
+
+            // If removing current character, switch to default first
+            if (currentCharacter == characterRoster[index])
+                SwitchCharacter(0);
+
+            // Proper cleanup (could use object pooling in a real scenario)
+            if (characterRoster[index] is MonoBehaviour mb)
+                Destroy(mb.gameObject);
+
+            characterRoster.RemoveAt(index);
+        }
+
+        void SwitchCharacter(int index)
+        {
+            if (index < 0 || index >= characterRoster.Count) return;
+
+            currentCharacter?.Deactivate();
+            currentCharacter = characterRoster[index];
+            currentCharacter.Activate();
+
+            Debug.Log($"Switched to {currentCharacter.CharacterName}");
+        }
     }
 }

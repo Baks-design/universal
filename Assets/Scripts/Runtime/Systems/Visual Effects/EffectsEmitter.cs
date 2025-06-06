@@ -13,7 +13,7 @@ namespace Universal.Runtime.Systems.VisualEffects
         public EffectsData Data { get; private set; }
         public LinkedListNode<EffectsEmitter> Node { get; set; }
 
-        public void Initialize(EffectsData data) {  }
+        public void Initialize(EffectsData data) => Data = data;
 
         public void Play() => vfxSource.Play();
 

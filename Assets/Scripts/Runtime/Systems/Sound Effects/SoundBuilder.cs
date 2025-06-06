@@ -4,11 +4,11 @@ namespace Universal.Runtime.Systems.SoundEffects
 {
     public class SoundBuilder
     {
-        readonly SoundManager soundManager;
+        readonly SoundEffectsManager soundManager;
         Vector3 position = Vector3.zero;
         bool randomPitch;
 
-        public SoundBuilder(SoundManager soundManager) => this.soundManager = soundManager;
+        public SoundBuilder(SoundEffectsManager soundManager) => this.soundManager = soundManager;
 
         public SoundBuilder WithPosition(Vector3 position)
         {

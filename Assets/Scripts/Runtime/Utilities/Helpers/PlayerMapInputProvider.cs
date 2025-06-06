@@ -10,13 +10,19 @@ namespace Universal.Runtime.Utilities.Helpers
         static readonly Dictionary<string, InputAction> actions = new();
         static readonly Dictionary<string, Func<InputAction>> ActionSetupMethods = new()
         {
+            { "Move", () => InputSystem.actions.FindAction("Player/Move")},
+            { "Look", () => InputSystem.actions.FindAction("Player/Look")},
             { "SwitchCharacter", () => InputSystem.actions.FindAction("Player/SwitchCharacter")},
-            { "UseAbility", () => InputSystem.actions.FindAction("Player/UseAbility")}
+            { "AddCharacter", () => InputSystem.actions.FindAction("Player/AddCharacter")},
+            { "Pause", () => InputSystem.actions.FindAction("Player/Pause")},
         };
 
         public static Vector2 MousePos => Mouse.current.position.ReadValue();
+        public static InputAction Move => GetAction("Move");
+        public static InputAction Look => GetAction("Look");
         public static InputAction SwitchCharacter => GetAction("SwitchCharacter");
-        public static InputAction UseAbility => GetAction("UseAbility");
+        public static InputAction AddCharacter => GetAction("AddCharacter");
+        public static InputAction Pause => GetAction("Pause");
 
         static InputAction GetAction(string actionId)
         {

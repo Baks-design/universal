@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
-    public class VisualEffectsManager : PersistentSingleton<VisualEffectsManager> //TODO: Finished
+    public class VisualEffectsManager : PersistentSingleton<VisualEffectsManager> 
     {
         [SerializeField] GameObject container;
         [SerializeField] AssetReference effectEmitterPrefab;
@@ -16,8 +16,14 @@ namespace Universal.Runtime.Systems.VisualEffects
         [SerializeField] int maxSoundInstances = 30;
         IObjectPool<EffectsEmitter> effectsEmitterPool;
         GameObject effectInstantiated;
+        LinkedList<EffectsEmitter> frequentEffectEmitters = new();
         readonly List<EffectsEmitter> activeEffectEmitters = new();
-        public readonly LinkedList<EffectsEmitter> FrequentEffectEmitters = new();
+
+        public LinkedList<EffectsEmitter> FrequentEffectEmitters
+        {
+            get => frequentEffectEmitters;
+            set => frequentEffectEmitters = value;
+        }
 
         void Start() => InitializePool();
 
@@ -28,11 +34,11 @@ namespace Universal.Runtime.Systems.VisualEffects
             if (!data.frequentEffect)
                 return true;
 
-            if (FrequentEffectEmitters.Count >= maxSoundInstances)
+            if (frequentEffectEmitters.Count >= maxSoundInstances)
             {
                 try
                 {
-                    FrequentEffectEmitters.First.Value.Stop();
+                    frequentEffectEmitters.First.Value.Stop();
                     return true;
                 }
                 catch
@@ -54,7 +60,7 @@ namespace Universal.Runtime.Systems.VisualEffects
             for (var i = 0; i < activeEffectEmitters.Count; i++)
                 activeEffectEmitters[i].Stop();
 
-            FrequentEffectEmitters.Clear();
+            frequentEffectEmitters.Clear();
         }
 
         void InitializePool()
@@ -87,7 +93,7 @@ namespace Universal.Runtime.Systems.VisualEffects
         {
             if (effectEmitter.Node != null)
             {
-                FrequentEffectEmitters.Remove(effectEmitter.Node);
+                frequentEffectEmitters.Remove(effectEmitter.Node);
                 effectEmitter.Node = null;
             }
             effectEmitter.gameObject.SetActive(false);

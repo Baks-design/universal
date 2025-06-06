@@ -1,0 +1,18 @@
+{
+    "name": "Universal.Runtime.Utilities.Tools.EventBus",
+    "rootNamespace": "Universal.Runtime.Utilities.Tools.EventBus",
+    "references": [
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
