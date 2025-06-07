@@ -2,8 +2,6 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class DanSmith : Character
     {
-        public override string CharacterName => "Dan Smith";
-
         public override void Activate()
         {
             base.Activate();

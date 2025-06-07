@@ -24,12 +24,15 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         }
 
         public EventBinding(Action<T> onEvent) => this.onEvent = onEvent;
+        
         public EventBinding(Action onEventNoArgs) => this.onEventNoArgs = onEventNoArgs;
 
         public void Add(Action onEvent) => onEventNoArgs += onEvent;
+
         public void Remove(Action onEvent) => onEventNoArgs -= onEvent;
 
         public void Add(Action<T> onEvent) => this.onEvent += onEvent;
+
         public void Remove(Action<T> onEvent) => this.onEvent -= onEvent;
     }
 }

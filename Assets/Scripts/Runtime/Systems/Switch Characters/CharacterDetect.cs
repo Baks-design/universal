@@ -3,6 +3,7 @@ using Universal.Runtime.Utilities.Helpers;
 using UnityEngine.InputSystem;
 using KBCore.Refs;
 using Universal.Runtime.Systems.ManagedUpdate;
+using Universal.Runtime.Behaviours.Characters;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
@@ -10,8 +11,8 @@ namespace Universal.Runtime.Systems.SwitchCharacters
     {
         [SerializeField, Self] CharacterManager characterManager;
         [SerializeField] LayerMask characterLayer;
-        [SerializeField] float checkradius = 0.3f;
-        [SerializeField] float maxDistance = 20f;
+        [SerializeField] float raySphereRadius = 0.3f;
+        [SerializeField] float raySphereMaxDistance = 20f;
         bool isColl;
         RaycastHit hitInfo;
         Camera mainCamera;
@@ -38,26 +39,43 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void OnAddCharacter(InputAction.CallbackContext context)
         {
-            if (isColl &&
-                hitInfo.collider.TryGetComponent(out IPlayableCharacter character) &&
-                !characterManager.CharacterRoster.Contains(character))
-            {
-                characterManager.AddCharacterToRoster(character);
-                Debug.Log($"Added {character.CharacterName} to roster");
+            if (!isColl) return;
 
-                var characterDetected = hitInfo.collider.transform;
-                var characterContainer = characterManager.CharacterContainer.transform;
-                characterDetected.SetParent(characterContainer);
+            if (hitInfo.collider.TryGetComponent(out Character character))
+            {
+                if (!characterManager.ContainsCharacter(character.Data))
+                {
+                    characterManager.AddCharacterToRoster(character.Data);
+                    Debug.Log($"Added {character.Data.characterName} to roster");
+
+                    RemoveCharacterFromScene(character.gameObject);
+                }
+                else
+                    Debug.Log($"{character.Data.characterName} already in roster");
             }
+        }
+
+        void RemoveCharacterFromScene(GameObject characterObj, bool byDestroy = false)
+        {
+            if (byDestroy)
+                Destroy(characterObj);
+            else
+                characterObj.SetActive(false);
         }
 
         void IUpdatable.ManagedUpdate(float deltaTime, float time) => DetectBodies();
 
         void DetectBodies()
         {
-            var getRay = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var getRay = mainCamera.ScreenPointToRay(PlayerMapInputProvider.MousePos);
             (isColl, hitInfo) = GamePhysics.SphereCast(
-                getRay.origin, getRay.direction, checkradius, 0f, maxDistance, characterLayer);
+                getRay.origin,
+                getRay.direction,
+                raySphereRadius,
+                0f,
+                raySphereMaxDistance,
+                characterLayer
+            );
         }
     }
 }

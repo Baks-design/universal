@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70383d5aeffea4d45bd41149b352ceb2
+    m_Address: Assets/Prefabs/Characters/Dan.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7247726a3f6db4d489339436b7c417fc
     m_Address: Assets/Prefabs/Effect Emitter.prefab
     m_ReadOnly: 0

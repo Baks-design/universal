@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Universal.Runtime.Utilities.Tools.EventBus
@@ -13,31 +12,31 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
     {
         public static IReadOnlyList<Type> EventTypes { get; set; }
         public static IReadOnlyList<Type> EventBusTypes { get; set; }
-
 #if UNITY_EDITOR
-    public static PlayModeStateChange PlayModeState { get; set; }
-    
-    /// <summary>
-    /// Initializes the Unity Editor related components of the EventBusUtil.
-    /// The [InitializeOnLoadMethod] attribute causes this method to be called every time a script
-    /// is loaded or when the game enters Play Mode in the Editor. This is useful to initialize
-    /// fields or states of the class that are necessary during the editing state that also apply
-    /// when the game enters Play Mode.
-    /// The method sets up a subscriber to the playModeStateChanged event to allow
-    /// actions to be performed when the Editor's play mode changes.
-    /// </summary>    
-    [InitializeOnLoadMethod]
-    public static void InitializeEditor() {
-        EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-        EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-    }
-    
-    static void OnPlayModeStateChanged(PlayModeStateChange state) {
-        PlayModeState = state;
-        if (state == PlayModeStateChange.ExitingPlayMode) {
-            ClearAllBuses();
+        public static UnityEditor.PlayModeStateChange PlayModeState { get; set; }
+
+        /// <summary>
+        /// Initializes the Unity Editor related components of the EventBusUtil.
+        /// The [InitializeOnLoadMethod] attribute causes this method to be called every time a script
+        /// is loaded or when the game enters Play Mode in the Editor. This is useful to initialize
+        /// fields or states of the class that are necessary during the editing state that also apply
+        /// when the game enters Play Mode.
+        /// The method sets up a subscriber to the playModeStateChanged event to allow
+        /// actions to be performed when the Editor's play mode changes.
+        /// </summary>    
+        [UnityEditor.InitializeOnLoadMethod]
+        public static void InitializeEditor()
+        {
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
-    }
+
+        static void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange state)
+        {
+            PlayModeState = state;
+            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+                ClearAllBuses();
+        }
 #endif
 
         /// <summary>
@@ -56,11 +55,11 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
 
         static List<Type> InitializeAllBuses()
         {
-            List<Type> eventBusTypes = new List<Type>();
-
+            var eventBusTypes = new List<Type>();
             var typedef = typeof(EventBus<>);
-            foreach (var eventType in EventTypes)
+            for (var i = 0; i < EventTypes.Count; i++)
             {
+                var eventType = EventTypes[i];
                 var busType = typedef.MakeGenericType(eventType);
                 eventBusTypes.Add(busType);
                 Debug.Log($"Initialized EventBus<{eventType.Name}>");
@@ -75,7 +74,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         public static void ClearAllBuses()
         {
             Debug.Log("Clearing all buses...");
-            for (int i = 0; i < EventBusTypes.Count; i++)
+            for (var i = 0; i < EventBusTypes.Count; i++)
             {
                 var busType = EventBusTypes[i];
                 var clearMethod = busType.GetMethod("Clear", BindingFlags.Static | BindingFlags.NonPublic);

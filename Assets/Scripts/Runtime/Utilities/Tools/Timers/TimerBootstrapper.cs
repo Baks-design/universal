@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
@@ -22,12 +21,12 @@ namespace Universal.Runtime.Utilities.Tools.Timers
             PlayerLoop.SetPlayerLoop(currentPlayerLoop);
 
 #if UNITY_EDITOR
-            EditorApplication.playModeStateChanged -= OnPlayModeState;
-            EditorApplication.playModeStateChanged += OnPlayModeState;
+            UnityEditor.EditorApplication.playModeStateChanged -= OnPlayModeState;
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeState;
 
-            static void OnPlayModeState(PlayModeStateChange state)
+            static void OnPlayModeState(UnityEditor.PlayModeStateChange state)
             {
-                if (state == PlayModeStateChange.ExitingPlayMode)
+                if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
                 {
                     var currentPlayerLoop = PlayerLoop.GetCurrentPlayerLoop();
                     RemoveTimerManager<Update>(ref currentPlayerLoop);
