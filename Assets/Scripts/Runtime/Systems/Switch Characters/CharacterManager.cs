@@ -6,6 +6,7 @@ using Universal.Runtime.Utilities.Helpers;
 using UnityEngine.InputSystem;
 using Universal.Runtime.Behaviours.Characters;
 using Unity.Cinemachine;
+using System.Collections;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
@@ -15,14 +16,13 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         [SerializeField] CinemachineCamera cinemachine;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
-        List<IPlayableCharacter> characterRoster = new(7);
         IPlayableCharacter currentCharacter;
         Vector3 lastActivePosition;
         Quaternion lastActiveRotation;
         const int maxCharacters = 7;
-        readonly HashSet<CharacterData> rosterData = new();
+        readonly List<IPlayableCharacter> characterRoster = new(maxCharacters);
+        readonly HashSet<CharacterData> rosterData = new(maxCharacters);
 
-        public bool ContainsCharacter(CharacterData data) => rosterData.Contains(data);
         public IReadOnlyList<IPlayableCharacter> CharacterRoster => characterRoster.AsReadOnly();
 
         void Start() => AddCharacterToRoster(characterData);
@@ -66,6 +66,8 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             SwitchCharacter(prevIndex);
         }
 
+        public bool ContainsCharacter(CharacterData data) => rosterData.Contains(data);
+
         public void AddCharacterToRoster(CharacterData characterData)
         {
             if (characterRoster.Count >= maxCharacters)
@@ -73,7 +75,6 @@ namespace Universal.Runtime.Systems.SwitchCharacters
                 Debug.LogWarning("Character roster is full!");
                 return;
             }
-
             if (rosterData.Contains(characterData))
             {
                 Debug.LogWarning($"Character {characterData.characterName} already in roster!");
@@ -84,7 +85,6 @@ namespace Universal.Runtime.Systems.SwitchCharacters
                 characterData.characterPrefab,
                 characterContainer.transform
             ).WaitForCompletion();
-
             if (!charObj.TryGetComponent(out Character character))
             {
                 Debug.LogError("Instantiated prefab doesn't have Character component!");
@@ -95,15 +95,20 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
             if (characterRoster.Count == 0)
             {
+                // Set spawn position for first character
                 character.LastPosition = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
                 character.LastRotation = Quaternion.identity;
+
+                // Update lastActivePosition immediately
+                lastActivePosition = character.LastPosition;
+                lastActiveRotation = character.LastRotation;
             }
             else
             {
+                // Use last active position for subsequent characters
                 character.LastPosition = lastActivePosition;
                 character.LastRotation = lastActiveRotation;
             }
-
             character.transform.SetPositionAndRotation(character.LastPosition, character.LastRotation);
 
             rosterData.Add(characterData);
@@ -135,6 +140,11 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         {
             if (index < 0 || index >= characterRoster.Count) return;
 
+            StartCoroutine(SwitchCharacterRoutine(index));
+        }
+
+        IEnumerator SwitchCharacterRoutine(int index)
+        {
             // Store current position before switching
             if (currentCharacter != null)
             {
@@ -148,17 +158,16 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             // Apply the stored position/rotation to the new character
             currentCharacter.LastPosition = lastActivePosition;
             currentCharacter.LastRotation = lastActiveRotation;
-
             currentCharacter.CharacterTransform.SetPositionAndRotation(
                 lastActivePosition,
                 lastActiveRotation
             );
 
             currentCharacter.Activate();
-
-            if (cinemachine != null && cinemachine.Target.TrackingTarget != null)
-                cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
+            cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
             Debug.Log($"Switched to {currentCharacter.Data.characterName} at {currentCharacter.LastPosition}");
+
+            yield return null;
         }
     }
 }

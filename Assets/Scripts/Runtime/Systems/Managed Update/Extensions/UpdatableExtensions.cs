@@ -9,7 +9,7 @@ namespace Universal.Runtime.Systems.ManagedUpdate
 
             try
             {
-                UpdateManager.Instance.Register(updatable);
+                ManagedUpdateManager.Instance.Register(updatable);
             }
             catch
             {
@@ -24,7 +24,7 @@ namespace Universal.Runtime.Systems.ManagedUpdate
 
             try
             {
-                UpdateManager.Instance.Unregister(updatable);
+                ManagedUpdateManager.Instance.Unregister(updatable);
             }
             catch
             {

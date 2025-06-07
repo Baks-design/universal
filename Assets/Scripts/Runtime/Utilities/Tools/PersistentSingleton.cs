@@ -3,7 +3,7 @@ using Universal.Runtime.Systems.ManagedUpdate;
 
 namespace Universal.Runtime.Utilities.Tools
 {
-    public class PersistentSingleton<T> : AManagedBehaviour where T : Component
+    public class PersistentSingleton<T> : AManagedBehaviour where T : Component //TODO: Changed to ServiceLocator
     {
         protected static T instance;
         protected bool UnparentOnAwake = true;

@@ -1,7 +1,9 @@
 {
     "name": "Universal.Runtime.Systems.ManagedUpdate",
     "rootNamespace": "Universal.Runtime.Systems.ManagedUpdate",
-    "references": [],
+    "references": [
+        "GUID:e25b80c96a09f054895ea366b261d091"
+    ],
     "includePlatforms": [
         "Editor",
         "WindowsStandalone64"
