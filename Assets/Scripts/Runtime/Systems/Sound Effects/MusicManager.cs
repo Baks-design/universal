@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using Universal.Runtime.Systems.ManagedUpdate;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {
-    public class MusicManager : PersistentSingleton<MusicManager>, IUpdatable
+    public class MusicManager : MonoBehaviour, IMusicServices
     {
         [SerializeField] AudioMixerGroup musicMixerGroup;
         float fading;
@@ -14,6 +13,12 @@ namespace Universal.Runtime.Systems.SoundEffects
         AudioSource previous;
         const float crossFadeTime = 1f;
         readonly Queue<AudioClip> playlist = new();
+
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<IMusicServices>(this);
+        }
 
         public void AddToPlaylist(AudioClip clip)
         {
@@ -27,7 +32,7 @@ namespace Universal.Runtime.Systems.SoundEffects
             if (playlist.TryDequeue(out var nextTrack))
                 Play(nextTrack);
         }
-        
+
         public void Clear() => playlist.Clear();
 
         void Play(AudioClip clip)
@@ -55,9 +60,9 @@ namespace Universal.Runtime.Systems.SoundEffects
             fading = 0.001f;
         }
 
-        void IUpdatable.ManagedUpdate(float deltaTime, float time)
+        void Update()
         {
-            HandleCrossFade(deltaTime);
+            HandleCrossFade(Time.deltaTime);
 
             if (current && !current.isPlaying && playlist.Count > 0)
                 PlayNextTrack();

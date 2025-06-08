@@ -1,10 +1,9 @@
-using Universal.Runtime.Systems.ManagedUpdate;
 using UnityEngine;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.WeatherAmbient
 {
-    public class WeatherAmbientManager : PersistentSingleton<WeatherAmbientManager>, IUpdatable
+    public class WeatherAmbientManager : MonoBehaviour, IWeatherServices
     {
         WeatherSystem weatherSystem;
         DaytimeSystem daytimeSystem;
@@ -19,9 +18,10 @@ namespace Universal.Runtime.Systems.WeatherAmbient
                 return $"Current: {daytime} ({currentHour:F1}h), {weather}";
             }
         }
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<IWeatherServices>(this);
             weatherSystem = new WeatherSystem(new SunnyWeather());
             daytimeSystem = new DaytimeSystem(new DaytimeMorning());
         }
@@ -33,7 +33,7 @@ namespace Universal.Runtime.Systems.WeatherAmbient
             Debug.Log(GetCurrentEnvironmentInfo);
         }
 
-        void IUpdatable.ManagedUpdate(float deltaTime, float time) => daytimeSystem.UpdateDaytime();
+        void Update() => daytimeSystem.UpdateDaytime();
 
         public void SetWeather(IWeatherState newWeather)
         {

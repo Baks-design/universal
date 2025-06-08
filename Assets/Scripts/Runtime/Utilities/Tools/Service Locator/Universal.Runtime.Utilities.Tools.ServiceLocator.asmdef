@@ -2,7 +2,7 @@
     "name": "Universal.Runtime.Utilities.Tools.ServiceLocator",
     "rootNamespace": "Universal.Runtime.Utilities.Tools.ServiceLocator",
     "references": [
-        "GUID:34ea0123fa11de545ace977a55cf69a3"
+        "GUID:84884ef7c68f0b14b94fb02ca5693269"
     ],
     "includePlatforms": [
         "Editor",

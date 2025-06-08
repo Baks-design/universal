@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {
-    public class SoundEffectsManager : PersistentSingleton<SoundEffectsManager>
+    public class SoundEffectsManager : MonoBehaviour, ISoundEffectsServices
     {
         [SerializeField] GameObject parentSounds;
         [SerializeField] AssetReference soundEmitterPrefab;
@@ -19,6 +19,12 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         readonly List<SoundEmitter> activeSoundEmitters = new();
         public readonly LinkedList<SoundEmitter> FrequentSoundEmitters = new();
+
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<ISoundEffectsServices>(this);
+        }
 
         void Start() => InitializePool();
 

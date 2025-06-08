@@ -3,40 +3,31 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Universal.Runtime.Systems.Persistence.Interfaces;
 using Universal.Runtime.Utilities.Helpers;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.EntityPersistence
 {
-    public class PersistenceManager : PersistentSingleton<PersistenceManager> 
+    public class PersistenceManager : MonoBehaviour, IPersistenceServices
     {
         [SerializeField] GameData gameData;
         IDataService dataService;
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<IPersistenceServices>(this);
             dataService = new FileDataService(new JsonSerializer());
         }
 
         void Start() => NewGame();
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
+        void OnApplicationQuit() => SaveGame();
 
-        protected override void OnDisable()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            base.OnDisable();
-        }
+        void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
 
-        protected override void OnDestroy()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            base.OnDestroy();
-        }
+        void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        void OnDestroy() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -101,6 +92,8 @@ namespace Universal.Runtime.Systems.EntityPersistence
             if (string.IsNullOrWhiteSpace(gameData.CurrentLevelName))
                 gameData.CurrentLevelName = GlobalTags.DemoString;
             SceneManager.LoadScene(gameData.CurrentLevelName);
+
+            
         }
 
         public void ReloadGame() => LoadGame(gameData.Name);

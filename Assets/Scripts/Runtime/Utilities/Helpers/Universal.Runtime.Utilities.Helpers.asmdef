@@ -1,0 +1,17 @@
+{
+    "name": "Universal.Runtime.Utilities.Helpers",
+    "rootNamespace": "Universal.Runtime.Utilities.Helpers",
+    "references": [],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

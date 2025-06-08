@@ -1,9 +1,9 @@
 using UnityEngine;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.WorldTendency
 {
-    public class TendencyManager : PersistentSingleton<TendencyManager>
+    public class TendencyManager : MonoBehaviour, ITendencyServices
     {
         [SerializeField] int worldCount = 5;
         [SerializeField] float[] thresholds = { 0.8f, 0.3f, -0.3f, -0.8f };
@@ -11,9 +11,10 @@ namespace Universal.Runtime.Systems.WorldTendency
 
         public WorldTendency GetTendencySystem => tendencySystem;
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<ITendencyServices>(this);
 
             var calculator = new ThresholdTendencyCalculator(thresholds);
             var persister = new PersisterHandler();
@@ -24,6 +25,6 @@ namespace Universal.Runtime.Systems.WorldTendency
             tendencySystem.AddEffect(objectEffect);
         }
 
-        void OnApplicationQuit() => tendencySystem.Save();
+        void OnApplicationQuit() => tendencySystem.Save(); 
     }
 }

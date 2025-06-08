@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
-using Universal.Runtime.Utilities.Tools;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
-    public class VisualEffectsManager : PersistentSingleton<VisualEffectsManager> 
+    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices
     {
         [SerializeField] GameObject container;
         [SerializeField] AssetReference effectEmitterPrefab;
@@ -23,6 +23,12 @@ namespace Universal.Runtime.Systems.VisualEffects
         {
             get => frequentEffectEmitters;
             set => frequentEffectEmitters = value;
+        }
+
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<IVisualEffectsServices>(this);
         }
 
         void Start() => InitializePool();

@@ -2,12 +2,12 @@ using UnityEngine;
 using Universal.Runtime.Utilities.Helpers;
 using UnityEngine.InputSystem;
 using KBCore.Refs;
-using Universal.Runtime.Systems.ManagedUpdate;
 using Universal.Runtime.Behaviours.Characters;
+using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
-    public class CharacterDetect : AManagedBehaviour, IUpdatable
+    public class CharacterDetect : MonoBehaviour
     {
         [SerializeField, Self] CharacterManager characterManager;
         [SerializeField] LayerMask characterLayer;
@@ -19,23 +19,11 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void Start() => mainCamera = Camera.main;
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            PlayerMapInputProvider.AddCharacter.started += OnAddCharacter;
-        }
+        void OnEnable() => PlayerMapInputProvider.AddCharacter.started += OnAddCharacter;
 
-        protected override void OnDisable()
-        {
-            PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
-            base.OnDisable();
-        }
+        void OnDisable() => PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
 
-        protected override void OnDestroy()
-        {
-            PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
-            base.OnDestroy();
-        }
+        void OnDestroy() => PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
 
         void OnAddCharacter(InputAction.CallbackContext context)
         {
@@ -63,7 +51,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
                 characterObj.SetActive(false);
         }
 
-        void IUpdatable.ManagedUpdate(float deltaTime, float time) => DetectBodies();
+        void Update() => DetectBodies();
 
         void DetectBodies()
         {

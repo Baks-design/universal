@@ -1,0 +1,17 @@
+{
+    "name": "Universal.Runtime.Utilities.Extensions",
+    "rootNamespace": "Universal.Runtime.Utilities.Extensions",
+    "references": [],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

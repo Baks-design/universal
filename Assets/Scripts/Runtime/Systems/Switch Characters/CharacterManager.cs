@@ -1,16 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using Universal.Runtime.Utilities.Tools;
-using Universal.Runtime.Utilities.Helpers;
 using UnityEngine.InputSystem;
 using Universal.Runtime.Behaviours.Characters;
 using Unity.Cinemachine;
 using System.Collections;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
-    public class CharacterManager : PersistentSingleton<CharacterManager>
+    public class CharacterManager : MonoBehaviour, ICharacterServices
     {
         [SerializeField] CharacterData characterData;
         [SerializeField] CinemachineCamera cinemachine;
@@ -25,27 +25,30 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         public IReadOnlyList<IPlayableCharacter> CharacterRoster => characterRoster.AsReadOnly();
 
+        void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<ICharacterServices>(this);
+        }
+
         void Start() => AddCharacterToRoster(characterData);
 
-        protected override void OnEnable()
+        void OnEnable()
         {
-            base.OnEnable();
             PlayerMapInputProvider.SwitchCharacter.started += NextCharacter;
             PlayerMapInputProvider.SwitchCharacter.started += PreviousCharacter;
         }
 
-        protected override void OnDisable()
+        void OnDisable()
         {
             PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
             PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
-            base.OnDisable();
         }
 
-        protected override void OnDestroy()
+        void OnDestroy()
         {
             PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
             PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
-            base.OnDestroy();
         }
 
         void NextCharacter(InputAction.CallbackContext context)

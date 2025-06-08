@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KBCore.Refs;
 using UnityEngine;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Random = UnityEngine.Random;
 
 namespace Universal.Runtime.Systems.SoundEffects
@@ -10,9 +11,12 @@ namespace Universal.Runtime.Systems.SoundEffects
     {
         [SerializeField, Child] AudioSource audioSource;
         Coroutine playingCoroutine;
+        ISoundEffectsServices soundEffectsServices;
 
         public SoundData Data { get; private set; }
         public LinkedListNode<SoundEmitter> Node { get; set; }
+
+        void Start() => ServiceLocator.Global.Get(out soundEffectsServices);
 
         public void Initialize(SoundData data)
         {
@@ -64,7 +68,8 @@ namespace Universal.Runtime.Systems.SoundEffects
             }
 
             audioSource.Stop();
-            SoundEffectsManager.Instance.ReturnToPool(this);
+
+            soundEffectsServices.ReturnToPool(this);
         }
 
         public void WithRandomPitch(float min = -0.05f, float max = 0.05f)

@@ -1,17 +1,18 @@
 using UnityEngine;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.WorldTendency
 {
     public class PlayerTendencyActions : MonoBehaviour
     {
         [SerializeField] int currentWorldIndex;
-        WorldTendency tendencySystem;
+        ITendencyServices tendencyServices;
 
-        void Start() => tendencySystem = TendencyManager.Instance.GetTendencySystem;
+        void Start() => ServiceLocator.Global.Get(out tendencyServices);
 
         public void OnEnemyDefeated(bool isBoss = false)
-        => tendencySystem.AdjustTendency(currentWorldIndex, isBoss ? 0.5f : 0.1f);
+        => tendencyServices.GetTendencySystem.AdjustTendency(currentWorldIndex, isBoss ? 0.5f : 0.1f);
 
-        public void OnPlayerDeath() => tendencySystem.AdjustTendency(currentWorldIndex, -0.2f);
+        public void OnPlayerDeath() => tendencyServices.GetTendencySystem.AdjustTendency(currentWorldIndex, -0.2f);
     }
 }

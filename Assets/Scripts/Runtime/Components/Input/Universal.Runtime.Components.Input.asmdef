@@ -1,0 +1,20 @@
+{
+    "name": "Universal.Runtime.Components.Input",
+    "rootNamespace": "Universal.Runtime.Components.Input",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6720e7604dacf5044ba2e8bfe1829aa9"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

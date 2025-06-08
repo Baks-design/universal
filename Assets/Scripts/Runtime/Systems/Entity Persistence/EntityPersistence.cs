@@ -1,10 +1,9 @@
 using KBCore.Refs;
 using UnityEngine;
-using Universal.Runtime.Systems.ManagedUpdate;
 
 namespace Universal.Runtime.Systems.EntityPersistence
 {
-    public class EntityPersistence : AManagedBehaviour, IUpdatable, IBind<EntityData>
+    public class EntityPersistence : MonoBehaviour, IBind<EntityData>
     {
         [SerializeField, Self] Transform tr;
         [SerializeField] EntityData data;
@@ -18,7 +17,7 @@ namespace Universal.Runtime.Systems.EntityPersistence
             tr.SetLocalPositionAndRotation(data.Position, data.Rotation);
         }
 
-        void IUpdatable.ManagedUpdate(float deltaTime, float time)
+        void Update()
         {
             data.Position = tr.localPosition;
             data.Rotation = tr.localRotation;

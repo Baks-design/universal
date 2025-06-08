@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.VFX;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
@@ -9,9 +10,12 @@ namespace Universal.Runtime.Systems.VisualEffects
     {
         [SerializeField, Child] VisualEffect vfxSource;
         Coroutine playingCoroutine;
+        IVisualEffectsServices visualEffectsServices;
 
         public EffectsData Data { get; private set; }
         public LinkedListNode<EffectsEmitter> Node { get; set; }
+
+        void Start() => ServiceLocator.Global.Get(out visualEffectsServices);
 
         public void Initialize(EffectsData data) => Data = data;
 
@@ -26,7 +30,8 @@ namespace Universal.Runtime.Systems.VisualEffects
             }
 
             vfxSource.Stop();
-            VisualEffectsManager.Instance.ReturnToPool(this);
+
+            visualEffectsServices.ReturnToPool(this);
         }
     }
 }
