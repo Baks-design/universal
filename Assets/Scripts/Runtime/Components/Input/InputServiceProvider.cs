@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,47 +5,29 @@ namespace Universal.Runtime.Components.Input
 {
     public static class InputServiceProvider
     {
-        static readonly Dictionary<string, InputActionMap> maps = new();
-        static readonly Dictionary<string, Func<InputActionMap>> MapsSetup = new()
-        {
-            { "Player", () => InputSystem.actions.FindActionMap("Player")},
-            { "UI", () => InputSystem.actions.FindActionMap("UI")}
-        };
+        static InputActionMap playerMap;
+        static InputActionMap uiMap;
 
-        public static InputActionMap PlayerMap => GetAction("Player");
-        public static InputActionMap UIMap => GetAction("UI");
+        public static InputActionMap PlayerMap => playerMap;
+        public static InputActionMap UIMap => uiMap;
 
-        static InputActionMap GetAction(string mapId)
-        {
-            if (maps.TryGetValue(mapId, out var map))
-                return map;
-
-            Debug.LogError($"Input action {mapId} not found. Did you call InitializeActions()?");
-            return null; // Instead of throwing, return null
-        }
-
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void InitializeMaps()
         {
-            foreach (var mapSetup in MapsSetup)
-            {
-                var action = mapSetup.Value();
-                if (action == null)
-                    Debug.LogError($"Input action {mapSetup.Key} not found! Check path: {mapSetup.Key}");
-                else
-                    maps[mapSetup.Key] = action;
-            }
+            playerMap = InputSystem.actions.FindActionMap("Player");
+            uiMap = InputSystem.actions.FindActionMap("UI");
         }
 
         public static void EnablePlayerMap()
         {
-            UIMap.Disable();
-            PlayerMap.Enable();
+            uiMap.Disable();
+            playerMap.Enable();
         }
 
         public static void EnableUIMap()
         {
-            UIMap.Enable();
-            PlayerMap.Disable();
+            playerMap.Disable();
+            uiMap.Enable();
         }
 
         public static void SetCursorLocked(bool isSet)

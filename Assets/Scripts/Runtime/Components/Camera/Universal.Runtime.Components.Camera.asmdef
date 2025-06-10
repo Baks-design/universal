@@ -1,0 +1,29 @@
+{
+    "name": "Universal.Runtime.Components.Camera",
+    "rootNamespace": "Universal.Runtime.Components.Camera",
+    "references": [
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:696a0953692949b40bec8730e64e1fdd",
+        "GUID:33759803a11f4d538227861a78aba30b",
+        "GUID:34ea0123fa11de545ace977a55cf69a3",
+        "GUID:a5e5312352a76904eb82d813d0e0d424",
+        "GUID:0031969725fdf6c45bbae2cf588fcc43",
+        "GUID:6b1a2a9675df8eb45b7370f3a8ef5fe1",
+        "GUID:3c326a894c94a8e47b117226d086909e"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

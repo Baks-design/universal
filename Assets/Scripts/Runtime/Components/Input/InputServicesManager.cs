@@ -8,15 +8,12 @@ namespace Universal.Runtime.Components.Input
         void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            ServiceLocator.Global.Register<IInputServices>(this);
+            InputServiceProvider.SetCursorLocked(true);
 
-            // Initialize input system first
             InputServiceProvider.InitializeMaps();
             PlayerMapInputProvider.InitializeActions();
             UIMapInputProvider.InitializeActions();
-
-            // Then register the service
-            ServiceLocator.Global.Register<IInputServices>(this);
-
             InputServiceProvider.EnablePlayerMap();
         }
     }

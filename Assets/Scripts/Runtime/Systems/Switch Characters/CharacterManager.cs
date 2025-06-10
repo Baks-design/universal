@@ -7,23 +7,26 @@ using Unity.Cinemachine;
 using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
+using KBCore.Refs;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
     public class CharacterManager : MonoBehaviour, ICharacterServices
     {
+        [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField] CharacterData characterData;
-        [SerializeField] CinemachineCamera cinemachine;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
         IPlayableCharacter currentCharacter;
+        IEnableComponent enableComponent;
         Vector3 lastActivePosition;
         Quaternion lastActiveRotation;
         const int maxCharacters = 7;
-        readonly List<IPlayableCharacter> characterRoster = new(maxCharacters);
+        readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
         readonly HashSet<CharacterData> rosterData = new(maxCharacters);
 
-        public IReadOnlyList<IPlayableCharacter> CharacterRoster => characterRoster.AsReadOnly();
+        public IReadOnlyList<KeyValuePair<IPlayableCharacter, IEnableComponent>> CharacterRoster
+        => characterRoster.AsReadOnly();
 
         void Awake()
         {
@@ -55,7 +58,9 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         {
             if (context.ReadValue<float>() <= 0f || characterRoster.Count == 0) return;
 
-            var currentIndex = characterRoster.IndexOf(currentCharacter);
+            var currentIndex = GetCurrentCharacterIndex();
+            if (currentIndex == -1) return;
+
             var nextIndex = (currentIndex + 1) % characterRoster.Count;
             SwitchCharacter(nextIndex);
         }
@@ -64,10 +69,15 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         {
             if (context.ReadValue<float>() >= 0f || characterRoster.Count == 0) return;
 
-            var currentIndex = characterRoster.IndexOf(currentCharacter);
+            var currentIndex = GetCurrentCharacterIndex();
+            if (currentIndex == -1) return;
+
             var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
             SwitchCharacter(prevIndex);
         }
+
+        int GetCurrentCharacterIndex()
+        => characterRoster.FindIndex(kvp => kvp.Key == currentCharacter || kvp.Value == enableComponent);
 
         public bool ContainsCharacter(CharacterData data) => rosterData.Contains(data);
 
@@ -88,9 +98,16 @@ namespace Universal.Runtime.Systems.SwitchCharacters
                 characterData.characterPrefab,
                 characterContainer.transform
             ).WaitForCompletion();
-            if (!charObj.TryGetComponent(out Character character))
+            if (!charObj.TryGetComponent(out IPlayableCharacter character))
             {
-                Debug.LogError("Instantiated prefab doesn't have Character component!");
+                Debug.LogError("Instantiated prefab doesn't implement IPlayableCharacter!");
+                Addressables.ReleaseInstance(charObj);
+                return;
+            }
+            if (!charObj.TryGetComponent(out IEnableComponent enableComp))
+            {
+                Debug.LogError("Instantiated prefab doesn't implement IEnableComponent!");
+                Addressables.ReleaseInstance(charObj);
                 return;
             }
 
@@ -99,24 +116,23 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             if (characterRoster.Count == 0)
             {
                 // Set spawn position for first character
-                character.LastPosition = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
-                character.LastRotation = Quaternion.identity;
+                var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
+                character.CharacterTransform.position = spawnPoint.position;
+                character.CharacterTransform.rotation = spawnPoint.rotation;
 
-                // Update lastActivePosition immediately
-                lastActivePosition = character.LastPosition;
-                lastActiveRotation = character.LastRotation;
+                lastActivePosition = spawnPoint.position;
+                lastActiveRotation = spawnPoint.rotation;
             }
             else
             {
                 // Use last active position for subsequent characters
-                character.LastPosition = lastActivePosition;
-                character.LastRotation = lastActiveRotation;
+                character.CharacterTransform.position = lastActivePosition;
+                character.CharacterTransform.rotation = lastActiveRotation;
             }
-            character.transform.SetPositionAndRotation(character.LastPosition, character.LastRotation);
 
             rosterData.Add(characterData);
-            characterRoster.Add(character);
-            character.Deactivate();
+            characterRoster.Add(new KeyValuePair<IPlayableCharacter, IEnableComponent>(character, enableComp));
+            enableComp.Deactivate();
 
             if (currentCharacter == null)
                 SwitchCharacter(0);
@@ -124,51 +140,54 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         public void RemoveCharacterFromRoster(int index)
         {
-            if (index >= 0 && index < characterRoster.Count)
+            if (index < 0 || index >= characterRoster.Count) return;
+
+            var character = characterRoster[index];
+            rosterData.Remove(character.Key.CharacterData);
+
+            if (currentCharacter == character.Key)
             {
-                var character = characterRoster[index];
-                rosterData.Remove(character.Data);
-
-                if (currentCharacter == character)
-                    SwitchCharacter(Mathf.Max(0, index - 1));
-
-                if (character is MonoBehaviour mb)
-                    Addressables.ReleaseInstance(mb.gameObject);
-
-                characterRoster.RemoveAt(index);
+                var newIndex = Mathf.Clamp(index - 1, 0, characterRoster.Count - 2);
+                SwitchCharacter(newIndex);
             }
+
+            if (character.Key is MonoBehaviour mb)
+                Addressables.ReleaseInstance(mb.gameObject);
+
+            characterRoster.RemoveAt(index);
         }
 
         void SwitchCharacter(int index)
         {
             if (index < 0 || index >= characterRoster.Count) return;
 
-            StartCoroutine(SwitchCharacterRoutine(index));
+            var newCharacter = characterRoster[index];
+            StartCoroutine(SwitchCharacterRoutine(newCharacter.Key, newCharacter.Value));
         }
 
-        IEnumerator SwitchCharacterRoutine(int index)
+        IEnumerator SwitchCharacterRoutine(IPlayableCharacter newCharacter, IEnableComponent newEnableComponent)
         {
             // Store current position before switching
             if (currentCharacter != null)
             {
                 lastActivePosition = currentCharacter.CharacterTransform.position;
                 lastActiveRotation = currentCharacter.CharacterTransform.rotation;
-                currentCharacter.Deactivate();
+                enableComponent.Deactivate();
             }
 
-            currentCharacter = characterRoster[index];
+            // Update references
+            currentCharacter = newCharacter;
+            enableComponent = newEnableComponent;
 
             // Apply the stored position/rotation to the new character
-            currentCharacter.LastPosition = lastActivePosition;
-            currentCharacter.LastRotation = lastActiveRotation;
             currentCharacter.CharacterTransform.SetPositionAndRotation(
                 lastActivePosition,
                 lastActiveRotation
             );
 
-            currentCharacter.Activate();
+            enableComponent.Activate();
             cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
-            Debug.Log($"Switched to {currentCharacter.Data.characterName} at {currentCharacter.LastPosition}");
+            Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
 
             yield return null;
         }

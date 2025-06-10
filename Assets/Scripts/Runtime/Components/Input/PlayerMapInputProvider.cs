@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,42 +5,30 @@ namespace Universal.Runtime.Components.Input
 {
     public static class PlayerMapInputProvider
     {
-        static readonly Dictionary<string, InputAction> actions = new();
-        static readonly Dictionary<string, Func<InputAction>> ActionSetupMethods = new()
-        {
-            { "Move", () => InputSystem.actions.FindAction("Player/Move")},
-            { "Look", () => InputSystem.actions.FindAction("Player/Look")},
-            { "SwitchCharacter", () => InputSystem.actions.FindAction("Player/SwitchCharacter")},
-            { "AddCharacter", () => InputSystem.actions.FindAction("Player/AddCharacter")},
-            { "Pause", () => InputSystem.actions.FindAction("Player/Pause")},
-        };
+        static InputAction move;
+        static InputAction look;
+        static InputAction switchCharacter;
+        static InputAction addCharacter;
+        static InputAction pause;
+        static InputAction setAttackMode;
 
-        public static Vector2 MousePos => Mouse.current.position.ReadValue();
-        public static InputAction Move => GetAction("Move");
-        public static InputAction Look => GetAction("Look");
-        public static InputAction SwitchCharacter => GetAction("SwitchCharacter");
-        public static InputAction AddCharacter => GetAction("AddCharacter");
-        public static InputAction Pause => GetAction("Pause");
+        public static Vector2 MousePosition => Mouse.current.position.ReadValue();
+        public static Vector2 Move => move?.ReadValue<Vector2>() ?? Vector2.zero;
+        public static Vector2 Look => look?.ReadValue<Vector2>() ?? Vector2.zero;
+        public static InputAction SwitchCharacter => switchCharacter;
+        public static InputAction AddCharacter => addCharacter;
+        public static InputAction Pause => pause;
+        public static InputAction SetAttackMode => setAttackMode;
 
-        static InputAction GetAction(string actionId)
-        {
-            if (actions.TryGetValue(actionId, out var action))
-                return action;
-
-            Debug.LogError($"Input action {actionId} not found. Did you call InitializeActions()?");
-            return null; // Instead of throwing, return null
-        }
-
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void InitializeActions()
         {
-            foreach (var actionSetup in ActionSetupMethods)
-            {
-                var action = actionSetup.Value();
-                if (action == null)
-                    Debug.LogError($"Input action {actionSetup.Key} not found! Check path: {actionSetup.Key}");
-                else
-                    actions[actionSetup.Key] = action;
-            }
+            move = InputSystem.actions.FindAction("Player/Move");
+            look = InputSystem.actions.FindAction("Player/Look");
+            switchCharacter = InputSystem.actions.FindAction("Player/SwitchCharacter");
+            addCharacter = InputSystem.actions.FindAction("Player/AddCharacter");
+            pause = InputSystem.actions.FindAction("Player/Pause");
+            setAttackMode = InputSystem.actions.FindAction("Player/SetAttackMode");
         }
     }
 }

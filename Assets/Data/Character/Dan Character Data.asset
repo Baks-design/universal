@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Dan
   characterPrefab:
-    m_AssetGUID: 70383d5aeffea4d45bd41149b352ceb2
+    m_AssetGUID: 2cb3ea6a9e402bb439040c7b5c65dc29
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

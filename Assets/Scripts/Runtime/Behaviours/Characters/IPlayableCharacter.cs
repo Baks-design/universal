@@ -4,12 +4,11 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public interface IPlayableCharacter
     {
-        CharacterData Data { get; }
+        CharacterData CharacterData { get; }
         Transform CharacterTransform { get; }
         Vector3 LastPosition { get; set; }
         Quaternion LastRotation { get; set; }
 
-        void Activate();
-        void Deactivate();
+        void Initialize(CharacterData data);
     }
 }

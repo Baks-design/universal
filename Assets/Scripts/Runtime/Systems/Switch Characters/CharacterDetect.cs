@@ -31,15 +31,15 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
             if (hitInfo.collider.TryGetComponent(out Character character))
             {
-                if (!characterManager.ContainsCharacter(character.Data))
+                if (!characterManager.ContainsCharacter(character.CharacterData))
                 {
-                    characterManager.AddCharacterToRoster(character.Data);
-                    Debug.Log($"Added {character.Data.characterName} to roster");
+                    characterManager.AddCharacterToRoster(character.CharacterData);
+                    Debug.Log($"Added {character.CharacterData.characterName} to roster");
 
                     RemoveCharacterFromScene(character.gameObject);
                 }
                 else
-                    Debug.Log($"{character.Data.characterName} already in roster");
+                    Debug.Log($"{character.CharacterData.characterName} already in roster");
             }
         }
 
@@ -55,7 +55,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void DetectBodies()
         {
-            var getRay = mainCamera.ScreenPointToRay(PlayerMapInputProvider.MousePos);
+            var getRay = mainCamera.ScreenPointToRay(PlayerMapInputProvider.MousePosition);
             (isColl, hitInfo) = GamePhysics.SphereCast(
                 getRay.origin,
                 getRay.direction,

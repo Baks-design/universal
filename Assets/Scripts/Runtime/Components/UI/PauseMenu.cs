@@ -10,9 +10,9 @@ namespace Universal.Runtime.Components.UI
     {
         [SerializeField, Self] UIDocument uIDocument;
         VisualElement root;
-        Button resumeButton;
-        Button optionsButton;
-        Button mainMenuButton;
+        // Button resumeButton;
+        // Button optionsButton;
+        // Button mainMenuButton;
 
         public bool IsPaused { get; private set; } = false;
 
@@ -24,9 +24,9 @@ namespace Universal.Runtime.Components.UI
             root.style.display = DisplayStyle.None;
 
             // Query the buttons
-            resumeButton = root.Q<Button>("resume-button");
-            optionsButton = root.Q<Button>("options-button");
-            mainMenuButton = root.Q<Button>("main-menu-button");
+            // resumeButton = root.Q<Button>("resume-button");
+            // optionsButton = root.Q<Button>("options-button");
+            // mainMenuButton = root.Q<Button>("main-menu-button");
 
             // Register button callbacks
             // resumeButton.clicked += OnResumeClicked; //TODO:Pause Menu
@@ -71,7 +71,7 @@ namespace Universal.Runtime.Components.UI
 
         void OnResumePressed(InputAction.CallbackContext _) => ResumeGame();
 
-        void OnResumeClicked() => ResumeGame();
+        // void OnResumeClicked() => ResumeGame();
 
         void ResumeGame()
         {
@@ -83,17 +83,17 @@ namespace Universal.Runtime.Components.UI
             Debug.Log("Closed Menu");
         }
 
-        void OnOptionsClicked()
-        {
-            // Implement options menu logic
-            Debug.Log("Options clicked");
-        }
+        // void OnOptionsClicked()
+        // {
+        //     // Implement options menu logic
+        //     Debug.Log("Options clicked");
+        // }
 
-        void OnMainMenuClicked()
-        {
-            // Return to main menu
-            Time.timeScale = 1f;
-            //SceneManager.LoadScene("MainMenu");
-        }
+        // void OnMainMenuClicked()
+        // {
+        //     // Return to main menu
+        //     Time.timeScale = 1f;
+        //     //SceneManager.LoadScene("MainMenu");
+        // }
     }
 }

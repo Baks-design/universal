@@ -12,17 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c75f72293e57f4a8f173d7aa656d06, type: 3}
   m_Name: Garcian Character Data
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: Garcian
   characterPrefab:
-    m_AssetGUID: 3e7d5503186f5544fa465ca3a90130b0
+    m_AssetGUID: a5c4631b0ceaf5544a5fc5223b4aedbd
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  characterIcon: {fileID: 0}
-  useCustomSpawnPosition: 0
-  customSpawnPosition: {x: 0, y: 0, z: 0}
-  customSpawnRotation: {x: 0, y: 0, z: 0, w: 1}
+  characterIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   movementSpeed: 5
   jumpForce: 7
   abilities: []

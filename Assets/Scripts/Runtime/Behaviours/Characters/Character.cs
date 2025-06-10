@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public abstract class Character : MonoBehaviour, IPlayableCharacter
+    public abstract class Character : MonoBehaviour, IEnableComponent, IPlayableCharacter
     {
         [SerializeField, InLineEditor] CharacterData characterData;
 
-        public CharacterData Data => characterData;
+        public CharacterData CharacterData => characterData;
         public Transform CharacterTransform => transform;
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
