@@ -15,8 +15,6 @@ namespace Universal.Runtime.Systems.SoundEffects
         [SerializeField] int maxPoolSize = 100;
         [SerializeField] int maxSoundInstances = 30;
         IObjectPool<SoundEmitter> soundEmitterPool;
-        GameObject soundInstantiated;
-
         readonly List<SoundEmitter> activeSoundEmitters = new();
         public readonly LinkedList<SoundEmitter> FrequentSoundEmitters = new();
 
@@ -75,7 +73,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         SoundEmitter CreateSoundEmitter()
         {
-            soundInstantiated = Addressables
+            var soundInstantiated = Addressables
                 .InstantiateAsync(soundEmitterPrefab, parentSounds.transform)
                 .WaitForCompletion();
             soundInstantiated.SetActive(false);

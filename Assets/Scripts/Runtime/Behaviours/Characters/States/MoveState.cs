@@ -6,15 +6,14 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class MoveState : IState
     {
-        readonly CharacterSwitchController controller;
+        readonly CharacterMovementController controller;
 
-        public MoveState(CharacterSwitchController controller) => this.controller = controller;
+        public MoveState(CharacterMovementController controller) => this.controller = controller;
 
         public void Update()
         {
-            controller.MovementController.CharacterMovement.HandleMovement(
-                PlayerMapInputProvider.Move, Time.deltaTime
-            );
+            // if (controller.CharacterCameraController.IsActiveCurrentState) return;
+            // controller.CharacterMovement.HandleMovement(PlayerMapInputProvider.Move, Time.deltaTime);TODO: SETUP STATE
         }
     }
 }

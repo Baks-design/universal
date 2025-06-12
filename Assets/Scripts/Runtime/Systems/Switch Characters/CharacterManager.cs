@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using Universal.Runtime.Behaviours.Characters;
-using Unity.Cinemachine;
 using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
-using KBCore.Refs;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
     public class CharacterManager : MonoBehaviour, ICharacterServices
     {
-        [SerializeField, Child] CinemachineCamera cinemachine;
-        [SerializeField] CharacterData characterData;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
+        [SerializeField, InLineEditor] CharacterData characterData;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
         Vector3 lastActivePosition;
@@ -24,9 +22,6 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
         readonly HashSet<CharacterData> rosterData = new(maxCharacters);
-
-        public IReadOnlyList<KeyValuePair<IPlayableCharacter, IEnableComponent>> CharacterRoster
-        => characterRoster.AsReadOnly();
 
         void Awake()
         {
@@ -116,19 +111,15 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             if (characterRoster.Count == 0)
             {
                 // Set spawn position for first character
-                var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
-                character.CharacterTransform.position = spawnPoint.position;
-                character.CharacterTransform.rotation = spawnPoint.rotation;
-
+                var randomPoint = Random.Range(0, spawnPoints.Length);
+                var spawnPoint = spawnPoints[randomPoint].transform;
+                character.CharacterTransform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
                 lastActivePosition = spawnPoint.position;
                 lastActiveRotation = spawnPoint.rotation;
             }
             else
-            {
                 // Use last active position for subsequent characters
-                character.CharacterTransform.position = lastActivePosition;
-                character.CharacterTransform.rotation = lastActiveRotation;
-            }
+                character.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             rosterData.Add(characterData);
             characterRoster.Add(new KeyValuePair<IPlayableCharacter, IEnableComponent>(character, enableComp));
@@ -180,14 +171,10 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             enableComponent = newEnableComponent;
 
             // Apply the stored position/rotation to the new character
-            currentCharacter.CharacterTransform.SetPositionAndRotation(
-                lastActivePosition,
-                lastActiveRotation
-            );
+            currentCharacter.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             enableComponent.Activate();
-            cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
-            Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
+            //Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
 
             yield return null;
         }

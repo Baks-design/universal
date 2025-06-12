@@ -2485,10 +2485,18 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
+    - target: {fileID: 3309246745016039530, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: characterData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a9d26a08a5cd5c41979a4e20b2d044f, type: 2}
     - target: {fileID: 3588946117734807384, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_Name
       value: Dan Character
       objectReference: {fileID: 0}
+    - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
     - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: characterData
       value: 

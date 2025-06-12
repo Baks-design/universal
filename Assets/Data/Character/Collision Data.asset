@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a42d29cd90846c4298e8f319f933fae, type: 3}
+  m_Name: Collision Data
+  m_EditorClassIdentifier: 
+  floorCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  floorRayOriginPositionOffset: -0.25
+  floorRayMaxDistance: 0.1
+  roofCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  roofOriginPositionOffset: -0.25
+  roofRayMaxDistance: 0.1
+  obstacleCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  obstacleRayOriginPositionOffset: 0.4
+  obstacleRayRadius: 0.2
+  obstacleRayMaxDistance: 0.4
+  interactableCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  interactionRayRadius: 0.3
+  interactionMaxRayDistance: 0.3
+  pushCollsionLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  canPush: 1
+  strength: 5

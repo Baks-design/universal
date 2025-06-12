@@ -7,7 +7,5 @@ namespace Universal.Runtime.Components.Camera
         readonly CharacterCameraController controller;
 
         public DeactiveState(CharacterCameraController controller) => this.controller = controller;
-
-        public void LateUpdate() { }
     }
 }

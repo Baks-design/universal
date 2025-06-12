@@ -2469,10 +2469,18 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 3309246745016039530, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: characterData
+      value: 
+      objectReference: {fileID: 11400000, guid: 9f591c3d9aa13ac47939e59fe8a64bad, type: 2}
     - target: {fileID: 3588946117734807384, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_Name
       value: Garcian Character
       objectReference: {fileID: 0}
+    - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
     - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: characterData
       value: 

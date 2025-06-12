@@ -9,6 +9,6 @@ namespace Universal.Runtime.Components.Camera
 
         public ActiveState(CharacterCameraController controller) => this.controller = controller;
 
-        public void LateUpdate() => controller.CameraRotation.HandleRotation(Time.smoothDeltaTime);
+        public void LateUpdate() => controller.CameraRotation.HandleRotation();
     }
 }

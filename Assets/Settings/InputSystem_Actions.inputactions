@@ -15,22 +15,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Move",
-                    "type": "Value",
-                    "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
-                    "expectedControlType": "Vector2",
+                    "name": "AddCharacter",
+                    "type": "Button",
+                    "id": "9c569c45-50c9-4db2-849e-1d5c6d69e92e",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "6b444451-8a00-4d00-a97e-f47457f736a8",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "SwitchCharacter",
@@ -42,18 +33,45 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "AddCharacter",
+                    "name": "SetAttackMode",
                     "type": "Button",
-                    "id": "9c569c45-50c9-4db2-849e-1d5c6d69e92e",
+                    "id": "57966dae-9fff-4f38-be63-4d0f61b7a33b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SetAttackMode",
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "6b444451-8a00-4d00-a97e-f47457f736a8",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Turn",
+                    "type": "Value",
+                    "id": "bb7f458c-d0a8-4ac3-9725-6b6acb18cbc7",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "351f2ccd-1f9f-44bf-9bec-d62ac5c5f408",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Run",
                     "type": "Button",
-                    "id": "57966dae-9fff-4f38-be63-4d0f61b7a33b",
+                    "id": "9b38d9c0-48b1-47c2-a18a-8f3c8fce9677",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -64,7 +82,7 @@
                 {
                     "name": "WASD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
-                    "path": "Dpad",
+                    "path": "Dpad(mode=1)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -150,7 +168,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
+                    "name": "Previous/Next",
                     "id": "d1f5a845-6638-468b-81ff-cc355b9325d8",
                     "path": "1DAxis",
                     "interactions": "",
@@ -163,7 +181,7 @@
                 {
                     "name": "positive",
                     "id": "608eb6f1-79d4-4174-9034-4a4e9f234fe9",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -174,10 +192,32 @@
                 {
                     "name": "negative",
                     "id": "50578444-e6cf-4481-9fc5-45c8f13c3217",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
+                    "action": "SwitchCharacter",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "4cd71e7f-863d-4d55-b614-d9eaaa3ddeef",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "SwitchCharacter",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "d51e66ac-c38d-4c77-8794-f531d9cda863",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
                     "action": "SwitchCharacter",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -194,37 +234,15 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "121471d1-9873-48ab-8ca4-a40aa98a87fe",
-                    "path": "1DAxis",
+                    "name": "",
+                    "id": "a424bafc-812f-4708-b7f5-d9209f8b7f47",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Gamepad",
                     "action": "AddCharacter",
-                    "isComposite": true,
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "6ece9741-03b4-41b0-9ab4-846863e555da",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "AddCharacter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "1899c791-9ada-47e5-a365-b1ad062cd239",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "AddCharacter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -269,6 +287,83 @@
                     "action": "SetAttackMode",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edad4ef2-bd52-4822-b0e0-92205de14087",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d860f6a6-c318-4b27-ba7b-12a1199e6487",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "TurnLeft/TurnRight",
+                    "id": "90cb50ca-4adf-4ac6-9caa-cc919a54003a",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Turn",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "fae8a6da-05a6-4056-bd8b-1185a69ddab7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "73251ffc-024e-4fb9-a2ff-515d92212386",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "4f29eb88-bfd6-4158-8019-f2518793aad6",
+                    "path": "<Gamepad>/rightStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "6634af02-6868-4928-befb-f9631c69121d",
+                    "path": "<Gamepad>/rightStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

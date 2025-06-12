@@ -1,68 +1,79 @@
-using System;
 using KBCore.Refs;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Components.Camera
 {
-    public class CharacterCameraController : MonoBehaviour, IEnableComponent
+    public class CharacterCameraController : StatefulEntity, IEnableComponent
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
-        [SerializeField] Transform yawTransform;
-        [SerializeField] Transform pitchTransform;
         [SerializeField, InLineEditor] CameraData cameraData;
-        StateMachine stateMachine;
-        bool isCameraActive = false;
+        bool isBodyCamEnable = false;
+        ActiveState activeState;
+        DeactiveState deactiveState;
+        private Vector2 lookInput;
 
         public CameraRotation CameraRotation { get; set; }
+        public bool IsActiveCurrentState => stateMachine.CurrentState == activeState;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             SetupStateMachine();
-            CameraRotation = new CameraRotation(cameraData, yawTransform, pitchTransform);
+            SetupComponents();
         }
 
         void SetupStateMachine()
         {
-            stateMachine = new StateMachine();
+            activeState = new ActiveState(this);
+            deactiveState = new DeactiveState(this);
 
-            var activeState = new ActiveState(this);
-            var deactiveState = new DeactiveState(this);
+            At(deactiveState, activeState, () => isBodyCamEnable);
+            At(activeState, deactiveState, () => !isBodyCamEnable);
 
-            At(deactiveState, activeState, () => isCameraActive);
-            At(activeState, deactiveState, () => !isCameraActive);
-
-            stateMachine.SetState(deactiveState);
+            SetState(deactiveState);
         }
 
-        void At(IState from, IState to, Func<bool> condition)
-        => stateMachine.AddTransition(from, to, condition);
-
-        void LateUpdate() => stateMachine.LateUpdate();
-
-        void Update() => Debug.Log($"Current State: {stateMachine.CurrentState}");
-
-        void OnEnable() => PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
-
-        void OnDisable() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-
-        void OnDestroy() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-
-        void SetAttackMode(InputAction.CallbackContext context)
-        {
-            isCameraActive = !isCameraActive;
-            if (isCameraActive)
-                cinemachine.Priority = 9;
-            else
-                cinemachine.Priority = 1;
-        }
+        void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine, lookInput);
 
         public void Activate() => gameObject.SetActive(true);
 
         public void Deactivate() => gameObject.SetActive(false);
+
+        void OnEnable()
+        {
+            PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
+            PlayerMapInputProvider.Move.performed += Look;
+        }
+
+        void OnDisable()
+        {
+            PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
+            PlayerMapInputProvider.Move.performed -= Look;
+        }
+
+        void OnDestroy()
+        {
+            PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
+            PlayerMapInputProvider.Move.performed -= Look;
+        }
+
+        void Look(InputAction.CallbackContext context) => lookInput = context.ReadValue<Vector2>();
+
+        void SetAttackMode(InputAction.CallbackContext context)
+        {
+            isBodyCamEnable = !isBodyCamEnable;
+            cinemachine.Priority = isBodyCamEnable ? (PrioritySettings)9 : (PrioritySettings)1;
+        }
+
+        // protected override void Update()
+        // {
+        //     base.Update();
+        //     Debug.Log($"Current State: {stateMachine.CurrentState}");
+        // }
     }
 }

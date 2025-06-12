@@ -17,14 +17,11 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         public void Update()
         {
             var transition = GetTransition();
-
             if (transition != null)
             {
                 ChangeState(transition.To);
                 foreach (var node in nodes.Values)
-                {
                     ResetActionPredicateFlags(node.Transitions);
-                }
                 ResetActionPredicateFlags(anyTransitions);
             }
 
@@ -36,9 +33,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         static void ResetActionPredicateFlags(IEnumerable<Transition> transitions)
         {
             foreach (var transition in transitions.OfType<Transition<ActionPredicate>>())
-            {
                 transition.condition.flag = false;
-            }
         }
 
         public void SetState(IState state)
@@ -61,14 +56,10 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         }
 
         public void AddTransition<T>(IState from, IState to, T condition)
-        {
-            GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
-        }
+        => GetOrAddNode(from).AddTransition(GetOrAddNode(to).State, condition);
 
         public void AddAnyTransition<T>(IState to, T condition)
-        {
-            anyTransitions.Add(new Transition<T>(GetOrAddNode(to).State, condition));
-        }
+        => anyTransitions.Add(new Transition<T>(GetOrAddNode(to).State, condition));
 
         Transition GetTransition()
         {
@@ -77,10 +68,8 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
                     return transition;
 
             foreach (var transition in currentNode.Transitions)
-            {
                 if (transition.Evaluate())
                     return transition;
-            }
 
             return null;
         }
@@ -93,7 +82,6 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
                 node = new StateNode(state);
                 nodes[state.GetType()] = node;
             }
-
             return node;
         }
 
@@ -109,9 +97,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
             }
 
             public void AddTransition<T>(IState to, T predicate)
-            {
-                Transitions.Add(new Transition<T>(to, predicate));
-            }
+            => Transitions.Add(new Transition<T>(to, predicate));
         }
     }
 }

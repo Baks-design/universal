@@ -1,9 +1,9 @@
 using UnityEngine;
-using Universal.Runtime.Utilities.Helpers;
 using UnityEngine.InputSystem;
 using KBCore.Refs;
 using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Components.Collider;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
@@ -29,7 +29,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
         {
             if (!isColl) return;
 
-            if (hitInfo.collider.TryGetComponent(out Character character))
+            if (hitInfo.collider.TryGetComponent(out CharacterMovementController character))
             {
                 if (!characterManager.ContainsCharacter(character.CharacterData))
                 {
@@ -55,7 +55,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void DetectBodies()
         {
-            var getRay = mainCamera.ScreenPointToRay(PlayerMapInputProvider.MousePosition);
+            var getRay = mainCamera.ScreenPointToRay(Vector3.zero);
             (isColl, hitInfo) = GamePhysics.SphereCast(
                 getRay.origin,
                 getRay.direction,

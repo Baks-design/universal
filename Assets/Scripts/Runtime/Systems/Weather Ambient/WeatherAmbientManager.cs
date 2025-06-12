@@ -18,6 +18,7 @@ namespace Universal.Runtime.Systems.WeatherAmbient
                 return $"Current: {daytime} ({currentHour:F1}h), {weather}";
             }
         }
+        
         void Awake()
         {
             DontDestroyOnLoad(gameObject);
@@ -30,7 +31,7 @@ namespace Universal.Runtime.Systems.WeatherAmbient
         {
             SetDaytime(new DaytimeMorning());
             SetWeather(new RainyWeather());
-            Debug.Log(GetCurrentEnvironmentInfo);
+            //Debug.Log(GetCurrentEnvironmentInfo);
         }
 
         void Update() => daytimeSystem.UpdateDaytime();
@@ -38,13 +39,13 @@ namespace Universal.Runtime.Systems.WeatherAmbient
         public void SetWeather(IWeatherState newWeather)
         {
             weatherSystem.SetWeather(newWeather);
-            Debug.Log(GetCurrentEnvironmentInfo);
+            //Debug.Log(GetCurrentEnvironmentInfo);
         }
 
         public void SetDaytime(IDaytimeState newDaytime)
         {
             daytimeSystem.SetDaytime(newDaytime);
-            Debug.Log(GetCurrentEnvironmentInfo);
+            //Debug.Log(GetCurrentEnvironmentInfo);
         }
     }
 }

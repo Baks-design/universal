@@ -6,15 +6,15 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class IdleState : IState
     {
-        readonly CharacterSwitchController controller;
+        readonly CharacterMovementController controller;
 
-        public IdleState(CharacterSwitchController controller) => this.controller = controller;
+        public IdleState(CharacterMovementController controller) => this.controller = controller;
 
         public void Update()
         {
-            controller.MovementController.CharacterMovement.HandleMovement(
-                PlayerMapInputProvider.Move, Time.deltaTime
-            );
+            // controller.CharacterMovement.HandleMovement( TODO: SETUP STATE
+            //     PlayerMapInputProvider.Move, Time.deltaTime
+            // );
         }
     }
 }

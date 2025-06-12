@@ -10,7 +10,6 @@ namespace Universal.Runtime.Components.Input
         public static InputAction Unpause => unpause;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void InitializeActions()
-        => unpause = InputSystem.actions.FindAction("UI/Unpause");
+        public static void InitializeActions() => unpause = InputSystem.actions.FindAction("UI/Unpause");
     }
 }

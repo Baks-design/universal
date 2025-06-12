@@ -6,16 +6,14 @@ namespace Universal.Runtime.Behaviours.Characters
     public class CharacterAnimationController : MonoBehaviour
     {
         [SerializeField, Child] Animator animator;
-        [SerializeField, Parent] CharacterSwitchController switchController;
+        [SerializeField, Parent] CharacterMovementController movementController;
         readonly int animIDSpeed = Animator.StringToHash("Speed");
         readonly int animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 
         void Update()
         {
-            animator.SetFloat(
-                animIDSpeed,
-                switchController.MovementController.CharacterMovement.CalculateBlend());
-            animator.SetFloat(animIDMotionSpeed, 1f);
+            //animator.SetFloat(animIDSpeed, movementController.CharacterMovement.CalculateBlend);TODO: Adjust
+            //animator.SetFloat(animIDMotionSpeed, 1f);
         }
     }
 }
