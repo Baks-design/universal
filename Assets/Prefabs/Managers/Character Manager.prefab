@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2116281126589495609}
   - component: {fileID: 3291302390530907358}
   m_Layer: 0
-  m_Name: Character Switch Manager
+  m_Name: Character Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 5045746581716277779}
+  grid: {fileID: 0}
   characterContainer: {fileID: 3091726633723982254}
   spawnPoints:
   - {fileID: 0}
@@ -130,13 +131,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6065808605712230364}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: -3.1, y: 22.51, z: -33.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 552114244824793768}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!114 &5045746581716277779
 MonoBehaviour:
   m_ObjectHideFlags: 0

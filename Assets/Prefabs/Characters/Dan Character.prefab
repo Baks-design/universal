@@ -2501,6 +2501,10 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
+    - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: <Data>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
     - target: {fileID: 6105000888535693558, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.23

@@ -19,11 +19,38 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  gridSize: 1
-  moveSpeed: 5
-  rotationSpeed: 10
+  inputCooldown: 0.1
+  inputDeadzone: 0.2
+  diagonalThreshold: 0.1
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
+  obstacleCheckRadius: 0.4
+  moveDuration: 0.1
+  moveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateDuration: 0.1
   walkStepInterval: 0.5
   runStepInterval: 0.3

@@ -14,6 +14,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
     public class CharacterManager : MonoBehaviour, ICharacterServices
     {
         [SerializeField] CinemachineCamera cinemachine;
+        [SerializeField] Grid grid;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InLineEditor] CharacterData characterData;
@@ -176,6 +177,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             currentCharacter.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             enableComponent.Activate();
+            currentCharacter.Grid = grid;
             cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
             //Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
 

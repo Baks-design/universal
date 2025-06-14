@@ -1,25 +1,22 @@
 using UnityEngine;
-using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
-using Universal.Runtime.Utilities.Tools.StateMachine;
-using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Camera;
 using KBCore.Refs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter
+    public class CharacterMovementController : MonoBehaviour, IEnableComponent, IPlayableCharacter
     {
-        [field: SerializeField, Self] public CharacterController Character { get; }
-        [field: SerializeField] public Transform Transform { get; }
-        [field: SerializeField] public CharacterCameraController Camera { get; }
+        [field: SerializeField, Self] public CharacterController Character { get; private set; }
+        [field: SerializeField] public Transform Transform { get; private set; }
+        [field: SerializeField] public CharacterCameraController CameraController { get; private set; }
+        [field: SerializeField] public Grid Grid { get; set; }
         [field: SerializeField, InLineEditor] public CharacterData Data { get; private set; }
 
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
-        public CharacterCameraController CameraController => Camera;
         public CharacterData CharacterData => Data;
-        public Transform CharacterTransform => Transform;
+        public Transform CharacterTransform => transform;
         public CharacterRotation CharacterRotation { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
         public bool IsRunHold { get; private set; }
@@ -39,70 +36,25 @@ namespace Universal.Runtime.Behaviours.Characters
             gameObject.SetActive(false);
         }
 
-        protected override void Awake()
-        {
-            base.Awake();
-            InitializeComponents();
-            SetupStateMachine();
-        }
+        void Awake() => InitializeComponents();
 
         void InitializeComponents()
         {
-            CharacterMovement = new CharacterMovement(this, Character, Data);
+            CharacterMovement = new CharacterMovement(Character, Data, Grid, Camera.main);
             CharacterRotation = new CharacterRotation(this, Character, Data);
         }
 
-        void SetupStateMachine()
+        void Start() => CharacterMovement.SnapToGrid();
+
+        void Update()
         {
-            var idle = new IdleState(this);
-            var moving = new MoveState(this);
+            CharacterMovement.UpdateMovement();
+            CharacterRotation.UpdateRotation();
 
-            At(idle, moving, () => CharacterMovement.IsMoving);
-            At(moving, idle, () => !CharacterMovement.IsMoving);
-
-            SetState(idle);
+            if (!CharacterMovement.IsMoving)
+                CharacterRotation.HandleRotationInput();
+            if (!CharacterRotation.IsRotating)
+                CharacterMovement.HandleGridMovement();
         }
-
-        void OnEnable() => SubscribeInputActions();
-
-        void SubscribeInputActions()
-        {
-            PlayerMapInputProvider.Move.started += HandleMovementInput;
-            PlayerMapInputProvider.Run.performed += HandleRunInput;
-        }
-
-        void OnDisable() => UnsubscribeInputActions();
-
-        void OnDestroy() => UnsubscribeInputActions();
-
-        void UnsubscribeInputActions()
-        {
-            PlayerMapInputProvider.Move.started -= HandleMovementInput;
-            PlayerMapInputProvider.Run.performed -= HandleRunInput;
-        }
-
-        void HandleMovementInput(InputAction.CallbackContext context)
-        {
-            // Handle forward/backward movement
-            switch (context.ReadValue<Vector2>().y)
-            {
-                case > 0f:
-                    break;
-                case < 0f:
-                    break;
-            }
-            // Handle strafing
-            switch (context.ReadValue<Vector2>().x)
-            {
-                case > 0f:
-                    break;
-                case < 0f:
-        
-                    break;
-            }
-        }
-
-        void HandleRunInput(InputAction.CallbackContext context)
-            => IsRunHold = context.phase is InputActionPhase.Performed;
     }
 }

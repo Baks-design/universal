@@ -76,9 +76,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1796df8eed5e8a749926c749d99be58a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 4245997754906919261}
-  cameraController: {fileID: 332088360065323903}
-  data: {fileID: 0}
+  <Character>k__BackingField: {fileID: 4245997754906919261}
+  <Transform>k__BackingField: {fileID: 6105000888535693558}
+  <CameraController>k__BackingField: {fileID: 332088360065323903}
+  <Grid>k__BackingField: {fileID: 0}
+  <Data>k__BackingField: {fileID: 0}
 --- !u!114 &8225837996919150562
 MonoBehaviour:
   m_ObjectHideFlags: 0
