@@ -1,5 +1,3 @@
-using UnityEngine;
-using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Behaviours.Characters
@@ -12,9 +10,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void Update()
         {
-            // controller.CharacterMovement.HandleMovement( TODO: SETUP STATE
-            //     PlayerMapInputProvider.Move, Time.deltaTime
-            // );
+       
         }
     }
 }

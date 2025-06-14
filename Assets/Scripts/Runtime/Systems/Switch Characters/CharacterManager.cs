@@ -7,11 +7,13 @@ using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
+using Unity.Cinemachine;
 
 namespace Universal.Runtime.Systems.SwitchCharacters
 {
     public class CharacterManager : MonoBehaviour, ICharacterServices
     {
+        [SerializeField] CinemachineCamera cinemachine;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InLineEditor] CharacterData characterData;
@@ -174,6 +176,7 @@ namespace Universal.Runtime.Systems.SwitchCharacters
             currentCharacter.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             enableComponent.Activate();
+            cinemachine.Target.TrackingTarget = currentCharacter.CharacterTransform;
             //Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
 
             yield return null;

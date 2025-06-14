@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d078a6f699e924041a1cfa5cca4824b1, type: 3}
   m_Name: Camera Data
   m_EditorClassIdentifier: 
-  topClamp: 45
-  bottomClamp: -45
-  smoothAmount: 10
+  verticalClamp: {x: -45, y: 45}
+  horizontalClamp: {x: -45, y: 45}
+  sensitivityAmount: {x: 10, y: 10}
+  smoothAmount: {x: 10, y: 10}

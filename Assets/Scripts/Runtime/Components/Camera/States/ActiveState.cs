@@ -1,4 +1,3 @@
-using UnityEngine;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Components.Camera

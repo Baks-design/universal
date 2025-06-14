@@ -55,12 +55,13 @@ namespace Universal.Runtime.Systems.SwitchCharacters
 
         void DetectBodies()
         {
-            var getRay = mainCamera.ScreenPointToRay(Vector3.zero);
-            (isColl, hitInfo) = GamePhysics.SphereCast(
+            var getRay = mainCamera.ScreenPointToRay(
+                PlayerMapInputProvider.Look.ReadValue<Vector2>());
+            isColl = Physics.SphereCast(
                 getRay.origin,
-                getRay.direction,
                 raySphereRadius,
-                0f,
+                getRay.direction,
+                out var _,
                 raySphereMaxDistance,
                 characterLayer
             );

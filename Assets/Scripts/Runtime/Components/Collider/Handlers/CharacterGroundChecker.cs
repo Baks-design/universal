@@ -1,36 +1,41 @@
 using UnityEngine;
-using Universal.Runtime.Components.Collider;
 
-public class CharacterGroundChecker
+namespace Universal.Runtime.Components.Collider
 {
-    readonly CharacterCollisionData data;
-    readonly CharacterController character;
-
-    public bool WasGrounded { get; set; }
-    public float SlopeAngle { get; private set; }
-    public bool IsGrounded { get; set; }
-    public bool IsOnSlope { get; private set; }
-    public RaycastHit IsGroundHit { get; private set; }
-
-    public CharacterGroundChecker(CharacterCollisionData data, CharacterController character)
+    public class CharacterGroundChecker
     {
-        this.data = data;
-        this.character = character;
+        readonly CharacterCollisionData data;
+        readonly Transform bodyTransform;
+        RaycastHit hitInfo;
+        
+        public bool WasGrounded { get; set; }
+        public float SlopeAngle { get; private set; }
+        public bool IsGrounded { get; set; }
+        public bool IsOnSlope { get; private set; }
+        public RaycastHit IsGroundHit => hitInfo;
 
-        WasGrounded = true;
-        IsGrounded = true;
-    }
+        public CharacterGroundChecker(CharacterCollisionData data, Transform bodyTransform)
+        {
+            this.data = data;
+            this.bodyTransform = bodyTransform;
 
-    public void CheckGrounded()
-    {
-        (IsGrounded, IsGroundHit) = GamePhysics.SphereCast(
-            character.transform.position, -character.transform.up, character.radius,
-            data.floorRayOriginPositionOffset, data.floorRayMaxDistance,
-            data.floorCollisionLayers
-        );
+            WasGrounded = true;
+            IsGrounded = true;
+        }
 
-        WasGrounded = IsGrounded;
-        SlopeAngle = Vector3.Angle(IsGroundHit.normal, character.transform.up);
-        IsOnSlope = SlopeAngle > 0f;
+        public void CheckGrounded()
+        {
+            if (Physics.Raycast(
+                bodyTransform.transform.position,
+                -bodyTransform.up,
+                out hitInfo,
+                data.floorRayMaxDistance,
+                data.floorCollisionLayers))
+            {
+                WasGrounded = IsGrounded;
+                SlopeAngle = Vector3.Angle(hitInfo.normal, bodyTransform.transform.up);
+                IsOnSlope = SlopeAngle > 0f;
+            }
+        }
     }
 }

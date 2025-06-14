@@ -9,51 +9,39 @@ namespace Universal.Runtime.Components.Camera
     {
         readonly CameraData data;
         readonly CinemachineCamera target;
-        Vector2 lookInput;
         float cinemachineTargetPitch;
         float cinemachineTargetYaw;
-        float smoothFactor;
         float desiredTargetYaw;
         float desiredTargetPitch;
-        readonly bool IsCurrentDeviceMouse = true;
 
-        public CameraRotation(CameraData data, CinemachineCamera target, Vector2 lookInput)
+        public CameraRotation(CameraData data, CinemachineCamera target)
         {
             this.data = data;
             this.target = target;
-            this.lookInput = lookInput;
-
-            cinemachineTargetPitch = target.transform.localRotation.eulerAngles.x;
-            cinemachineTargetYaw = target.transform.localRotation.eulerAngles.y;
         }
 
         public void HandleRotation()
         {
-            CalculateSmoothFactor();
             CalculateRotation();
             ApplySmoothRotation();
             ApplyRotation();
         }
 
-        void CalculateSmoothFactor()
-        {
-            var deltaTimeMultiplier = IsCurrentDeviceMouse ? 1f : Time.deltaTime;
-            smoothFactor = data.smoothAmount * deltaTimeMultiplier;
-        }
-
         void CalculateRotation()
         {
-            desiredTargetYaw += lookInput.x * smoothFactor;
-            desiredTargetPitch += lookInput.y * smoothFactor;
+            var lookInput = PlayerMapInputProvider.Look.ReadValue<Vector2>();
 
-            desiredTargetYaw = GameHelper.ClampAngle(cinemachineTargetYaw, data.bottomHorizontalClamp, data.topHorizontalClamp);
-            desiredTargetPitch = GameHelper.ClampAngle(cinemachineTargetPitch, data.bottomVerticalClamp, data.topVerticalClamp);
+            desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * Time.deltaTime;
+            desiredTargetPitch += lookInput.y * data.sensitivityAmount.y * Time.deltaTime;
+
+            desiredTargetYaw = GameHelper.ClampAngle(desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
+            desiredTargetPitch = GameHelper.ClampAngle(desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
         }
 
         void ApplySmoothRotation()
         {
-            cinemachineTargetYaw = Mathf.Lerp(cinemachineTargetYaw, desiredTargetYaw, smoothFactor);
-            cinemachineTargetPitch = Mathf.Lerp(cinemachineTargetPitch, desiredTargetPitch, smoothFactor);
+            cinemachineTargetYaw = Mathf.Lerp(cinemachineTargetYaw, desiredTargetYaw, data.smoothAmount.x * Time.deltaTime);
+            cinemachineTargetPitch = Mathf.Lerp(cinemachineTargetPitch, desiredTargetPitch, data.smoothAmount.y * Time.deltaTime);
         }
 
         void ApplyRotation() => target.transform.localRotation = Quaternion.Euler(cinemachineTargetPitch, cinemachineTargetYaw, 0f);

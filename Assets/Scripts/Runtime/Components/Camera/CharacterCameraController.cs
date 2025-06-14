@@ -38,42 +38,22 @@ namespace Universal.Runtime.Components.Camera
             SetState(deactiveState);
         }
 
-        void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine, lookInput);
+        void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine);
 
         public void Activate() => gameObject.SetActive(true);
 
         public void Deactivate() => gameObject.SetActive(false);
 
-        void OnEnable()
-        {
-            PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
-            PlayerMapInputProvider.Move.performed += Look;
-        }
+        void OnEnable() => PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
 
-        void OnDisable()
-        {
-            PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-            PlayerMapInputProvider.Move.performed -= Look;
-        }
+        void OnDisable() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
 
-        void OnDestroy()
-        {
-            PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-            PlayerMapInputProvider.Move.performed -= Look;
-        }
-
-        void Look(InputAction.CallbackContext context) => lookInput = context.ReadValue<Vector2>();
+        void OnDestroy() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
 
         void SetAttackMode(InputAction.CallbackContext context)
         {
             isBodyCamEnable = !isBodyCamEnable;
             cinemachine.Priority = isBodyCamEnable ? (PrioritySettings)9 : (PrioritySettings)1;
         }
-
-        // protected override void Update()
-        // {
-        //     base.Update();
-        //     Debug.Log($"Current State: {stateMachine.CurrentState}");
-        // }
     }
 }

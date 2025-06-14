@@ -1046,7 +1046,7 @@ Transform:
   m_GameObject: {fileID: 3967494635069952824}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2488,7 +2488,7 @@ PrefabInstance:
     - target: {fileID: 3309246745016039530, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: characterData
       value: 
-      objectReference: {fileID: 11400000, guid: 0a9d26a08a5cd5c41979a4e20b2d044f, type: 2}
+      objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
     - target: {fileID: 3588946117734807384, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_Name
       value: Dan Character
@@ -2542,9 +2542,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7155199855801424717, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 74fcf85aa41375a428625df7cac903cb, type: 2}
+    - target: {fileID: 7155199855801424717, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 7684446228684297208}
+    - target: {fileID: 8225837996919150562, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

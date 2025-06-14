@@ -10,7 +10,7 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Parent] CharacterCollisionController collisionController;
         [SerializeField, Parent] CharacterMovementController movementController;
-        [SerializeField, InLineEditor] CharacterAudioData characterData;
+        [SerializeField, InLineEditor] CharacterData characterData;
         [SerializeField, InLineEditor] FootstepsSoundLibrary[] surfaceData;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         Transform playPos;
@@ -40,9 +40,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void Update() => FootstepsSoundHandler();
 
-        void FootstepsSoundHandler() //TODO: Activate
+        void FootstepsSoundHandler()
         {
-            if (collisionController.GroundChecker.IsGrounded && movementController.IsMoving)
+            if (movementController.CharacterMovement.IsMoving)
             {
                 var currentStepInterval = GetCurrentStepInterval();
                 stepTimer += Time.deltaTime;
@@ -58,9 +58,12 @@ namespace Universal.Runtime.Behaviours.Characters
 
         float GetCurrentStepInterval()
         {
-            if (movementController.IsMoving)
+            var currentStep = 0f;
+            if (movementController.CharacterMovement.IsMoving)
+                return characterData.walkStepInterval;
+            else if (movementController.IsRunHold)
                 return characterData.runStepInterval;
-            return characterData.walkStepInterval;
+            return currentStep;
         }
 
         void PlayFootstepSound(FootstepsSoundLibrary surface)
@@ -77,12 +80,20 @@ namespace Universal.Runtime.Behaviours.Characters
 
         FootstepsSoundLibrary GetCurrentSurface()
         {
-            if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
+            if (surfaceLookup == null || surfaceLookup.Count == 0)
+                return default;
 
-            if (collisionController.GroundChecker.IsGrounded)
+            if (collisionController.GroundChecker.IsGrounded &&
+                collisionController.GroundChecker.IsGroundHit.collider != null)
             {
-                var isGetComponent = collisionController.GroundChecker.IsGroundHit.collider.TryGetComponent(out SurfaceTag surfaceTag);
+                var isGetComponent = collisionController
+                                        .GroundChecker
+                                        .IsGroundHit
+                                        .collider
+                                        .TryGetComponent(out SurfaceTag surfaceTag);
+                                        
                 var isGetValue = surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
+
                 if (isGetComponent && isGetValue)
                     return data;
             }

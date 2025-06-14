@@ -19,9 +19,11 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  characterIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  movementSpeed: 5
-  jumpForce: 7
-  abilities: []
-  spawnSound: {fileID: 0}
-  spawnVFX: {fileID: 0}
+  gridSize: 1
+  moveSpeed: 5
+  rotationSpeed: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  walkStepInterval: 0.5
+  runStepInterval: 0.3

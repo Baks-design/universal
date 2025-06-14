@@ -6,10 +6,9 @@ namespace Universal.Runtime.Components.Camera
     public class CameraData : ScriptableObject
     {
         [Header("Camera Movement Settings")]
-        public float topVerticalClamp = 45f;
-        public float bottomVerticalClamp = -45f;
-        public float topHorizontalClamp = 45f;
-        public float bottomHorizontalClamp = -45f;
-        public float smoothAmount = 10f;
+        [MinMaxSlider(-45f, 45f)] public Vector2 verticalClamp = new(-45f, 45f);
+        [MinMaxSlider(-45f, 45f)] public Vector2 horizontalClamp = new(-45f, 45f);
+        [MinMaxSlider(0f, 10f)] public Vector2 sensitivityAmount = new(10f, 10f);
+        [MinMaxSlider(0f, 10f)] public Vector2 smoothAmount = new(10f, 10f);
     }
 }

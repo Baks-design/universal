@@ -2,15 +2,13 @@ using UnityEngine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovement
+    public class CharacterRotation
     {
         readonly CharacterMovementController controller;
         readonly CharacterController character;
         readonly CharacterData data;
 
-        public bool IsMoving { get; private set; } = false;
-
-        public CharacterMovement(
+        public CharacterRotation(
             CharacterMovementController controller,
             CharacterController character,
             CharacterData data)
