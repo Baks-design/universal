@@ -44,12 +44,6 @@ namespace Universal.Runtime.Systems.CharactersManagement
             PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
         }
 
-        void OnDestroy()
-        {
-            PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
-            PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
-        }
-
         void NextCharacter(InputAction.CallbackContext context)
         {
             if (context.ReadValue<float>() <= 0f || characterRoster.Count == 0) return;

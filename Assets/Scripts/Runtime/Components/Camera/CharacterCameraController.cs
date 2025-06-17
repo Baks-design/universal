@@ -14,13 +14,9 @@ namespace Universal.Runtime.Components.Camera
         [SerializeField, InLineEditor] CameraData cameraData;
         CameraActiveState activeState;
         CameraDeactiveState deactiveState;
-        bool isBodyCamEnable = false;
 
+        public bool IsBodyCameraEnabled { get; private set; } = false;
         public CameraRotation CameraRotation { get; set; }
-        public bool IsActiveCurrentState => stateMachine.CurrentState == activeState;
-
-        public void Activate() => gameObject.SetActive(true);
-        public void Deactivate() => gameObject.SetActive(false);
 
         protected override void Awake()
         {
@@ -29,29 +25,51 @@ namespace Universal.Runtime.Components.Camera
             SetupStateMachine();
         }
 
+        void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine);
+
         void SetupStateMachine()
         {
             activeState = new CameraActiveState(this);
             deactiveState = new CameraDeactiveState(this);
 
-            At(deactiveState, activeState, () => isBodyCamEnable);
-            At(activeState, deactiveState, () => !isBodyCamEnable);
+            At(deactiveState, activeState, () => IsBodyCameraEnabled);
+            At(activeState, deactiveState, () => !IsBodyCameraEnabled);
 
             Set(deactiveState);
         }
 
-        void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine);
-
-        void OnEnable() => PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
-
-        void OnDisable() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-
-        void OnDestroy() => PlayerMapInputProvider.SetAttackMode.started -= SetAttackMode;
-
-        void SetAttackMode(InputAction.CallbackContext context)
+        void OnEnable()
         {
-            isBodyCamEnable = !isBodyCamEnable;
-            cinemachine.Priority = isBodyCamEnable ? (PrioritySettings)9 : (PrioritySettings)1;
+            PlayerMapInputProvider.Aim.started += OnAimStarted;
+            PlayerMapInputProvider.Aim.canceled += OnAimCanceled;
         }
+
+        void OnDisable()
+        {
+            PlayerMapInputProvider.Aim.started -= OnAimStarted;
+            PlayerMapInputProvider.Aim.canceled -= OnAimCanceled;
+        }
+
+        void OnAimStarted(InputAction.CallbackContext context)
+        {
+            IsBodyCameraEnabled = true;
+            cinemachine.Priority = 9;
+        }
+
+        void OnAimCanceled(InputAction.CallbackContext context)
+        {
+            IsBodyCameraEnabled = false;
+            cinemachine.Priority = 1;
+        }
+
+        protected override void LateUpdate()
+        {
+            base.LateUpdate();
+            CameraRotation.UpdateRotateBackToInitial();
+        }
+
+        public void Activate() => gameObject.SetActive(true);
+
+        public void Deactivate() => gameObject.SetActive(false);
     }
 }

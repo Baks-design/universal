@@ -22,8 +22,6 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         void OnDisable() => PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
 
-        void OnDestroy() => PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
-
         void OnAddCharacter(InputAction.CallbackContext context)
         {
             if (!isColl) return;

@@ -3,13 +3,13 @@ using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterRotation
+    public class CharacterRotation //FIXME: ROTATION ON START BUG GAME
     {
         readonly CharacterMovementController controller;
         readonly Transform character;
         readonly CharacterData data;
-        Quaternion targetRotation;
         Quaternion startRotation;
+        Quaternion targetRotation;
         bool isTurningInputPressed;
         float rotationProgress;
         float lastInputTime;
@@ -25,9 +25,12 @@ namespace Universal.Runtime.Behaviours.Characters
             this.character = character;
             this.data = data;
 
-            IsRotating = false;
-            isTurningInputPressed = false;
+            startRotation = Quaternion.identity;
             targetRotation = character.transform.rotation;
+            rotationProgress = 0f;
+            isTurningInputPressed = false;
+            lastInputTime = 0f;
+            IsRotating = false;
         }
 
         public void UpdateRotation()

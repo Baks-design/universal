@@ -9,11 +9,9 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
 
         protected virtual void Awake() => stateMachine = new StateMachine();
 
-        void FixedUpdate() => stateMachine.FixedUpdate();
-
         void Update() => stateMachine.Update();
 
-        void LateUpdate() => stateMachine.LateUpdate();
+        protected virtual void LateUpdate() => stateMachine.LateUpdate();
 
         protected void At<T>(IState from, IState to, Func<T> condition) => stateMachine.AddTransition(from, to, condition);
 

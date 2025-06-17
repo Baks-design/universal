@@ -12,8 +12,6 @@ namespace Universal.Runtime.Behaviours.Characters
 
         [Header("Input")]
         [Range(0.1f, 1f)] public float inputCooldown = 0.2f;
-        [Range(0.1f, 1f)] public float inputDeadzone = 0.2f;
-        [Range(0.1f, 1f)] public float diagonalThreshold = 0.1f;
 
         [Header("Movement")]
         public LayerMask obstacleMask;

@@ -33,6 +33,10 @@ namespace Universal.Runtime.Behaviours.Characters
             this.grid = grid;
             this.camera = camera;
 
+            startPosition = Vector3.zero;
+            targetPosition = Vector3.zero;
+            moveProgress = 0f;
+            lastInputTime = 0f;
             IsMoving = false;
         }
 
@@ -86,8 +90,6 @@ namespace Universal.Runtime.Behaviours.Characters
         Vector3 GetWorldSpaceDirection()
         {
             var moveInput = PlayerMapInputProvider.Move.ReadValue<Vector2>();
-            if (moveInput.magnitude < data.inputDeadzone)
-                return Vector3.zero;
 
             // Get camera-relative directions
             var cameraForward = Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up).normalized;
@@ -104,10 +106,6 @@ namespace Universal.Runtime.Behaviours.Characters
             // Get absolute values for comparison
             var absX = Mathf.Abs(worldDirection.x);
             var absZ = Mathf.Abs(worldDirection.z);
-            // Apply threshold to prevent accidental diagonal movement
-            if (Mathf.Abs(absX - absZ) < data.diagonalThreshold)
-                return Vector3Int.zero;
-
             // Determine primary movement direction
             if (absX > absZ)
                 return worldDirection.x > 0f ? AMathfs.SetDirection(4) : AMathfs.SetDirection(3);

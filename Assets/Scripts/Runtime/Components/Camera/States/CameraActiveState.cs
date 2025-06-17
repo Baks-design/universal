@@ -9,8 +9,6 @@ namespace Universal.Runtime.Components.Camera
         public CameraActiveState(CharacterCameraController controller)
         => this.controller = controller;
 
-        public void OnEnter() => controller.CameraRotation.ResetPosition();
-
-        public void LateUpdate() => controller.CameraRotation.HandleRotation();
+        public void LateUpdate() => controller.CameraRotation.ProcessRotation();
     }
 }

@@ -9,6 +9,6 @@ namespace Universal.Runtime.Components.Camera
         public CameraDeactiveState(CharacterCameraController controller)
         => this.controller = controller;
 
-        public void OnEnter() => controller.CameraRotation.ResetPosition();
+        public void OnEnter() => controller.CameraRotation.ReturnToInitialRotation();
     }
 }

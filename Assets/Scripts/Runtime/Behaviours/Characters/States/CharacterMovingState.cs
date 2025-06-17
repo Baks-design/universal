@@ -11,7 +11,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void Update()
         {
-            if (controller.CameraController.IsActiveCurrentState)
+            if (controller.CameraController.IsBodyCameraEnabled)
                 return;
 
             controller.CharacterMovement.UpdateMovement();

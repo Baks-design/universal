@@ -6,9 +6,9 @@ using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class PauseMenu : MonoBehaviour //TODO: UI - Make Pause Menu
+    public class OptionsMenu : MonoBehaviour //TODO: UI - Make Options Menu
     {
-        [SerializeField, Self] UIDocument uIDocument;
+        [SerializeField, Self] UIDocument document;
         VisualElement root;
         // Button resumeButton;
         // Button optionsButton;
@@ -18,7 +18,7 @@ namespace Universal.Runtime.Components.UI
 
         void Awake()
         {
-            root = uIDocument.rootVisualElement;
+            root = document.rootVisualElement;
             root.style.display = DisplayStyle.None;
 
             // optionsButton = root.Q<Button>("options-button");
@@ -27,8 +27,7 @@ namespace Universal.Runtime.Components.UI
 
         void OnEnable()
         {
-            PlayerMapInputProvider.Pause.started += OnPausePressed;
-            UIMapInputProvider.Unpause.started += OnResumePressed;
+            UIMapInputProvider.Unpause.started += OnBackPressed;
 
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
@@ -36,30 +35,13 @@ namespace Universal.Runtime.Components.UI
 
         void OnDisable()
         {
-            PlayerMapInputProvider.Pause.started -= OnPausePressed;
-            UIMapInputProvider.Unpause.started -= OnResumePressed;
+            UIMapInputProvider.Unpause.started -= OnBackPressed;
 
             // optionsButton.clicked -= OnOptionsClicked;
             // mainMenuButton.clicked -= OnMainMenuClicked;
         }
 
-        void OnPausePressed(InputAction.CallbackContext _)
-        {
-            IsPaused = true;
-            Time.timeScale = 0f;
-            root.style.display = DisplayStyle.Flex;
-            InputServiceProvider.EnableUIMap();
-            InputServiceProvider.SetCursorLocked(false);
-        }
-
-        void OnResumePressed(InputAction.CallbackContext _)
-        {
-            IsPaused = false;
-            Time.timeScale = 1f;
-            root.style.display = DisplayStyle.None;
-            InputServiceProvider.EnablePlayerMap();
-            InputServiceProvider.SetCursorLocked(true);
-        }
+        void OnBackPressed(InputAction.CallbackContext _) { }
 
         void OnOptionsPressed() { /*change to options menu;*/}
 
