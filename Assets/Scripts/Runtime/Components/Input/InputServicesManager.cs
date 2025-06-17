@@ -1,14 +1,12 @@
 using UnityEngine;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class InputServicesManager : MonoBehaviour, IInputServices
+    public class InputServicesManager : MonoBehaviour
     {
         void Awake()
         {
             DontDestroyOnLoad(gameObject);
-            ServiceLocator.Global.Register<IInputServices>(this);
             InputServiceProvider.SetCursorLocked(true);
 
             InputServiceProvider.InitializeMaps();

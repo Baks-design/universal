@@ -3,8 +3,8 @@
     public interface IState
     {
         void OnEnter() { }
-        void Update() { }
         void FixedUpdate() { }
+        void Update() { }
         void LateUpdate() { }
         void OnExit() { }
     }

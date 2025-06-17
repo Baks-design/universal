@@ -12,37 +12,35 @@ namespace Universal.Runtime.Components.Camera
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, InLineEditor] CameraData cameraData;
+        CameraActiveState activeState;
+        CameraDeactiveState deactiveState;
         bool isBodyCamEnable = false;
-        ActiveState activeState;
-        DeactiveState deactiveState;
-        private Vector2 lookInput;
 
         public CameraRotation CameraRotation { get; set; }
         public bool IsActiveCurrentState => stateMachine.CurrentState == activeState;
 
+        public void Activate() => gameObject.SetActive(true);
+        public void Deactivate() => gameObject.SetActive(false);
+
         protected override void Awake()
         {
             base.Awake();
-            SetupStateMachine();
             SetupComponents();
+            SetupStateMachine();
         }
 
         void SetupStateMachine()
         {
-            activeState = new ActiveState(this);
-            deactiveState = new DeactiveState(this);
+            activeState = new CameraActiveState(this);
+            deactiveState = new CameraDeactiveState(this);
 
             At(deactiveState, activeState, () => isBodyCamEnable);
             At(activeState, deactiveState, () => !isBodyCamEnable);
 
-            SetState(deactiveState);
+            Set(deactiveState);
         }
 
         void SetupComponents() => CameraRotation = new CameraRotation(cameraData, cinemachine);
-
-        public void Activate() => gameObject.SetActive(true);
-
-        public void Deactivate() => gameObject.SetActive(false);
 
         void OnEnable() => PlayerMapInputProvider.SetAttackMode.started += SetAttackMode;
 

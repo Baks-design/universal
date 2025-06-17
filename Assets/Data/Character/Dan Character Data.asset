@@ -19,14 +19,14 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  inputCooldown: 0.2
-  gridSize: 1
-  moveSpeed: 5
-  rotationSpeed: 10
+  inputCooldown: 0.1
+  inputDeadzone: 0.1
+  diagonalThreshold: 0.1
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  moveDuration: 0.3
+  obstacleCheckRadius: 0.4
+  moveDuration: 0.1
   moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -51,5 +51,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  rotateDuration: 0.1
+  floorMask:
+    serializedVersion: 2
+    m_Bits: 64
+  footstepsDistance: 2
   walkStepInterval: 0.5
   runStepInterval: 0.3

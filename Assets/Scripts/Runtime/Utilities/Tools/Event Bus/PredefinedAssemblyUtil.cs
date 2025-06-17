@@ -62,7 +62,6 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         public static List<Type> GetTypes(Type interfaceType)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
             var assemblyTypes = new Dictionary<AssemblyType, Type[]>();
             var types = new List<Type>();
             for (var i = 0; i < assemblies.Length; i++)

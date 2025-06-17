@@ -31,7 +31,7 @@ namespace Universal.Runtime.Systems.EntityPersistence
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name.Equals(GlobalTags.MenuString)) return;
+            if (scene.name.Equals("Menu")) return;
             Bind<EntityPersistence, EntityData>(gameData.EntityData);
         }
 
@@ -39,8 +39,10 @@ namespace Universal.Runtime.Systems.EntityPersistence
         {
             var entities = FindObjectsByType<T>(FindObjectsSortMode.None);
             T entity = null;
+            
             if (entities.Length > 0)
                 entity = entities[0];
+
             if (entity != null)
             {
                 data ??= new TData { Id = entity.Id };
@@ -77,8 +79,8 @@ namespace Universal.Runtime.Systems.EntityPersistence
         {
             gameData = new GameData
             {
-                Name = GlobalTags.GameString,
-                CurrentLevelName = GlobalTags.DemoString,
+                Name = "Demo" ,
+                CurrentLevelName = "Level1",
                 EntityData = new List<EntityData>(),
             };
             SceneManager.LoadScene(gameData.CurrentLevelName);
@@ -90,7 +92,7 @@ namespace Universal.Runtime.Systems.EntityPersistence
         {
             gameData = dataService.Load(gameName);
             if (string.IsNullOrWhiteSpace(gameData.CurrentLevelName))
-                gameData.CurrentLevelName = GlobalTags.DemoString;
+                gameData.CurrentLevelName = "Demo";
             SceneManager.LoadScene(gameData.CurrentLevelName);
 
             

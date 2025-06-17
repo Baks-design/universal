@@ -8,16 +8,16 @@ namespace Universal.Runtime.Systems.WeatherAmbient
         WeatherSystem weatherSystem;
         DaytimeSystem daytimeSystem;
 
-        public string GetCurrentEnvironmentInfo
-        {
-            get
-            {
-                var daytime = daytimeSystem.GetCurrentDaytime;
-                var currentHour = daytimeSystem.GetCurrentHour;
-                var weather = weatherSystem.GetCurrentWeather;
-                return $"Current: {daytime} ({currentHour:F1}h), {weather}";
-            }
-        }
+        // public string GetCurrentEnvironmentInfo
+        // {
+        //     get
+        //     {
+        //         var daytime = daytimeSystem.GetCurrentDaytime;
+        //         var currentHour = daytimeSystem.GetCurrentHour;
+        //         var weather = weatherSystem.GetCurrentWeather;
+        //         return $"Current: {daytime} ({currentHour:F1}h), {weather}";
+        //     }
+        // }
         
         void Awake()
         {

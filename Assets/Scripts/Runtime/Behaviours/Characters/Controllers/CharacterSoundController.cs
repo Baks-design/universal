@@ -8,12 +8,11 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterSoundController : MonoBehaviour
     {
-        [SerializeField, Parent] CharacterCollisionController collisionController;
+        [SerializeField, Self] Transform bodyTransfom;
         [SerializeField, Parent] CharacterMovementController movementController;
-        [SerializeField, InLineEditor] CharacterData characterData;
-        [SerializeField, InLineEditor] FootstepsSoundLibrary[] surfaceData;
+        [SerializeField, InLineEditor] CharacterData data;
+        [SerializeField, InLineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
-        Transform playPos;
         SoundBuilder soundBuilder;
         ISoundEffectsServices soundService;
         float stepTimer;
@@ -32,10 +31,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void SetupDictionary()
         {
-            playPos = transform;
             surfaceLookup = new Dictionary<SurfaceType, FootstepsSoundLibrary>();
-            for (var i = 0; i < surfaceData.Length; i++)
-                surfaceLookup[surfaceData[i].surfaceType] = surfaceData[i];
+            for (var i = 0; i < soundLib.Length; i++)
+                surfaceLookup[soundLib[i].surfaceType] = soundLib[i];
         }
 
         void Update() => FootstepsSoundHandler();
@@ -60,9 +58,9 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             var currentStep = 0f;
             if (movementController.CharacterMovement.IsMoving)
-                return characterData.walkStepInterval;
-            else if (movementController.IsRunHold)
-                return characterData.runStepInterval;
+                return data.walkStepInterval;
+            else if (movementController.CharacterMovement.IsRunHold)
+                return data.runStepInterval;
             return currentStep;
         }
 
@@ -74,7 +72,7 @@ namespace Universal.Runtime.Behaviours.Characters
             var clip = surface.footstepSounds[rnd];
             soundBuilder
                 .WithRandomPitch()
-                .WithPosition(playPos.position)
+                .WithPosition(bodyTransfom.position)
                 .Play(clip);
         }
 
@@ -83,19 +81,13 @@ namespace Universal.Runtime.Behaviours.Characters
             if (surfaceLookup == null || surfaceLookup.Count == 0)
                 return default;
 
-            if (collisionController.GroundChecker.IsGrounded &&
-                collisionController.GroundChecker.IsGroundHit.collider != null)
+            if (Physics.Raycast(
+                bodyTransfom.position, Vector3.down, out var hit,
+                data.footstepsDistance, data.floorMask))
             {
-                var isGetComponent = collisionController
-                                        .GroundChecker
-                                        .IsGroundHit
-                                        .collider
-                                        .TryGetComponent(out SurfaceTag surfaceTag);
-                                        
-                var isGetValue = surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
-
-                if (isGetComponent && isGetValue)
-                    return data;
+                hit.collider.TryGetComponent(out SurfaceTag surfaceTag);
+                surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
+                return data;
             }
 
             return default;

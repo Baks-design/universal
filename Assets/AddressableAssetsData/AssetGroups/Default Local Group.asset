@@ -15,8 +15,28 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 2554508ff134f6c4ca28bfb5f0356d62
   m_SerializeEntries:
+  - m_GUID: 06cdc9a970deeb846a8096c148ea32a3
+    m_Address: Assets/Scenes/Level 01.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12967ae04f27b8440b86cf7887554ca0
+    m_Address: Assets/Scenes/HUD.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2cb3ea6a9e402bb439040c7b5c65dc29
     m_Address: Assets/Prefabs/Characters/Dan Character.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d3dfc8c107e1de478792926850eeb44
+    m_Address: Assets/Scenes/Gameplay.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30e31b307b4c5ad40b43159fc9db437d
+    m_Address: Assets/Scenes/Tooling.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -32,6 +52,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e55d2680840f0f047a4f7e124923e9d4
     m_Address: Assets/Prefabs/Sound Emitter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0017be0b3db3f4478f9aa53cd1398fd
+    m_Address: Assets/Scenes/User Interface.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

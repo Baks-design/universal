@@ -6,19 +6,19 @@ namespace Universal.Runtime.Behaviours.Characters
     public class CharacterRotation
     {
         readonly CharacterMovementController controller;
-        readonly CharacterController character;
+        readonly Transform character;
         readonly CharacterData data;
         Quaternion targetRotation;
         Quaternion startRotation;
+        bool isTurningInputPressed;
         float rotationProgress;
         float lastInputTime;
-        bool isTurningInputPressed;
 
         public bool IsRotating { get; private set; }
 
         public CharacterRotation(
             CharacterMovementController controller,
-            CharacterController character,
+            Transform character,
             CharacterData data)
         {
             this.controller = controller;
@@ -32,18 +32,18 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void UpdateRotation()
         {
-            if (IsRotating)
-            {
-                rotationProgress += Time.deltaTime / data.rotateDuration;
-                var t = data.moveCurve.Evaluate(rotationProgress);
-                character.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            if (!IsRotating)
+                return;
 
-                if (rotationProgress >= 1f)
-                {
-                    character.transform.rotation = targetRotation;
-                    IsRotating = false;
-                    controller.CharacterMovement.IsMoving = false;
-                }
+            rotationProgress += Time.deltaTime / data.rotateDuration;
+            var t = data.moveCurve.Evaluate(rotationProgress);
+            character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            if (rotationProgress >= 1f)
+            {
+                character.rotation = targetRotation;
+                IsRotating = false;
+                controller.CharacterMovement.IsMoving = false;
             }
         }
 
@@ -57,21 +57,21 @@ namespace Universal.Runtime.Behaviours.Characters
             var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
             if (Mathf.Abs(rotateInput) > 0.1f)
             {
-                if (!isTurningInputPressed) 
+                if (!isTurningInputPressed)
                 {
                     StartRotation(rotateInput > 0f);
                     lastInputTime = Time.time;
-                    isTurningInputPressed = true; 
+                    isTurningInputPressed = true;
                 }
             }
             else
-                isTurningInputPressed = false; 
+                isTurningInputPressed = false;
         }
 
         void StartRotation(bool clockwise)
         {
-            startRotation = character.transform.rotation;
-            targetRotation = startRotation * Quaternion.Euler(0, clockwise ? 90f : -90f, 0f);
+            startRotation = character.rotation;
+            targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90f : -90f, 0f);
             rotationProgress = 0f;
             IsRotating = true;
             controller.CharacterMovement.IsMoving = true;
@@ -79,7 +79,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void ForceSnapRotation()
         {
-            character.transform.rotation = targetRotation;
+            character.rotation = targetRotation;
             IsRotating = false;
             controller.CharacterMovement.IsMoving = false;
         }

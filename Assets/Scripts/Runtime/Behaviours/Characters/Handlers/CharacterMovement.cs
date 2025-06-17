@@ -1,60 +1,55 @@
 using UnityEngine;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovement
     {
-        readonly CharacterController character;
+        readonly CharacterMovementController movement;
+        readonly Transform character;
         readonly CharacterData data;
         readonly Grid grid;
         readonly Camera camera;
-        Vector3Int currentCell;
         Vector3 startPosition;
         Vector3 targetPosition;
         float moveProgress;
         float lastInputTime;
 
-        public bool IsMoving { get; set; } 
-        public Vector3Int CurrentGridPosition => currentCell;
-        public Vector3 FacingDirection { get; private set; }
+        public bool IsMoving { get; set; }
+        public bool IsRunHold { get; private set; }
+        public Vector3 FacingDirection { get; set; }
 
         public CharacterMovement(
-            CharacterController character,
+            CharacterMovementController movement,
+            Transform character,
             CharacterData data,
             Grid grid,
             Camera camera)
         {
+            this.movement = movement;
             this.character = character;
             this.data = data;
             this.grid = grid;
             this.camera = camera;
 
             IsMoving = false;
-            SnapToGrid();
-        }
-
-        public void SnapToGrid()
-        {
-            currentCell = grid.WorldToCell(character.transform.position);
-            character.transform.position = grid.GetCellCenterWorld(currentCell);
-            FacingDirection = character.transform.forward;
         }
 
         public void UpdateMovement()
         {
-            if (IsMoving)
-            {
-                moveProgress += Time.deltaTime / data.moveDuration;
-                var t = data.moveCurve.Evaluate(moveProgress);
-                character.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            if (!IsMoving)
+                return;
 
-                if (moveProgress >= 1f)
-                {
-                    character.transform.position = targetPosition;
-                    currentCell = grid.WorldToCell(targetPosition);
-                    IsMoving = false;
-                }
+            moveProgress += Time.deltaTime / data.moveDuration;
+            var t = data.moveCurve.Evaluate(moveProgress);
+            character.position = Vector3.Lerp(startPosition, targetPosition, t);
+
+            if (moveProgress >= 1f)
+            {
+                character.position = targetPosition;
+                movement.CurrentGridPosition = grid.WorldToCell(targetPosition);
+                IsMoving = false;
             }
         }
 
@@ -64,46 +59,35 @@ namespace Universal.Runtime.Behaviours.Characters
                 return;
 
             var worldDirection = GetWorldSpaceDirection();
-            if (worldDirection == Vector3.zero) return;
+            if (worldDirection == Vector3.zero)
+                return;
 
             var gridDirection = GetGridAlignedDirection(worldDirection);
-            if (gridDirection == Vector3Int.zero) return;
+            if (gridDirection == Vector3Int.zero)
+                return;
 
-            var targetCell = currentCell + gridDirection;
+            var targetCell = movement.CurrentGridPosition + gridDirection;
             if (!IsCellBlocked(targetCell))
             {
                 StartMovement(targetCell);
                 lastInputTime = Time.time;
-                FacingDirection = new Vector3(gridDirection.x, 0, gridDirection.y).normalized;
+                FacingDirection = new Vector3(gridDirection.x, 0f, gridDirection.y).normalized;
             }
         }
 
         void StartMovement(Vector3Int targetCell)
         {
-            startPosition = character.transform.position;
+            startPosition = character.position;
             targetPosition = grid.GetCellCenterWorld(targetCell);
             moveProgress = 0f;
             IsMoving = true;
         }
 
-        public void CancelMovement()
-        {
-            IsMoving = false;
-            SnapToGrid();
-        }
-
         Vector3 GetWorldSpaceDirection()
         {
             var moveInput = PlayerMapInputProvider.Move.ReadValue<Vector2>();
-            Debug.Log($"Raw Input: {moveInput}");
             if (moveInput.magnitude < data.inputDeadzone)
-            {
-                Debug.Log("Input below deadzone threshold");
                 return Vector3.zero;
-            }
-            // Normalize input if it exceeds 1 magnitude (diagonal movement)
-            if (moveInput.magnitude > 1f)
-                moveInput.Normalize();
 
             // Get camera-relative directions
             var cameraForward = Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up).normalized;
@@ -122,25 +106,19 @@ namespace Universal.Runtime.Behaviours.Characters
             var absZ = Mathf.Abs(worldDirection.z);
             // Apply threshold to prevent accidental diagonal movement
             if (Mathf.Abs(absX - absZ) < data.diagonalThreshold)
-            {
-                Debug.Log("Diagonal input detected - movement blocked");
                 return Vector3Int.zero;
-            }
 
             // Determine primary movement direction
             if (absX > absZ)
-                return worldDirection.x > 0 ? Vector3Int.right : Vector3Int.left;
+                return worldDirection.x > 0f ? AMathfs.SetDirection(4) : AMathfs.SetDirection(3);
             else
-                return worldDirection.z > 0 ? new Vector3Int(0, 1, 0) : new Vector3Int(0, -1, 0);
+                return worldDirection.z > 0f ? AMathfs.SetDirection(1) : AMathfs.SetDirection(2);
         }
 
         bool IsCellBlocked(Vector3Int cell)
         {
             var worldPosition = grid.GetCellCenterWorld(cell);
-            var isBlocked = Physics.CheckSphere(worldPosition, data.obstacleCheckRadius, data.obstacleMask);
-            if (isBlocked)
-                Debug.DrawLine(character.transform.position, worldPosition, Color.red, 1f);
-            return isBlocked;
+            return Physics.CheckSphere(worldPosition, data.obstacleCheckRadius, data.obstacleMask);
         }
     }
 }

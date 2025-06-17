@@ -6,7 +6,7 @@ using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class PauseMenu : MonoBehaviour
+    public class PauseMenu : MonoBehaviour //TODO: UI - Make Pause Menu
     {
         [SerializeField, Self] UIDocument uIDocument;
         VisualElement root;
@@ -16,20 +16,22 @@ namespace Universal.Runtime.Components.UI
 
         public bool IsPaused { get; private set; } = false;
 
-        void OnEnable()
+        void Awake()
         {
             // Get the root VisualElement
             root = uIDocument.rootVisualElement;
             // Hide the menu initially
             root.style.display = DisplayStyle.None;
-
             // Query the buttons
             // resumeButton = root.Q<Button>("resume-button");
             // optionsButton = root.Q<Button>("options-button");
             // mainMenuButton = root.Q<Button>("main-menu-button");
+        }
 
+        void OnEnable()
+        {
             // Register button callbacks
-            // resumeButton.clicked += OnResumeClicked; //TODO:Pause Menu
+            // resumeButton.clicked += OnResumeClicked; 
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
 
@@ -66,7 +68,7 @@ namespace Universal.Runtime.Components.UI
             root.style.display = DisplayStyle.Flex;
             InputServiceProvider.EnableUIMap();
             InputServiceProvider.SetCursorLocked(false);
-            Debug.Log("Opened Menu");
+            //Debug.Log("Opened Menu");
         }
 
         void OnResumePressed(InputAction.CallbackContext _) => ResumeGame();
@@ -80,7 +82,7 @@ namespace Universal.Runtime.Components.UI
             root.style.display = DisplayStyle.None;
             InputServiceProvider.EnablePlayerMap();
             InputServiceProvider.SetCursorLocked(true);
-            Debug.Log("Closed Menu");
+            //Debug.Log("Closed Menu");
         }
 
         // void OnOptionsClicked()

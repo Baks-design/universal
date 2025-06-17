@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Universal.Runtime.Utilities.Tools.StateMachine
 {
@@ -11,8 +10,6 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         readonly HashSet<Transition> anyTransitions = new();
 
         public IState CurrentState => currentNode.State;
-
-        public void FixedUpdate() => currentNode.State?.FixedUpdate();
 
         public void Update()
         {
@@ -28,13 +25,16 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
             currentNode.State?.Update();
         }
 
-        public void LateUpdate() => currentNode.State?.LateUpdate();
-
         static void ResetActionPredicateFlags(IEnumerable<Transition> transitions)
         {
-            foreach (var transition in transitions.OfType<Transition<ActionPredicate>>())
-                transition.condition.flag = false;
+            foreach (var transition in transitions)
+                if (transition is Transition<ActionPredicate> typedTransition)
+                    typedTransition.condition.flag = false;
         }
+
+        public void FixedUpdate() => currentNode.State?.FixedUpdate();
+
+        public void LateUpdate() => currentNode.State?.LateUpdate();
 
         public void SetState(IState state)
         {
@@ -70,7 +70,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
             foreach (var transition in currentNode.Transitions)
                 if (transition.Evaluate())
                     return transition;
-
+            
             return null;
         }
 

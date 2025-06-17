@@ -34,7 +34,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         static void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange state)
         {
             PlayModeState = state;
-            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            if (state is UnityEditor.PlayModeStateChange.ExitingPlayMode)
                 ClearAllBuses();
         }
 #endif
@@ -62,7 +62,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
                 var eventType = EventTypes[i];
                 var busType = typedef.MakeGenericType(eventType);
                 eventBusTypes.Add(busType);
-                Debug.Log($"Initialized EventBus<{eventType.Name}>");
+                //Debug.Log($"Initialized EventBus<{eventType.Name}>");
             }
 
             return eventBusTypes;
@@ -73,7 +73,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         /// </summary>
         public static void ClearAllBuses()
         {
-            Debug.Log("Clearing all buses...");
+            //Debug.Log("Clearing all buses...");
             for (var i = 0; i < EventBusTypes.Count; i++)
             {
                 var busType = EventBusTypes[i];

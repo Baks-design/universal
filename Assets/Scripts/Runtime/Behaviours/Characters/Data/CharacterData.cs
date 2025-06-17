@@ -10,10 +10,12 @@ namespace Universal.Runtime.Behaviours.Characters
         public string characterName;
         public AssetReferenceGameObject characterPrefab;
 
-        [Header("Movement")]
+        [Header("Input")]
         [Range(0.1f, 1f)] public float inputCooldown = 0.2f;
         [Range(0.1f, 1f)] public float inputDeadzone = 0.2f;
         [Range(0.1f, 1f)] public float diagonalThreshold = 0.1f;
+
+        [Header("Movement")]
         public LayerMask obstacleMask;
         [Range(0.1f, 1f)] public float obstacleCheckRadius = 0.4f;
         [Range(0.1f, 1f)] public float moveDuration = 0.3f;
@@ -21,6 +23,8 @@ namespace Universal.Runtime.Behaviours.Characters
         [Range(0.1f, 1f)] public float rotateDuration = 0.2f;
 
         [Header("Footsteps")]
+        public LayerMask floorMask;
+        [Range(0.5f, 1f)] public float footstepsDistance = 2f;
         [Range(0.5f, 1f)] public float walkStepInterval = 0.5f;
         [Range(0.3f, 1f)] public float runStepInterval = 0.3f;
     }
