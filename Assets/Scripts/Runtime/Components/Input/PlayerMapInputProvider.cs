@@ -13,6 +13,7 @@ namespace Universal.Runtime.Components.Input
         public static InputAction Turn { get; private set; }
         public static InputAction Move { get; private set; }
         public static InputAction Interact { get; private set; }
+        public static InputAction Throw { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void InitializeActions()
@@ -25,6 +26,7 @@ namespace Universal.Runtime.Components.Input
             Turn = InputSystem.actions.FindAction("Player/Turn");
             Move = InputSystem.actions.FindAction("Player/Move");
             Interact = InputSystem.actions.FindAction("Player/Interact");
+            Throw = InputSystem.actions.FindAction("Player/Throw");
         }
     }
 }

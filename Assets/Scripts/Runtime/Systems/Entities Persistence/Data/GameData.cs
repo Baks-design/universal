@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Universal.Runtime.Systems.InventoryManagement;
 
 namespace Universal.Runtime.Systems.EntitiesPersistence
 {
@@ -8,7 +9,9 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
     {
         public string Name;
         public string CurrentLevelName;
-        [NonSerialized] public InventoryData inventoryData;
-        [NonSerialized] public List<EntityData> EntityData = new();
+        public int worldCount;
+        public float globalTendency;
+        public InventoryData inventoryData;
+        public List<EntityData> EntityData;
     }
 }

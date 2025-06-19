@@ -1,4 +1,4 @@
-using Universal.Runtime.Systems.EntityPersistence;
+using Universal.Runtime.Systems.EntitiesPersistence;
 
 namespace Universal.Runtime.Systems.WorldTendency
 {

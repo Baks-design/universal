@@ -1,4 +1,5 @@
 using Universal.Runtime.Systems.EntityPersistence;
+using Universal.Runtime.Systems.InventoryManagement;
 
 namespace Universal.Runtime.Systems.EntitiesPersistence
 {

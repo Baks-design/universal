@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 522ee1cd7c919784cadfc78e299a4f78
+    m_Address: Assets/Prefabs/Sphere.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7247726a3f6db4d489339436b7c417fc
     m_Address: Assets/Prefabs/Effect Emitter.prefab
     m_ReadOnly: 0

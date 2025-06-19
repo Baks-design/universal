@@ -1,0 +1,23 @@
+{
+    "name": "Universal.Runtime.Systems.DamageObjects",
+    "rootNamespace": "Universal.Runtime.Systems.DamageObjects",
+    "references": [
+        "GUID:9e24947de15b9834991c9d8411ea37cf",
+        "GUID:84651a3751eca9349aac36a66bba901b",
+        "GUID:c71e90b7a3c7ffd4bae24760aa788d0a",
+        "GUID:7c4d6d5290f2d47499c28a24afeae2ce",
+        "GUID:6720e7604dacf5044ba2e8bfe1829aa9"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
