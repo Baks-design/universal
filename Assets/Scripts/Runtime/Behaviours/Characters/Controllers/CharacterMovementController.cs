@@ -2,13 +2,14 @@ using UnityEngine;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Utilities.Tools.StateMachine;
+using KBCore.Refs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter
     {
-        [field: SerializeField] public Transform Transform { get; private set; }
-        [field: SerializeField] public CharacterCameraController CameraController { get; private set; }
+        [field: SerializeField, Self] public Transform Transform { get; private set; }
+        [field: SerializeField, Child] public CharacterCameraController CameraController { get; private set; }
         [field: SerializeField, InLineEditor] public CharacterData Data { get; private set; }
 
         public CharacterData CharacterData => Data;
@@ -22,12 +23,12 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void Start()
         {
-            MovementProcesses();
+            Init();
             StateMachine();
             SnapToGrid();
         }
 
-        void MovementProcesses()
+        void Init()
         {
             CharacterRotation = new CharacterRotation(this, Transform, Data);
             CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main);

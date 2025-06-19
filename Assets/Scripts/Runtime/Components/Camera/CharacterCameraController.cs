@@ -16,7 +16,7 @@ namespace Universal.Runtime.Components.Camera
         CameraDeactiveState deactiveState;
 
         public bool IsBodyCameraEnabled { get; private set; } = false;
-        public CameraRotation CameraRotation { get; set; }
+        public CameraRotation CameraRotation { get; private set; }
 
         protected override void Awake()
         {
@@ -38,28 +38,14 @@ namespace Universal.Runtime.Components.Camera
             Set(deactiveState);
         }
 
-        void OnEnable()
-        {
-            PlayerMapInputProvider.Aim.started += OnAimStarted;
-            PlayerMapInputProvider.Aim.canceled += OnAimCanceled;
-        }
+        void OnEnable() => PlayerMapInputProvider.Aim.started += OnAimStarted;
 
-        void OnDisable()
-        {
-            PlayerMapInputProvider.Aim.started -= OnAimStarted;
-            PlayerMapInputProvider.Aim.canceled -= OnAimCanceled;
-        }
+        void OnDisable() => PlayerMapInputProvider.Aim.started -= OnAimStarted;
 
         void OnAimStarted(InputAction.CallbackContext context)
         {
-            IsBodyCameraEnabled = true;
-            cinemachine.Priority = 9;
-        }
-
-        void OnAimCanceled(InputAction.CallbackContext context)
-        {
-            IsBodyCameraEnabled = false;
-            cinemachine.Priority = 1;
+            IsBodyCameraEnabled = !IsBodyCameraEnabled;
+            cinemachine.Priority = IsBodyCameraEnabled ? 9 : 1;
         }
 
         protected override void LateUpdate()

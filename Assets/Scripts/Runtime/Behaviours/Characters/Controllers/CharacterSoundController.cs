@@ -59,8 +59,6 @@ namespace Universal.Runtime.Behaviours.Characters
             var currentStep = 0f;
             if (movementController.CharacterMovement.IsMoving)
                 return data.walkStepInterval;
-            else if (movementController.CharacterMovement.IsRunHold)
-                return data.runStepInterval;
             return currentStep;
         }
 

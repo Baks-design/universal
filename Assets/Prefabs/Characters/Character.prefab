@@ -33,6 +33,8 @@ Transform:
   m_Children:
   - {fileID: 6518328737943928426}
   - {fileID: 7517224090028403351}
+  - {fileID: 8519153528729452951}
+  - {fileID: 1775565060932413372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2335871156229631570
@@ -76,6 +78,57 @@ MonoBehaviour:
   <Transform>k__BackingField: {fileID: 6105000888535693558}
   <CameraController>k__BackingField: {fileID: 332088360065323903}
   <Data>k__BackingField: {fileID: 0}
+--- !u!1 &4504538062994894636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8519153528729452951}
+  - component: {fileID: 7338831354204029381}
+  m_Layer: 3
+  m_Name: Interactor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8519153528729452951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4504538062994894636}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 6105000888535693558}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7338831354204029381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4504538062994894636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb053e82767bbd5438d066c947bb353d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 8519153528729452951}
+  cameraController: {fileID: 332088360065323903}
+  objectsLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  interactionRadius: 0.1
+  interactionRange: 1
 --- !u!1 &5667496618357336784
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +251,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 5932689844251830603}
   cameraData: {fileID: 11400000, guid: fc3789cbb9b3a9143ba00a51064a6b9d, type: 2}
+--- !u!1 &7510502827176266112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1775565060932413372}
+  - component: {fileID: 4695921970475299082}
+  - component: {fileID: 6279667040325846009}
+  m_Layer: 3
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1775565060932413372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510502827176266112}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 6105000888535693558}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4695921970475299082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510502827176266112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9346b1d9d948e4b8192a0ab5008e0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 0}
+  styleSheet: {fileID: 7433441132597879392, guid: 2b0324e19364e3b408d529ec654d3d37, type: 3}
+  panelName: Inventory
+--- !u!114 &6279667040325846009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510502827176266112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 012194ab3987448690078e0ddc0c6de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 4695921970475299082}
+  capacity: 20
+  startingItems: []
+  <Id>k__BackingField:
+    Part1: 2347172997
+    Part2: 1278304566
+    Part3: 3230790535
+    Part4: 3928233619
 --- !u!1 &8340735802089306174
 GameObject:
   m_ObjectHideFlags: 0

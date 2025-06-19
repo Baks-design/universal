@@ -1,0 +1,23 @@
+{
+    "name": "Universal.Runtime.Systems.InteractionObjects",
+    "rootNamespace": "Universal.Runtime.Systems.InteractionObjects",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:33759803a11f4d538227861a78aba30b",
+        "GUID:0031969725fdf6c45bbae2cf588fcc43",
+        "GUID:319d3947fe3ddc8428e241c5be524bb0",
+        "GUID:47eda695209bb814db2ab442b2e43f96"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

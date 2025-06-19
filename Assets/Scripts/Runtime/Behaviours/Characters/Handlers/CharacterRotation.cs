@@ -3,16 +3,15 @@ using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterRotation //FIXME: ROTATION ON START BUG GAME
+    public class CharacterRotation
     {
         readonly CharacterMovementController controller;
         readonly Transform character;
         readonly CharacterData data;
-        Quaternion startRotation;
-        Quaternion targetRotation;
+        Quaternion startRotation, targetRotation;
         bool isTurningInputPressed;
-        float rotationProgress;
-        float lastInputTime;
+        float rotationProgress, lastInputTime, inputBufferTimer;
+        const float INPUT_BUFFER_TIME = 0.1f;
 
         public bool IsRotating { get; private set; }
 
@@ -25,24 +24,24 @@ namespace Universal.Runtime.Behaviours.Characters
             this.character = character;
             this.data = data;
 
-            startRotation = Quaternion.identity;
-            targetRotation = character.transform.rotation;
-            rotationProgress = 0f;
-            isTurningInputPressed = false;
-            lastInputTime = 0f;
-            IsRotating = false;
+            targetRotation = startRotation = Quaternion.identity;
+            lastInputTime = rotationProgress = inputBufferTimer = 0f;
+            IsRotating = isTurningInputPressed = false;
         }
 
         public void UpdateRotation()
         {
-            if (!IsRotating)
-                return;
+            if (!IsRotating) return;
 
-            rotationProgress += Time.deltaTime / data.rotateDuration;
-            var t = data.moveCurve.Evaluate(rotationProgress);
+            // Frame-rate independent smooth progression
+            rotationProgress += Time.unscaledDeltaTime / Mathf.Max(0.01f, data.rotateDuration);
+
+            // Enhanced smoothing with curve evaluation
+            var t = Mathf.Clamp01(data.moveCurve.Evaluate(rotationProgress));
             character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
-            if (rotationProgress >= 1f)
+            // Precision completion check
+            if (rotationProgress >= 0.999f || Quaternion.Angle(character.rotation, targetRotation) < 0.1f)
             {
                 character.rotation = targetRotation;
                 IsRotating = false;
@@ -52,39 +51,178 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void HandleRotationInput()
         {
+            // Process input buffer
+            if (inputBufferTimer > 0f)
+                inputBufferTimer -= Time.unscaledDeltaTime;
+
+            // Early exit conditions
             if (controller.CharacterMovement.IsMoving ||
                 IsRotating ||
                 Time.time < lastInputTime + data.inputCooldown)
                 return;
 
             var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
-            if (Mathf.Abs(rotateInput) > 0.1f)
+            var absInput = Mathf.Abs(rotateInput);
+            // Input with deadzone and buffer consideration
+            if (absInput > 0.1f)
             {
-                if (!isTurningInputPressed)
+                if (!isTurningInputPressed || inputBufferTimer > 0)
                 {
                     StartRotation(rotateInput > 0f);
                     lastInputTime = Time.time;
                     isTurningInputPressed = true;
+                    inputBufferTimer = 0f; // Clear buffer after use
                 }
             }
             else
+            {
                 isTurningInputPressed = false;
+                // Store input in buffer if rotation was blocked
+                if (absInput > 0.1f && (IsRotating || controller.CharacterMovement.IsMoving))
+                    inputBufferTimer = INPUT_BUFFER_TIME;
+            }
         }
 
         void StartRotation(bool clockwise)
         {
             startRotation = character.rotation;
-            targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90f : -90f, 0f);
+            // Precise target rotation with slight overshoot to ensure completion
+            targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90.0001f : -90.0001f, 0f);
             rotationProgress = 0f;
             IsRotating = true;
             controller.CharacterMovement.IsMoving = true;
-        }
 
-        public void ForceSnapRotation()
-        {
-            character.rotation = targetRotation;
-            IsRotating = false;
-            controller.CharacterMovement.IsMoving = false;
+            // Immediate micro-rotation to start the interpolation
+            character.rotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // public class CharacterRotation
+    // {
+    //     readonly CharacterMovementController controller;
+    //     readonly Transform character;
+    //     readonly CharacterData data;
+    //     Quaternion startRotation, targetRotation;
+    //     bool isTurningInputPressed;
+    //     float rotationProgress, lastInputTime;
+
+    //     public bool IsRotating { get; private set; }
+
+    //     public CharacterRotation(
+    //         CharacterMovementController controller,
+    //         Transform character,
+    //         CharacterData data)
+    //     {
+    //         this.controller = controller;
+    //         this.character = character;
+    //         this.data = data;
+
+    //         targetRotation = startRotation = Quaternion.identity;
+    //         lastInputTime = rotationProgress = 0f;
+    //         IsRotating = isTurningInputPressed = false;
+    //     }
+
+    //     public void UpdateRotation()
+    //     {
+    //         if (!IsRotating)
+    //             return;
+
+    //         rotationProgress += Time.deltaTime / data.rotateDuration;
+    //         var t = data.moveCurve.Evaluate(rotationProgress);
+    //         character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+    //         if (rotationProgress >= 1f)
+    //         {
+    //             character.rotation = targetRotation;
+    //             IsRotating = false;
+    //             controller.CharacterMovement.IsMoving = false;
+    //         }
+    //     }
+
+    //     public void HandleRotationInput()
+    //     {
+    //         if (controller.CharacterMovement.IsMoving ||
+    //             IsRotating ||
+    //             Time.time < lastInputTime + data.inputCooldown)
+    //             return;
+
+    //         var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
+    //         if (Mathf.Abs(rotateInput) > 0.1f)
+    //         {
+    //             if (!isTurningInputPressed)
+    //             {
+    //                 StartRotation(rotateInput > 0f);
+    //                 lastInputTime = Time.time;
+    //                 isTurningInputPressed = true;
+    //             }
+    //         }
+    //         else
+    //             isTurningInputPressed = false;
+    //     }
+
+    //     void StartRotation(bool clockwise)
+    //     {
+    //         startRotation = character.rotation;
+    //         targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90f : -90f, 0f);
+    //         rotationProgress = 0f;
+    //         IsRotating = true;
+    //         controller.CharacterMovement.IsMoving = true;
+    //     }
+    // }
 }

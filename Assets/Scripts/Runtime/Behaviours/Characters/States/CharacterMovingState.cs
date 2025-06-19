@@ -11,16 +11,17 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void Update()
         {
-            if (controller.CameraController.IsBodyCameraEnabled)
+            if (controller.CameraController.IsBodyCameraEnabled ||
+                controller.CameraController.CameraRotation.IsRotatingBack)
                 return;
 
-            controller.CharacterMovement.UpdateMovement();
-            controller.CharacterRotation.UpdateRotation();
+            controller.CharacterMovement.UpdatePosition();
+            if (!controller.CharacterRotation.IsRotating)
+                controller.CharacterMovement.HandleMovementInput();
 
+            controller.CharacterRotation.UpdateRotation();
             if (!controller.CharacterMovement.IsMoving)
                 controller.CharacterRotation.HandleRotationInput();
-            if (!controller.CharacterRotation.IsRotating)
-                controller.CharacterMovement.HandleGridMovement();
         }
     }
 }

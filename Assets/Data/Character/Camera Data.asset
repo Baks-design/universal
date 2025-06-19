@@ -16,5 +16,5 @@ MonoBehaviour:
   horizontalClamp: {x: -90, y: 90}
   sensitivityAmount: {x: 10, y: 10}
   smoothAmount: {x: 10, y: 10}
-  recenterDuration: 1
+  recenterDuration: 0.5
   recenterSpeed: 0.1
