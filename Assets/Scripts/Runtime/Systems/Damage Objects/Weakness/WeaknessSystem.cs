@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
-    public class WeaknessSystem : MonoBehaviour, IWeaknessSystem
+    public class WeaknessSystem : MonoBehaviour
     {
         [SerializeField] LimbWeaknessConfig[] limbWeaknessConfigs;
         Dictionary<LimbType, LimbWeaknessConfig> weaknessMap;

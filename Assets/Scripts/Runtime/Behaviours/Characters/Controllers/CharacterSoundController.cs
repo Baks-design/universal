@@ -3,6 +3,7 @@ using UnityEngine;
 using Universal.Runtime.Systems.SoundEffects;
 using System.Collections.Generic;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Alchemy.Inspector;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -10,8 +11,8 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Self] Transform bodyTransfom;
         [SerializeField, Parent] CharacterMovementController movementController;
-        [SerializeField, InLineEditor] CharacterData data;
-        [SerializeField, InLineEditor] FootstepsSoundLibrary[] soundLib;
+        [SerializeField, InlineEditor] CharacterData data;
+        [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         SoundBuilder soundBuilder;
         ISoundEffectsServices soundService;
@@ -70,7 +71,7 @@ namespace Universal.Runtime.Behaviours.Characters
             var clip = surface.footstepSounds[rnd];
             soundBuilder
                 .WithRandomPitch()
-                .WithPosition(bodyTransfom.position)
+                .WithPosition(bodyTransfom.localPosition)
                 .Play(clip);
         }
 

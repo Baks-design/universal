@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using Alchemy.Inspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Universal.Runtime.Systems.InventoryManagement;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
-namespace Universal.Runtime.Systems.EntitiesPersistence
+namespace Universal.Runtime.Systems.EntitiesPersistence  //TODO: Adjust Persistence
 {
     public class PersistenceManager : MonoBehaviour, IPersistenceServices
     {
-        [SerializeField] GameData gameData;
+        [SerializeField, ReadOnly] GameData gameData;
         IDataService dataService;
 
         void Awake()
@@ -37,7 +38,7 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
         {
             var entities = FindObjectsByType<T>(FindObjectsSortMode.None);
             T entity = null;
-            
+
             if (entities.Length > 0)
                 entity = entities[0];
 
@@ -77,7 +78,7 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
         {
             gameData = new GameData
             {
-                Name = "Demo" ,
+                Name = "Demo",
                 CurrentLevelName = "Level1",
                 EntityData = new List<EntityData>(),
             };
@@ -92,8 +93,6 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
             if (string.IsNullOrWhiteSpace(gameData.CurrentLevelName))
                 gameData.CurrentLevelName = "Demo";
             SceneManager.LoadScene(gameData.CurrentLevelName);
-
-            
         }
 
         public void ReloadGame() => LoadGame(gameData.Name);

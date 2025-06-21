@@ -1,3 +1,4 @@
+using Alchemy.Inspector;
 using KBCore.Refs;
 using UnityEngine;
 using Universal.Runtime.Systems.EntityPersistence;
@@ -7,7 +8,7 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
     public class EntityPersistence : MonoBehaviour, IBind<EntityData>
     {
         [SerializeField, Self] Transform tr;
-        [SerializeField] EntityData data;
+        [SerializeField, ReadOnly] EntityData data;
 
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 

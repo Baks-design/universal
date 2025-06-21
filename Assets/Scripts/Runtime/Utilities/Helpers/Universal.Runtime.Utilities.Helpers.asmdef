@@ -1,7 +1,9 @@
 {
     "name": "Universal.Runtime.Utilities.Helpers",
     "rootNamespace": "Universal.Runtime.Utilities.Helpers",
-    "references": [],
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
     "includePlatforms": [
         "Editor",
         "WindowsStandalone64"

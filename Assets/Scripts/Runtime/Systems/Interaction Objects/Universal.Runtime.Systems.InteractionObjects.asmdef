@@ -9,7 +9,9 @@
         "GUID:0031969725fdf6c45bbae2cf588fcc43",
         "GUID:319d3947fe3ddc8428e241c5be524bb0",
         "GUID:47eda695209bb814db2ab442b2e43f96",
-        "GUID:94557e9e5c8e494468aedc59a4f33caf"
+        "GUID:94557e9e5c8e494468aedc59a4f33caf",
+        "GUID:88be65f96b86746888c927a5c8ff3534",
+        "GUID:cfd1a146fc13ce94082f9cb6e42d8cd5"
     ],
     "includePlatforms": [
         "Editor",

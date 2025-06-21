@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
-    public class VisualDamageSystem : MonoBehaviour, IVisualDamageSystem
+    public class VisualDamageSystem : MonoBehaviour
     {
         [SerializeField] LimbVisuals[] limbVisuals;
         [Serializable]

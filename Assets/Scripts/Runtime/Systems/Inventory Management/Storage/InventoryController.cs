@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Universal.Runtime.Systems.EntityPersistence;
 
 namespace Universal.Runtime.Systems.InventoryManagement
 {
-    public class InventoryController
+    public class InventoryController //TODO: Adjust Inventory
     {
         readonly InventoryView view;
         readonly InventoryModel model;
@@ -14,9 +13,6 @@ namespace Universal.Runtime.Systems.InventoryManagement
 
         InventoryController(InventoryView view, InventoryModel model, int capacity)
         {
-            Debug.Assert(view != null, "View is null");
-            Debug.Assert(model != null, "Model is null");
-            Debug.Assert(capacity > 0, "Capacity is less than 1");
             this.view = view;
             this.model = model;
             this.capacity = capacity;
@@ -25,6 +21,8 @@ namespace Universal.Runtime.Systems.InventoryManagement
         }
 
         public void Bind(InventoryData data) => model.Bind(data);
+
+        public void AddItems(Item item) => model.Add(item);
 
         public void AddCoins(int amount) => model.AddCoins(amount);
 
@@ -49,10 +47,6 @@ namespace Universal.Runtime.Systems.InventoryManagement
                 model.Swap(originalSlot.Index, closestSlot.Index);
                 return;
             }
-
-            // TODO: UI - Inventory - world drops
-            // TODO: UI - Inventory - Cross Inventory drops
-            // TODO: UI - Inventory - Hotbar drops
 
             // Moving to Non-Empty Slot
             var sourceItemId = model.Get(originalSlot.Index).details.Id;
@@ -106,6 +100,6 @@ namespace Universal.Runtime.Systems.InventoryManagement
                 return new InventoryController(view, model, capacity);
             }
         }
-        #endregion Builder
+        #endregion
     }
 }

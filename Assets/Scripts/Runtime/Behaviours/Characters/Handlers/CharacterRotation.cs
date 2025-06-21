@@ -51,22 +51,22 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void HandleRotationInput()
         {
-            // Process input buffer
-            if (inputBufferTimer > 0f)
-                inputBufferTimer -= Time.unscaledDeltaTime;
-
             // Early exit conditions
             if (controller.CharacterMovement.IsMoving ||
                 IsRotating ||
                 Time.time < lastInputTime + data.inputCooldown)
                 return;
 
+            // Process input buffer
+            if (inputBufferTimer > 0f)
+                inputBufferTimer -= Time.unscaledDeltaTime;
+
             var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
             var absInput = Mathf.Abs(rotateInput);
             // Input with deadzone and buffer consideration
             if (absInput > 0.1f)
             {
-                if (!isTurningInputPressed || inputBufferTimer > 0)
+                if (!isTurningInputPressed || inputBufferTimer > 0f)
                 {
                     StartRotation(rotateInput > 0f);
                     lastInputTime = Time.time;
@@ -93,136 +93,7 @@ namespace Universal.Runtime.Behaviours.Characters
             controller.CharacterMovement.IsMoving = true;
 
             // Immediate micro-rotation to start the interpolation
-            character.rotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
+            character.localRotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // public class CharacterRotation
-    // {
-    //     readonly CharacterMovementController controller;
-    //     readonly Transform character;
-    //     readonly CharacterData data;
-    //     Quaternion startRotation, targetRotation;
-    //     bool isTurningInputPressed;
-    //     float rotationProgress, lastInputTime;
-
-    //     public bool IsRotating { get; private set; }
-
-    //     public CharacterRotation(
-    //         CharacterMovementController controller,
-    //         Transform character,
-    //         CharacterData data)
-    //     {
-    //         this.controller = controller;
-    //         this.character = character;
-    //         this.data = data;
-
-    //         targetRotation = startRotation = Quaternion.identity;
-    //         lastInputTime = rotationProgress = 0f;
-    //         IsRotating = isTurningInputPressed = false;
-    //     }
-
-    //     public void UpdateRotation()
-    //     {
-    //         if (!IsRotating)
-    //             return;
-
-    //         rotationProgress += Time.deltaTime / data.rotateDuration;
-    //         var t = data.moveCurve.Evaluate(rotationProgress);
-    //         character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
-    //         if (rotationProgress >= 1f)
-    //         {
-    //             character.rotation = targetRotation;
-    //             IsRotating = false;
-    //             controller.CharacterMovement.IsMoving = false;
-    //         }
-    //     }
-
-    //     public void HandleRotationInput()
-    //     {
-    //         if (controller.CharacterMovement.IsMoving ||
-    //             IsRotating ||
-    //             Time.time < lastInputTime + data.inputCooldown)
-    //             return;
-
-    //         var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
-    //         if (Mathf.Abs(rotateInput) > 0.1f)
-    //         {
-    //             if (!isTurningInputPressed)
-    //             {
-    //                 StartRotation(rotateInput > 0f);
-    //                 lastInputTime = Time.time;
-    //                 isTurningInputPressed = true;
-    //             }
-    //         }
-    //         else
-    //             isTurningInputPressed = false;
-    //     }
-
-    //     void StartRotation(bool clockwise)
-    //     {
-    //         startRotation = character.rotation;
-    //         targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90f : -90f, 0f);
-    //         rotationProgress = 0f;
-    //         IsRotating = true;
-    //         controller.CharacterMovement.IsMoving = true;
-    //     }
-    // }
 }

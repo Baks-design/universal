@@ -1,3 +1,4 @@
+using Alchemy.Inspector;
 using UnityEngine;
 using Universal.Runtime.Systems.EntityPersistence;
 using Universal.Runtime.Systems.InventoryManagement;
@@ -6,7 +7,7 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
 {
     public class InventoryPersistence : MonoBehaviour, IBind<InventoryData>
     {
-        [SerializeField] Inventory inventory;
+        [SerializeField, ReadOnly] Inventory inventory;
 
         [field: SerializeField] public SerializableGuid Id { get; set; } = SerializableGuid.NewGuid();
 

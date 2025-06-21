@@ -21,7 +21,6 @@ namespace Universal.Runtime.Behaviours.Characters
         [Range(0f, 1f)] public float moveDuration = 0.1f;
         [Range(0.1f, 0.5f)] public float obstacleCheckRadius = 0.5f;
         [Range(0.1f, 1f)] public float rotateDuration = 0.35f;
-        [AnimationCurveSettings]
         public AnimationCurve moveCurve = new(
             new Keyframe(0f, 0f, 1.5f, 1.5f),  // Smooth acceleration
             new Keyframe(0.7f, 1.1f, 0.5f, 0.5f),  // Slight overshoot

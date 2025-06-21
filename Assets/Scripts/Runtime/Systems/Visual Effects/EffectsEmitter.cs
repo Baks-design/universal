@@ -30,7 +30,6 @@ namespace Universal.Runtime.Systems.VisualEffects
             }
 
             vfxSource.Stop();
-
             visualEffectsServices.ReturnToPool(this);
         }
     }

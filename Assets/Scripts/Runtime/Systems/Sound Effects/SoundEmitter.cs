@@ -68,7 +68,6 @@ namespace Universal.Runtime.Systems.SoundEffects
             }
 
             audioSource.Stop();
-
             soundEffectsServices.ReturnToPool(this);
         }
 

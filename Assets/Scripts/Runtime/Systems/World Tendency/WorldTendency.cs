@@ -5,20 +5,20 @@ using Universal.Runtime.Systems.EntitiesPersistence;
 
 namespace Universal.Runtime.Systems.WorldTendency
 {
-    public class WorldTendency : ITendencyNotifier
+    public class WorldTendency : ITendencyNotifier //TODO: Adjust World Tendency
     {
         readonly ITendencyCalculator calculator;
         readonly ITendencyPersister persister;
         readonly List<ITendencyEffect> effects = new();
         float[] worldTendencies;
 
-        public event Action<int, TendencyState> OnTendencyChanged;
+        public event Action<int, TendencyState> OnTendencyChanged = delegate { };
 
         public WorldTendency(ITendencyCalculator calculator, ITendencyPersister persister, int worldCount)
         {
             this.calculator = calculator;
             this.persister = persister;
-            
+
             InitializeTendencies(worldCount);
         }
 
@@ -53,7 +53,7 @@ namespace Universal.Runtime.Systems.WorldTendency
             for (var i = 0; i < effects.Count; i++)
                 effects[i].ApplyEffect(worldIndex, state);
 
-            OnTendencyChanged?.Invoke(worldIndex, state);
+            OnTendencyChanged.Invoke(worldIndex, state);
         }
 
         public void Save() => persister.SaveTendencies(worldTendencies);

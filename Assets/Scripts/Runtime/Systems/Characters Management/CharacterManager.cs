@@ -7,15 +7,16 @@ using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
+using Alchemy.Inspector;
 
 namespace Universal.Runtime.Systems.CharactersManagement
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices
+    public class CharacterManager : MonoBehaviour, ICharacterServices //TODO: Adjust Character Manager
     {
         [SerializeField] Grid grid;
         [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
-        [SerializeField, InLineEditor] CharacterData characterData;
+        [SerializeField, InlineEditor] CharacterData characterData;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
         Vector3 lastActivePosition;
@@ -32,38 +33,28 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         void Start() => AddCharacterToRoster(characterData);
 
-        void OnEnable()
-        {
-            PlayerMapInputProvider.SwitchCharacter.started += NextCharacter;
-            PlayerMapInputProvider.SwitchCharacter.started += PreviousCharacter;
-        }
+        void OnEnable() => PlayerMapInputProvider.SwitchCharacter.started += NextCharacter;
 
-        void OnDisable()
-        {
-            PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
-            PlayerMapInputProvider.SwitchCharacter.started -= PreviousCharacter;
-        }
+        void OnDisable() => PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
 
         void NextCharacter(InputAction.CallbackContext context)
         {
-            if (context.ReadValue<float>() <= 0f || characterRoster.Count == 0) return;
+            if (characterRoster.Count == 0) return;
 
             var currentIndex = GetCurrentCharacterIndex();
             if (currentIndex == -1) return;
 
-            var nextIndex = (currentIndex + 1) % characterRoster.Count;
-            SwitchCharacter(nextIndex);
-        }
-
-        void PreviousCharacter(InputAction.CallbackContext context)
-        {
-            if (context.ReadValue<float>() >= 0f || characterRoster.Count == 0) return;
-
-            var currentIndex = GetCurrentCharacterIndex();
-            if (currentIndex == -1) return;
-
-            var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
-            SwitchCharacter(prevIndex);
+            switch (context.ReadValue<float>())
+            {
+                case > 0f:
+                    var nextIndex = (currentIndex + 1) % characterRoster.Count;
+                    SwitchCharacter(nextIndex);
+                    break;
+                case < 0f:
+                    var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
+                    SwitchCharacter(prevIndex);
+                    break;
+            }
         }
 
         int GetCurrentCharacterIndex()
@@ -73,16 +64,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         public void AddCharacterToRoster(CharacterData characterData)
         {
-            if (characterRoster.Count >= maxCharacters)
-            {
-                Debug.LogWarning("Character roster is full!");
-                return;
-            }
-            if (rosterData.Contains(characterData))
-            {
-                Debug.LogWarning($"Character {characterData.characterName} already in roster!");
-                return;
-            }
+            if (characterRoster.Count >= maxCharacters ||
+                rosterData.Contains(characterData)) return;
 
             var charObj = Addressables.InstantiateAsync(
                 characterData.characterPrefab,
@@ -90,13 +73,11 @@ namespace Universal.Runtime.Systems.CharactersManagement
             ).WaitForCompletion();
             if (!charObj.TryGetComponent(out IPlayableCharacter character))
             {
-                Debug.LogError("Instantiated prefab doesn't implement IPlayableCharacter!");
                 Addressables.ReleaseInstance(charObj);
                 return;
             }
             if (!charObj.TryGetComponent(out IEnableComponent enableComp))
             {
-                Debug.LogError("Instantiated prefab doesn't implement IEnableComponent!");
                 Addressables.ReleaseInstance(charObj);
                 return;
             }
@@ -108,13 +89,13 @@ namespace Universal.Runtime.Systems.CharactersManagement
                 // Set spawn position for first character
                 var randomPoint = Random.Range(0, spawnPoints.Length);
                 var spawnPoint = spawnPoints[randomPoint].transform;
-                character.CharacterTransform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+                character.CharacterTransform.SetLocalPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
                 lastActivePosition = spawnPoint.position;
                 lastActiveRotation = spawnPoint.rotation;
             }
             else
                 // Use last active position for subsequent characters
-                character.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
+                character.CharacterTransform.SetLocalPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             rosterData.Add(characterData);
             characterRoster.Add(new KeyValuePair<IPlayableCharacter, IEnableComponent>(character, enableComp));
@@ -156,8 +137,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
             // Store current position before switching
             if (currentCharacter != null)
             {
-                lastActivePosition = currentCharacter.CharacterTransform.position;
-                lastActiveRotation = currentCharacter.CharacterTransform.rotation;
+                lastActivePosition = currentCharacter.CharacterTransform.localPosition;
+                lastActiveRotation = currentCharacter.CharacterTransform.localRotation;
                 enableComponent.Deactivate();
             }
 
@@ -166,11 +147,9 @@ namespace Universal.Runtime.Systems.CharactersManagement
             enableComponent = newEnableComponent;
 
             // Apply the stored position/rotation to the new character
-            currentCharacter.CharacterTransform.SetPositionAndRotation(lastActivePosition, lastActiveRotation);
+            currentCharacter.CharacterTransform.SetLocalPositionAndRotation(lastActivePosition, lastActiveRotation);
 
             enableComponent.Activate();
-
-            //Debug.Log($"Switched to {currentCharacter.CharacterData.characterName}");
 
             yield return null;
         }

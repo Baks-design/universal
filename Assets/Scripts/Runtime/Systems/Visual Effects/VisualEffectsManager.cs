@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
-    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices
+    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices //TODO: Adjust Visual Effects
     {
         [SerializeField] GameObject container;
         [SerializeField] AssetReference effectEmitterPrefab;

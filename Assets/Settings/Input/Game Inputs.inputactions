@@ -42,6 +42,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Inspection",
+                    "type": "Button",
+                    "id": "7fb3377b-60d5-4796-9fa5-372d5edc8bd7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Aim",
                     "type": "Button",
                     "id": "57966dae-9fff-4f38-be63-4d0f61b7a33b",
@@ -235,7 +244,7 @@
                     "name": "",
                     "id": "5fc114cc-5dd5-4052-929d-70906f963d63",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "Hold",
+                    "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Aim",
@@ -316,6 +325,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8d0c4d7-016f-490b-ba8a-35eacba6a181",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Inspection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

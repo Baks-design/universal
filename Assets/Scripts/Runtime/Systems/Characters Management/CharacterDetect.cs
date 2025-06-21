@@ -31,12 +31,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
                 if (!characterManager.ContainsCharacter(character.CharacterData))
                 {
                     characterManager.AddCharacterToRoster(character.CharacterData);
-                    Debug.Log($"Added {character.CharacterData.characterName} to roster");
-
                     RemoveCharacterFromScene(character.gameObject);
                 }
-                else
-                    Debug.Log($"{character.CharacterData.characterName} already in roster");
             }
         }
 

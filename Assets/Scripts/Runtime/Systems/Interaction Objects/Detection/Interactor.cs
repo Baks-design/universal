@@ -1,14 +1,14 @@
-using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Systems.InventoryManagement;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
     public class Interactor : MonoBehaviour
     {
-        [SerializeField, Self] Transform body;
+        [SerializeField] Inventory inventory;
         [SerializeField] CharacterCameraController cameraController;
         [SerializeField] LayerMask objectsLayers;
         [SerializeField] float interactionRadius = 0.3f;
@@ -19,6 +19,7 @@ namespace Universal.Runtime.Systems.InteractionObjects
         Camera mainCamera;
         int hitCount;
 
+        public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
 
         void Awake()

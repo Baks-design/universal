@@ -32,7 +32,6 @@ namespace Universal.Runtime.Systems.InventoryManagement
                 Slots[i].OnStartDrag -= OnPointerDown;
         }
 
-
         void OnPointerMove(PointerMoveEvent evt)
         {
             if (!isDragging) return;
@@ -84,7 +83,6 @@ namespace Universal.Runtime.Systems.InventoryManagement
             originalSlot.StackLabel.visible = false;
 
             ghostIcon.style.visibility = Visibility.Visible;
-            // TODO: UI - Inventory - show stack size on ghost icon
         }
 
         static void SetGhostIconPosition(Vector2 position)

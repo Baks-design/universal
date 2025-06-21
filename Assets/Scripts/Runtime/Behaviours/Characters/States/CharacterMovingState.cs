@@ -22,6 +22,8 @@ namespace Universal.Runtime.Behaviours.Characters
             controller.CharacterRotation.UpdateRotation();
             if (!controller.CharacterMovement.IsMoving)
                 controller.CharacterRotation.HandleRotationInput();
+
+            controller.CameraEffects.HandleCameraSway();
         }
     }
 }

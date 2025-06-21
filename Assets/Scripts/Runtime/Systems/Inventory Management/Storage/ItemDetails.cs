@@ -1,4 +1,5 @@
 ﻿using System;
+using Alchemy.Inspector;
 using UnityEngine;
 using Universal.Runtime.Systems.EntityPersistence;
 
@@ -8,14 +9,36 @@ namespace Universal.Runtime.Systems.InventoryManagement
     [CreateAssetMenu(menuName = "Data/Inventory/Item")]
     public class ItemDetails : ScriptableObject
     {
-        [BeginHorizontalGroup(Label = "ItemSplit", LabelWidth = 0.75f)]
+        [HorizontalGroup("BasicInfo")]
+        [BoxGroup("BasicInfo/Left")]
+        [Required]
         public string Name;
-        public int maxStack = 1;
-        public SerializableGuid Id = SerializableGuid.NewGuid();
-        [AssetPreview] public Sprite Icon;
-        [EndHorizontalGroup]
-        [TextArea, HideLabel] public string Description;
 
+        [BoxGroup("BasicInfo/Left")]
+        [Range(1, 999)]
+        public int maxStack = 1;
+
+        [BoxGroup("BasicInfo/Left")]
+        [TextArea(3, 5)]
+        public string Description;
+
+        [BoxGroup("BasicInfo/Right")]
+        [Preview(100)]
+        [Required]
+        public Sprite Icon;
+
+        [BoxGroup("ID")]
+        [ReadOnly]
+        [LabelText("Unique ID")]
+        public SerializableGuid Id = SerializableGuid.NewGuid();
+
+        [BoxGroup("ID")]
+        [Button()]
+        [LabelText("Generate New ID")]
+        public void AssignNewGuid() => Id = SerializableGuid.NewGuid();
+
+        [FoldoutGroup("Advanced")]
+        [Tooltip("Creates a new inventory item instance with this item's details")]
         public Item Create(int quantity) => new(this, quantity);
     }
 }

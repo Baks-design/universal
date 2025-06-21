@@ -1,19 +1,16 @@
 using UnityEngine;
+using KBCore.Refs;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
-    public class Damageable : MonoBehaviour, IDamageable
+    public class Damageable : MonoBehaviour, IDamageable //TODO: Adjust Damageable
     {
-        ILimbSystem limbSystem;
-        IWeaknessSystem weaknessSystem;
-        //IVisualDamageSystem visualDamageSystem;
+        [SerializeField, Child] HumanoidLimbSystem limbSystem;
+        [SerializeField, Child] WeaknessSystem weaknessSystem;
+        //[SerializeField, Child] VisualDamageSystem visualDamageSystem; //TODO: Add Visuals on Damage
 
         void Awake()
         {
-            limbSystem = GetComponent<ILimbSystem>();
-            weaknessSystem = GetComponent<IWeaknessSystem>();
-            //visualDamageSystem = GetComponent<IVisualDamageSystem>();
-
             // Configure weaknesses for all limbs
             var array = limbSystem.GetLimbs();
             for (var i = 0; i < array.Length; i++)

@@ -6,13 +6,13 @@ namespace Universal.Runtime.Systems.WorldTendency
 
         public ThresholdTendencyCalculator(float[] thresholds) => this.thresholds = thresholds;
 
-        public TendencyState CalculateTendency(float tendencyValue)
+        public TendencyState CalculateTendency(float tendencyValue) => tendencyValue switch
         {
-            if (tendencyValue >= thresholds[0]) return TendencyState.PureWhite;
-            if (tendencyValue >= thresholds[1]) return TendencyState.White;
-            if (tendencyValue <= thresholds[3]) return TendencyState.PureBlack;
-            if (tendencyValue <= thresholds[2]) return TendencyState.Black;
-            return TendencyState.Neutral;
-        }
+            _ when tendencyValue >= thresholds[0] => TendencyState.PureWhite,
+            _ when tendencyValue >= thresholds[1] => TendencyState.White,
+            _ when tendencyValue <= thresholds[3] => TendencyState.PureBlack,
+            _ when tendencyValue <= thresholds[2] => TendencyState.Black,
+            _ => TendencyState.Neutral
+        };
     }
 }

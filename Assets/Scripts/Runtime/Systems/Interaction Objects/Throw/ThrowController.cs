@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Input;
 
-namespace Universal.Runtime.Systems.InteractionObjects
+namespace Universal.Runtime.Systems.InteractionObjects //TODO: Adjust Trow
 {
     public class ThrowController : MonoBehaviour
     {
@@ -13,9 +13,9 @@ namespace Universal.Runtime.Systems.InteractionObjects
         [SerializeField] Transform spawn;
         [SerializeField] ThrowConfiguration config;
 
-        void OnEnable() => PlayerMapInputProvider.Throw.started += OnThrowStarted;
+        void OnEnable() => PlayerMapInputProvider.Aim.started += OnThrowStarted;
 
-        void OnDisable() => PlayerMapInputProvider.Throw.started -= OnThrowStarted;
+        void OnDisable() => PlayerMapInputProvider.Aim.started -= OnThrowStarted;
 
         void OnThrowStarted(InputAction.CallbackContext context)
         {

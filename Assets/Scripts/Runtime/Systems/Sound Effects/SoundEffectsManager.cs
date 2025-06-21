@@ -30,8 +30,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         public bool CanPlaySound(SoundData data)
         {
-            if (!data.frequentSound)
-                return true;
+            if (!data.frequentSound) return true;
 
             if (FrequentSoundEmitters.Count >= maxSoundInstances)
             {
@@ -42,7 +41,6 @@ namespace Universal.Runtime.Systems.SoundEffects
                 }
                 catch
                 {
-                    //Debug.Log("SoundEmitter is already released");
                 }
                 return false;
             }
@@ -100,9 +98,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         void OnDestroyPoolObject(SoundEmitter soundEmitter)
         {
-            if (soundEmitter == null)
-                return;
-
+            if (soundEmitter == null) return;
             Destroy(soundEmitter.gameObject);
         }
     }

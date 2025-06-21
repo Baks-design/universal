@@ -28,10 +28,10 @@ namespace Universal.Runtime.Systems.WorldTendency
         public void ApplyEffect(int worldIndex, TendencyState state)
         {
             if (!worldData.TryGetValue(worldIndex, out var objects)) return;
-            SetObjectsActive(objects.WhiteObjects, state == TendencyState.White || state == TendencyState.PureWhite);
-            SetObjectsActive(objects.PureWhiteObjects, state == TendencyState.PureWhite);
-            SetObjectsActive(objects.BlackObjects, state == TendencyState.Black || state == TendencyState.PureBlack);
-            SetObjectsActive(objects.PureBlackObjects, state == TendencyState.PureBlack);
+            SetObjectsActive(objects.WhiteObjects, state is TendencyState.White || state is TendencyState.PureWhite);
+            SetObjectsActive(objects.PureWhiteObjects, state is TendencyState.PureWhite);
+            SetObjectsActive(objects.BlackObjects, state is TendencyState.Black || state is TendencyState.PureBlack);
+            SetObjectsActive(objects.PureBlackObjects, state is TendencyState.PureBlack);
         }
 
         void SetObjectsActive(GameObject[] objects, bool active)
