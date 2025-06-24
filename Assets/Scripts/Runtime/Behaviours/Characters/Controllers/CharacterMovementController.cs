@@ -4,14 +4,17 @@ using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 using KBCore.Refs;
 using Alchemy.Inspector;
+using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter //FIXME Order
+    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter
     {
         [field: SerializeField, Self] public Transform Transform { get; private set; }
         [field: SerializeField, Child] public CharacterCameraController CameraController { get; private set; }
         [field: SerializeField, InlineEditor] public CharacterData Data { get; private set; }
+        IPlayerInputReader inputReader;
 
         public CharacterData CharacterData => Data;
         public Transform CharacterTransform => Transform;
@@ -23,18 +26,19 @@ namespace Universal.Runtime.Behaviours.Characters
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
 
-        protected override void Awake()
+        void Start()
         {
-            base.Awake();
-            Init(); 
+            Init();
             StateMachine();
+            SnapToGrid();
         }
 
         void Init()
         {
-            CharacterRotation = new CharacterRotation(this, Transform, Data);
-            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main);
-            CameraEffects = new CameraEffects(this, CameraController);
+            ServiceLocator.Global.Get(out inputReader);
+            CharacterRotation = new CharacterRotation(this, Transform, Data, inputReader);
+            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
+            CameraEffects = new CameraEffects(this, CameraController, inputReader);
         }
 
         void StateMachine()
@@ -48,16 +52,8 @@ namespace Universal.Runtime.Behaviours.Characters
             Set(idlingState);
         }
 
-        void OnEnable() => CameraEffects.RegisterInput();
-
-        void OnDisable() => CameraEffects.UnregisterInput();
-
-        void Start() => SnapToGrid();
-
         void SnapToGrid()
         {
-            if (Grid == null) return;
-
             CurrentGridPosition = Grid.WorldToCell(Transform.position);
             Transform.position = Grid.GetCellCenterWorld(CurrentGridPosition);
             CharacterMovement.FacingDirection = Transform.forward;

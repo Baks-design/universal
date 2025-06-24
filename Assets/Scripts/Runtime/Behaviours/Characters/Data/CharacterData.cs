@@ -18,7 +18,8 @@ namespace Universal.Runtime.Behaviours.Characters
 
         [Header("Movement")]
         public LayerMask obstacleMask;
-        [Range(0f, 1f)] public float moveDuration = 0.1f;
+        [Range(0f, 1f)] public float moveDuration = 0.25f;
+        [Range(0f, 1f)] public float runDuration = 0.5f;
         [Range(0.1f, 0.5f)] public float obstacleCheckRadius = 0.5f;
         [Range(0.1f, 1f)] public float rotateDuration = 0.35f;
         public AnimationCurve moveCurve = new(

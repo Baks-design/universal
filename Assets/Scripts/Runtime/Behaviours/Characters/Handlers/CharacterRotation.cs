@@ -8,6 +8,7 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CharacterMovementController controller;
         readonly Transform character;
         readonly CharacterData data;
+        readonly IPlayerInputReader inputReader;
         Quaternion startRotation, targetRotation;
         bool isTurningInputPressed;
         float rotationProgress, lastInputTime, inputBufferTimer;
@@ -18,11 +19,13 @@ namespace Universal.Runtime.Behaviours.Characters
         public CharacterRotation(
             CharacterMovementController controller,
             Transform character,
-            CharacterData data)
+            CharacterData data,
+            IPlayerInputReader inputReader)
         {
             this.controller = controller;
             this.character = character;
             this.data = data;
+            this.inputReader = inputReader;
 
             targetRotation = startRotation = Quaternion.identity;
             lastInputTime = rotationProgress = inputBufferTimer = 0f;
@@ -61,7 +64,7 @@ namespace Universal.Runtime.Behaviours.Characters
             if (inputBufferTimer > 0f)
                 inputBufferTimer -= Time.unscaledDeltaTime;
 
-            var rotateInput = PlayerMapInputProvider.Turn.ReadValue<float>();
+            var rotateInput = inputReader.Turning;
             var absInput = Mathf.Abs(rotateInput);
             // Input with deadzone and buffer consideration
             if (absInput > 0.1f)

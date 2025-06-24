@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Systems.InventoryManagement;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
@@ -18,21 +18,23 @@ namespace Universal.Runtime.Systems.InteractionObjects
         Ray ray;
         Camera mainCamera;
         int hitCount;
+        IPlayerInputReader playerInput;
 
         public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
 
-        void Awake()
+        void Start()
         {
             interactionHits = new RaycastHit[10];
             mainCamera = Camera.main;
+
+            ServiceLocator.Global.Get(out playerInput);
+            playerInput.Interact += OnInteractStarted;
         }
 
-        void OnEnable() => PlayerMapInputProvider.Interact.started += OnInteractStarted;
+        void OnDisable() => playerInput.Interact -= OnInteractStarted;
 
-        void OnDisable() => PlayerMapInputProvider.Interact.started -= OnInteractStarted;
-
-        void OnInteractStarted(InputAction.CallbackContext context)
+        void OnInteractStarted()
         {
             if (hitCount == 0 || interactable == null) return;
 

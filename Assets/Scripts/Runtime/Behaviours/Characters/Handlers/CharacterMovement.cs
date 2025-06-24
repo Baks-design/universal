@@ -10,6 +10,7 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CharacterData data;
         readonly Grid grid;
         readonly Camera camera;
+        readonly IPlayerInputReader inputReader;
         Vector3 startPosition, targetPosition;
         Vector3Int queuedDirection;
         bool hasMovementInput;
@@ -26,25 +27,26 @@ namespace Universal.Runtime.Behaviours.Characters
             Transform character,
             CharacterData data,
             Grid grid,
-            Camera camera)
+            Camera camera,
+            IPlayerInputReader inputReader)
         {
             this.movement = movement;
             this.character = character;
             this.data = data;
             this.grid = grid;
             this.camera = camera;
+            this.inputReader = inputReader;
 
             startPosition = targetPosition = character.position;
             moveProgress = 0f;
             IsMoving = false;
-            FacingDirection = Vector3.forward;
             InputBuffer = Vector2.zero;
         }
 
         public void HandleMovementInput()
         {
             // Read and buffer input
-            var currentInput = PlayerMapInputProvider.Move.ReadValue<Vector2>();
+            var currentInput = inputReader.MoveDirection;
             hasMovementInput = currentInput.sqrMagnitude > 0.1f;
             if (hasMovementInput)
             {
@@ -91,7 +93,10 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (!IsMoving) return;
 
-            moveProgress += Time.deltaTime / Mathf.Max(0.0001f, data.moveDuration);
+            var isRunning = inputReader.MoveDirection != Vector2.zero;
+            var targetMoveDuration = isRunning ? data.runDuration : data.moveDuration;
+
+            moveProgress += Time.deltaTime / Mathf.Max(0.0001f, targetMoveDuration);
             moveProgress = Mathf.Clamp01(moveProgress);
 
             // Smooth movement with acceleration/deceleration

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Universal.Runtime.Utilities.Extensions;
+using UnityUtils;
 
 namespace Universal.Runtime.Utilities.Tools.Timers
 {
@@ -9,24 +9,23 @@ namespace Universal.Runtime.Utilities.Tools.Timers
         static readonly List<Timer> sweep = new();
 
         public static void RegisterTimer(Timer timer) => timers.Add(timer);
-        
+
         public static void DeregisterTimer(Timer timer) => timers.Remove(timer);
 
         public static void UpdateTimers()
         {
-            if (timers.Count == 0)
-                return;
+            if (timers.Count == 0) return;
 
-            sweep.RefreshWith(timers);
-            for (var i = 0; i < sweep.Count; i++)
-                sweep[i].Tick();
+            // sweep.RefreshWith(timers);
+            // for (var i = 0; i < sweep.Count; i++)
+            //     sweep[i].Tick();
         }
 
         public static void Clear()
         {
-            sweep.RefreshWith(timers);
-            for (var i = 0; i < sweep.Count; i++)
-                sweep[i].Dispose();
+            // sweep.RefreshWith(timers);
+            // for (var i = 0; i < sweep.Count; i++)
+            //     sweep[i].Dispose();
 
             timers.Clear();
             sweep.Clear();

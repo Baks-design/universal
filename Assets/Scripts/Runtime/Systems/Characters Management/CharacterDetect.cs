@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using KBCore.Refs;
 using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.CharactersManagement
 {
@@ -15,14 +16,19 @@ namespace Universal.Runtime.Systems.CharactersManagement
         bool isColl;
         RaycastHit hitInfo;
         Camera mainCamera;
+        IPlayerInputReader inputReader;
 
-        void Start() => mainCamera = Camera.main;
+        void Start()
+        {
+            mainCamera = Camera.main;
 
-        void OnEnable() => PlayerMapInputProvider.AddCharacter.started += OnAddCharacter;
+            ServiceLocator.Global.Get(out inputReader);
+            inputReader.AddCharacter += OnAddCharacter;
+        }
 
-        void OnDisable() => PlayerMapInputProvider.AddCharacter.started -= OnAddCharacter;
+        void OnDisable() => inputReader.AddCharacter -= OnAddCharacter;
 
-        void OnAddCharacter(InputAction.CallbackContext context)
+        void OnAddCharacter()
         {
             if (!isColl) return;
 
@@ -48,8 +54,10 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         void DetectBodies()
         {
-            var getRay = mainCamera.ScreenPointToRay(
-                PlayerMapInputProvider.Look.ReadValue<Vector2>());
+            Vector3 mousPos = default;
+            mousPos.x = inputReader.LookDirection.x;
+            mousPos.z = inputReader.LookDirection.y;
+            var getRay = mainCamera.ScreenPointToRay(mousPos);
             isColl = Physics.SphereCast(
                 getRay.origin,
                 raySphereRadius,

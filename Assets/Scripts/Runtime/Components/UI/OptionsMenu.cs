@@ -27,7 +27,7 @@ namespace Universal.Runtime.Components.UI
 
         void OnEnable()
         {
-            UIMapInputProvider.Unpause.started += OnBackPressed;
+            //UIMapInputProvider.Unpause.started += OnBackPressed;
 
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
@@ -35,7 +35,7 @@ namespace Universal.Runtime.Components.UI
 
         void OnDisable()
         {
-            UIMapInputProvider.Unpause.started -= OnBackPressed;
+            //UIMapInputProvider.Unpause.started -= OnBackPressed;
 
             // optionsButton.clicked -= OnOptionsClicked;
             // mainMenuButton.clicked -= OnMainMenuClicked;

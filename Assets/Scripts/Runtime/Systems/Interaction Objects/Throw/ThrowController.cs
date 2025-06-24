@@ -1,8 +1,8 @@
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects //TODO: Adjust Trow
 {
@@ -12,12 +12,17 @@ namespace Universal.Runtime.Systems.InteractionObjects //TODO: Adjust Trow
         [SerializeField] AssetReferenceGameObject throwableObject;
         [SerializeField] Transform spawn;
         [SerializeField] ThrowConfiguration config;
+        IPlayerInputReader inputReader;
 
-        void OnEnable() => PlayerMapInputProvider.Aim.started += OnThrowStarted;
+        void Start()
+        {
+            ServiceLocator.Global.Get(out inputReader);
+            inputReader.Throw += OnThrowStarted;
+        }
 
-        void OnDisable() => PlayerMapInputProvider.Aim.started -= OnThrowStarted;
+        void OnDisable() => inputReader.Throw -= OnThrowStarted;
 
-        void OnThrowStarted(InputAction.CallbackContext context)
+        void OnThrowStarted()
         {
             var proj = Addressables
                 .InstantiateAsync(throwableObject, spawn.position, Quaternion.identity)

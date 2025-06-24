@@ -13,25 +13,21 @@ namespace Universal.Runtime.Systems.InventoryManagement
         [BoxGroup("BasicInfo/Left")]
         [Required]
         public string Name;
-
         [BoxGroup("BasicInfo/Left")]
         [Range(1, 999)]
         public int maxStack = 1;
-
         [BoxGroup("BasicInfo/Left")]
         [TextArea(3, 5)]
         public string Description;
-
         [BoxGroup("BasicInfo/Right")]
         [Preview(100)]
         [Required]
         public Sprite Icon;
-
+        
         [BoxGroup("ID")]
         [ReadOnly]
         [LabelText("Unique ID")]
         public SerializableGuid Id = SerializableGuid.NewGuid();
-
         [BoxGroup("ID")]
         [Button()]
         [LabelText("Generate New ID")]

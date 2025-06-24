@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Universal.Runtime.Utilities.Extensions;
+using UnityUtils;
 
 namespace Universal.Runtime.Utilities.Tools.ServiceLocator
 {

@@ -2,6 +2,7 @@ using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.UI
 {
@@ -12,18 +13,19 @@ namespace Universal.Runtime.Components.UI
         // Button resumeButton;
         // Button optionsButton;
         // Button mainMenuButton;
+        IInputServices inputServices;
 
-        void Awake()
+        void Start()
         {
+            ServiceLocator.Global.Get(out inputServices);
+            inputServices.ChangeToUIMap();
+
             //root = uIDocument.rootVisualElement;
 
             // resumeButton = root.Q<Button>("resume-button");
             // optionsButton = root.Q<Button>("options-button");
             // mainMenuButton = root.Q<Button>("main-menu-button");
-        }
 
-        void OnEnable()
-        {
             // resumeButton.clicked += OnResumeClicked; 
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
@@ -43,7 +45,5 @@ namespace Universal.Runtime.Components.UI
         void OnOptionsClicked() => Debug.Log("Options clicked");
 
         void OnQuitClicked() => Debug.Log("Quit clicked");
-
-        void Start() => InputServiceProvider.EnableUIMap();
     }
 }

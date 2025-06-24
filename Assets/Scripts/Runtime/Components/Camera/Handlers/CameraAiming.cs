@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
 {
@@ -9,10 +10,10 @@ namespace Universal.Runtime.Components.Camera
         readonly CameraData data;
         readonly CinemachineCamera target;
         readonly float initFOV;
+        Coroutine activeCoroutine;
         bool running;
-        IEnumerator changeFOVRoutine, changeRunFOVRoutine;
 
-        public bool IsZooming { get; set; }
+        public bool IsZooming { get; private set; }
 
         public CameraAiming(CameraData data, CinemachineCamera target)
         {
@@ -24,75 +25,56 @@ namespace Universal.Runtime.Components.Camera
 
         public void ChangeFOV(MonoBehaviour mono)
         {
-            if (running)
-            {
-                IsZooming = !IsZooming;
-                return;
-            }
+            if (running) return;
 
-            if (changeRunFOVRoutine != null)
-                mono.StopCoroutine(changeRunFOVRoutine);
-
-            if (changeFOVRoutine != null)
-                mono.StopCoroutine(changeFOVRoutine);
-
-            changeFOVRoutine = ChangeFOVRoutine();
-            mono.StartCoroutine(changeFOVRoutine);
+            IsZooming = !IsZooming;
+            StartCoroutine(mono, ChangeFOVRoutine());
         }
 
         IEnumerator ChangeFOVRoutine()
         {
             var percent = 0f;
-            var smoothPercent = 0f;
-
-            var speed = 1f / data.zoomTransitionDuration;
-
             var currentFOV = target.Lens.FieldOfView;
-            var targetFOV = IsZooming ? initFOV : data.zoomFOV;
-
-            IsZooming = !IsZooming;
+            var targetFOV = IsZooming ? data.zoomFOV : initFOV;
+            var inverseDuration = 1f / data.zoomTransitionDuration;
 
             while (percent < 1f)
             {
-                percent += Time.deltaTime * speed;
-                smoothPercent = data.zoomCurve.Evaluate(percent);
-                target.Lens.FieldOfView = Mathf.Lerp(currentFOV, targetFOV, smoothPercent);
+                percent += Time.deltaTime * inverseDuration;
+                var smoothPercent = data.zoomCurve.Evaluate(percent);
+                target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
                 yield return null;
             }
         }
 
         public void ChangeRunFOV(bool returning, MonoBehaviour mono)
-        {
-            if (changeFOVRoutine != null)
-                mono.StopCoroutine(changeRunFOVRoutine);
+        => StartCoroutine(mono, ChangeRunFOVRoutine(returning));
 
-            if (changeRunFOVRoutine != null)
-                mono.StopCoroutine(changeRunFOVRoutine);
-
-            changeRunFOVRoutine = ChangeRunFOVRoutine(returning);
-            mono.StartCoroutine(changeRunFOVRoutine);
-        }
-
-        IEnumerator ChangeRunFOVRoutine(bool returning)
+        private IEnumerator ChangeRunFOVRoutine(bool returning)
         {
             var percent = 0f;
-            var smoothPercent = 0f;
-
-            var duration = returning ? data.runReturnTransitionDuration : data.runTransitionDuration;
-            var speed = 1f / duration;
-
             var currentFOV = target.Lens.FieldOfView;
             var targetFOV = returning ? initFOV : data.runFOV;
+            var duration = returning ? data.runReturnTransitionDuration : data.runTransitionDuration;
+            var inverseDuration = 1f / duration;
 
             running = !returning;
 
             while (percent < 1f)
             {
-                percent += Time.deltaTime * speed;
-                smoothPercent = data.runCurve.Evaluate(percent);
-                target.Lens.FieldOfView = Mathf.Lerp(currentFOV, targetFOV, smoothPercent);
+                percent += Time.deltaTime * inverseDuration;
+                var smoothPercent = data.runCurve.Evaluate(percent);
+                target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
                 yield return null;
             }
+        }
+
+        void StartCoroutine(MonoBehaviour mono, IEnumerator routine)
+        {
+            if (activeCoroutine != null)
+                mono.StopCoroutine(activeCoroutine);
+
+            activeCoroutine = mono.StartCoroutine(routine);
         }
     }
 }

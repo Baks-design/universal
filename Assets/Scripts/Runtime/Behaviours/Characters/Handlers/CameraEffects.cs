@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Components.Input;
 
@@ -9,69 +8,41 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         readonly CharacterMovementController movementController;
         readonly CharacterCameraController cameraController;
+        readonly IPlayerInputReader inputReader;
         bool duringRunAnimation;
 
         public CameraEffects(
             CharacterMovementController movementController,
-            CharacterCameraController cameraController)
+            CharacterCameraController cameraController,
+            IPlayerInputReader inputReader)
         {
             this.movementController = movementController;
             this.cameraController = cameraController;
+            this.inputReader = inputReader;
         }
 
-        public void RegisterInput()
+        public void HandleRunFOV()
         {
-            PlayerMapInputProvider.Move.performed += OnFOVMovePerformed;
-            PlayerMapInputProvider.Move.canceled += OnFOVMoveCanceled;
+            var isMoving = inputReader.MoveDirection != Vector2.zero;
+            var isRunning = inputReader.Running > 0.1f;
+            var movementBlocked = movementController.CharacterMovement.IsBlocked;
 
-            PlayerMapInputProvider.Run.started += OnFOVRunStarted;
-            PlayerMapInputProvider.Run.canceled += OnFOVRunCanceled;
-        }
-
-        public void UnregisterInput()
-        {
-            PlayerMapInputProvider.Move.performed -= OnFOVMovePerformed;
-            PlayerMapInputProvider.Move.canceled -= OnFOVMoveCanceled;
-            
-            PlayerMapInputProvider.Run.started -= OnFOVRunStarted;
-            PlayerMapInputProvider.Run.canceled -= OnFOVRunCanceled;
-        }
-
-        void OnFOVMovePerformed(InputAction.CallbackContext context)
-        {
-            // Handle case where player starts moving while already running
-            if (movementController.CharacterMovement.IsRunning &&
-                !duringRunAnimation &&
-                !movementController.CharacterMovement.IsBlocked)
+            // Handle starting to run
+            if (isMoving && !movementBlocked)
             {
-                duringRunAnimation = true;
-                cameraController.ChangeRunFOV(false);
+                var shouldStartRun = isRunning ||
+                    (!duringRunAnimation && movementController.CharacterMovement.IsRunning);
+                if (shouldStartRun)
+                {
+                    duringRunAnimation = true;
+                    cameraController.ChangeRunFOV(false);
+                    return; // Early exit since we've handled the running case
+                }
             }
-        }
 
-        void OnFOVMoveCanceled(InputAction.CallbackContext context)
-        {
-            // If movement stops while running, cancel FOV change
-            if (duringRunAnimation)
-            {
-                duringRunAnimation = false;
-                cameraController.ChangeRunFOV(true);
-            }
-        }
-
-        void OnFOVRunStarted(InputAction.CallbackContext context)
-        {
-            if (context.ReadValue<Vector2>() != Vector2.zero &&
-                !movementController.CharacterMovement.IsBlocked)
-            {
-                duringRunAnimation = true;
-                cameraController.ChangeRunFOV(false);
-            }
-        }
-
-        void OnFOVRunCanceled(InputAction.CallbackContext context)
-        {
-            if (duringRunAnimation)
+            // Handle stopping run conditions
+            var shouldStopRun = !isRunning || !isMoving || movementBlocked;
+            if (duringRunAnimation && shouldStopRun)
             {
                 duringRunAnimation = false;
                 cameraController.ChangeRunFOV(true);
@@ -79,7 +50,7 @@ namespace Universal.Runtime.Behaviours.Characters
         }
 
         public void HandleCameraSway() => cameraController.HandleSway(
-           movementController.CharacterMovement.InputBuffer,
-           PlayerMapInputProvider.Move.ReadValue<Vector2>().x);
+            movementController.CharacterMovement.InputBuffer,
+            inputReader.MoveDirection.x);
     }
 }

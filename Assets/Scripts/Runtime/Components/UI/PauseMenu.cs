@@ -1,8 +1,8 @@
 using KBCore.Refs;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.UI
 {
@@ -13,6 +13,9 @@ namespace Universal.Runtime.Components.UI
         // Button resumeButton;
         // Button optionsButton;
         // Button mainMenuButton;
+        IInputServices inputServices;
+        IPlayerInputReader playerInputReader;
+        IUIInputReader uIInputReader;
 
         public bool IsPaused { get; private set; } = false;
 
@@ -25,10 +28,14 @@ namespace Universal.Runtime.Components.UI
             // mainMenuButton = root.Q<Button>("main-menu-button");
         }
 
-        void OnEnable()
+        void Start()
         {
-            PlayerMapInputProvider.Pause.started += OnPausePressed;
-            UIMapInputProvider.Unpause.started += OnResumePressed;
+            ServiceLocator.Global.Get(out inputServices);
+            ServiceLocator.Global.Get(out playerInputReader);
+            ServiceLocator.Global.Get(out uIInputReader);
+
+            playerInputReader.Pause += OnPausePressed;
+            uIInputReader.Unpause += OnResumePressed;
 
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
@@ -36,29 +43,29 @@ namespace Universal.Runtime.Components.UI
 
         void OnDisable()
         {
-            PlayerMapInputProvider.Pause.started -= OnPausePressed;
-            UIMapInputProvider.Unpause.started -= OnResumePressed;
+            playerInputReader.Pause -= OnPausePressed;
+            uIInputReader.Unpause -= OnResumePressed;
 
             // optionsButton.clicked -= OnOptionsClicked;
             // mainMenuButton.clicked -= OnMainMenuClicked;
         }
 
-        void OnPausePressed(InputAction.CallbackContext _)
+        void OnPausePressed()
         {
             IsPaused = true;
             Time.timeScale = 0f;
             root.style.display = DisplayStyle.Flex;
-            InputServiceProvider.EnableUIMap();
-            InputServiceProvider.SetCursorLocked(false);
+            inputServices.ChangeToUIMap();
+            inputServices.SetCursorLocked(false);
         }
 
-        void OnResumePressed(InputAction.CallbackContext _)
+        void OnResumePressed()
         {
             IsPaused = false;
             Time.timeScale = 1f;
             root.style.display = DisplayStyle.None;
-            InputServiceProvider.EnablePlayerMap();
-            InputServiceProvider.SetCursorLocked(true);
+            inputServices.ChangeToPlayerMap();
+            inputServices.SetCursorLocked(true);
         }
 
         void OnOptionsPressed() { /*change to options menu;*/}

@@ -9,7 +9,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
 
         protected virtual void Awake() => stateMachine = new StateMachine();
 
-        void Update() => stateMachine.Update();
+        protected virtual void Update() => stateMachine.Update();
 
         protected virtual void LateUpdate() => stateMachine.LateUpdate();
 

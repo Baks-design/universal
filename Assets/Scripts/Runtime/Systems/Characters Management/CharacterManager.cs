@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using Universal.Runtime.Behaviours.Characters;
 using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
@@ -14,7 +13,6 @@ namespace Universal.Runtime.Systems.CharactersManagement
     public class CharacterManager : MonoBehaviour, ICharacterServices //TODO: Adjust Character Manager
     {
         [SerializeField] Grid grid;
-        [SerializeField] GameObject characterContainer;
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterData characterData;
         IPlayableCharacter currentCharacter;
@@ -24,6 +22,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
         readonly HashSet<CharacterData> rosterData = new(maxCharacters);
+        IPlayerInputReader playerInput;
 
         void Awake()
         {
@@ -31,30 +30,41 @@ namespace Universal.Runtime.Systems.CharactersManagement
             ServiceLocator.Global.Register<ICharacterServices>(this);
         }
 
-        void Start() => AddCharacterToRoster(characterData);
+        void Start()
+        {
+            AddCharacterToRoster(characterData);
 
-        void OnEnable() => PlayerMapInputProvider.SwitchCharacter.started += NextCharacter;
+            ServiceLocator.Global.Get(out playerInput);
+            playerInput.NextCharacter += NextCharacter;
+            playerInput.PreviousCharacter += PreviousCharacter;
+        }
 
-        void OnDisable() => PlayerMapInputProvider.SwitchCharacter.started -= NextCharacter;
+        void OnDisable()
+        {
+            playerInput.NextCharacter += NextCharacter;
+            playerInput.PreviousCharacter += PreviousCharacter;
+        }
 
-        void NextCharacter(InputAction.CallbackContext context)
+        void NextCharacter()
         {
             if (characterRoster.Count == 0) return;
 
             var currentIndex = GetCurrentCharacterIndex();
             if (currentIndex == -1) return;
 
-            switch (context.ReadValue<float>())
-            {
-                case > 0f:
-                    var nextIndex = (currentIndex + 1) % characterRoster.Count;
-                    SwitchCharacter(nextIndex);
-                    break;
-                case < 0f:
-                    var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
-                    SwitchCharacter(prevIndex);
-                    break;
-            }
+            var nextIndex = (currentIndex + 1) % characterRoster.Count;
+            SwitchCharacter(nextIndex);
+        }
+
+        void PreviousCharacter()
+        {
+            if (characterRoster.Count == 0) return;
+
+            var currentIndex = GetCurrentCharacterIndex();
+            if (currentIndex == -1) return;
+
+            var prevIndex = (currentIndex - 1 + characterRoster.Count) % characterRoster.Count;
+            SwitchCharacter(prevIndex);
         }
 
         int GetCurrentCharacterIndex()
@@ -69,7 +79,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
             var charObj = Addressables.InstantiateAsync(
                 characterData.characterPrefab,
-                characterContainer.transform
+                transform
             ).WaitForCompletion();
             if (!charObj.TryGetComponent(out IPlayableCharacter character))
             {

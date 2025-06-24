@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Universal.Runtime.Utilities.Extensions;
+using UnityUtils;
 
 namespace Universal.Runtime.Utilities.Tools.ServiceLocator
 {
@@ -192,12 +192,12 @@ namespace Universal.Runtime.Utilities.Tools.ServiceLocator
 
             if (transform.parent != null)
             {
-                var parentService = transform.parent.GetComponentInParent<ServiceLocator>().OrNull();
-                if (parentService != null)
-                {
-                    container = parentService;
-                    return true;
-                }
+                // var parentService = transform.parent.GetComponentInParent<ServiceLocator>().OrNull();
+                // if (parentService != null)
+                // {
+                //     container = parentService;
+                //     return true;
+                // }
             }
 
             container = ForSceneOf(this);

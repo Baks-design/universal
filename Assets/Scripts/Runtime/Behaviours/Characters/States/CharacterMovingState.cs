@@ -24,6 +24,7 @@ namespace Universal.Runtime.Behaviours.Characters
                 controller.CharacterRotation.HandleRotationInput();
 
             controller.CameraEffects.HandleCameraSway();
+            controller.CameraEffects.HandleRunFOV();
         }
     }
 }

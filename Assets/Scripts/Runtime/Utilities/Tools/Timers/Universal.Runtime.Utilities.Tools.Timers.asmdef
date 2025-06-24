@@ -2,7 +2,8 @@
     "name": "Universal.Runtime.Utilities.Tools.Timers",
     "rootNamespace": "Universal.Runtime.Utilities.Tools.Timers",
     "references": [
-        "GUID:84884ef7c68f0b14b94fb02ca5693269"
+        "GUID:3fdfe6dde2c72ef439fd6cb6d5dca5c8",
+        "GUID:4dff6dee342670b439dd4df0c22da8eb"
     ],
     "includePlatforms": [
         "Editor",

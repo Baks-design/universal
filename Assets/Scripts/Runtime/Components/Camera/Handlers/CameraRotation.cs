@@ -1,13 +1,15 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using Universal.Runtime.Components.Input;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
 {
-    public class CameraRotation //TODO: Testing with MathemathicsX
+    public class CameraRotation
     {
         readonly CameraData data;
         readonly CinemachineCamera target;
+        readonly IPlayerInputReader inputReader;
         Quaternion initialRotation;
         Quaternion currentRotation;
         float rotationTimer, desiredTargetYaw, desiredTargetPitch, targetYaw, targetPitch;
@@ -16,10 +18,14 @@ namespace Universal.Runtime.Components.Camera
 
         public bool IsRotatingBack { get; set; }
 
-        public CameraRotation(CameraData data, CinemachineCamera target)
+        public CameraRotation(
+            CameraData data,
+            CinemachineCamera target,
+            IPlayerInputReader inputReader)
         {
             this.data = data;
             this.target = target;
+            this.inputReader = inputReader;
 
             IsRotatingBack = false;
             rotationTimer = yawSmoothVelocity = pitchSmoothVelocity = 0f;
@@ -42,21 +48,21 @@ namespace Universal.Runtime.Components.Camera
         {
             if (IsRotatingBack) return;
 
-            var lookInput = PlayerMapInputProvider.Look.ReadValue<Vector2>();
+            var lookInput = inputReader.LookDirection;
 
             desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * Time.deltaTime;
             desiredTargetPitch += lookInput.y * data.sensitivityAmount.y * Time.deltaTime;
 
-            desiredTargetYaw = Mathf.Clamp(desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
-            desiredTargetPitch = Mathf.Clamp(desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
+            desiredTargetYaw = Clamp(desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
+            desiredTargetPitch = Clamp(desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
 
             // Use SmoothDamp for more consistent smoothing across framerates
-            targetYaw = Mathf.SmoothDamp(
+            targetYaw = SmoothDamp(
                 targetYaw, desiredTargetYaw, ref yawSmoothVelocity,
-                1f / data.smoothAmount.x, Mathf.Infinity, Time.deltaTime);
-            targetPitch = Mathf.SmoothDamp(
+                1f / data.smoothAmount.x, Infinity, Time.deltaTime);
+            targetPitch = SmoothDamp(
                 targetPitch, desiredTargetPitch, ref pitchSmoothVelocity,
-                1f / data.smoothAmount.y, Mathf.Infinity, Time.deltaTime);
+                1f / data.smoothAmount.y, Infinity, Time.deltaTime);
 
             // Skip rotation update if changes are negligible
             if (Quaternion.Angle(currentRotation, Quaternion.Euler(targetPitch, targetYaw, 0f)) > SMOOTHTARGETEPSILON)
@@ -80,10 +86,9 @@ namespace Universal.Runtime.Components.Camera
             if (!IsRotatingBack) return;
 
             rotationTimer += Time.deltaTime;
-            var progress = Mathf.Clamp01(rotationTimer / data.recenterDuration);
+            var progress = Clamp01(rotationTimer / data.recenterDuration);
 
-            // Use spherical interpolation with eased progress for smoother return
-            var easedProgress = Mathf.SmoothStep(0f, 1f, progress);
+            var easedProgress = Smooth01(progress);
             target.transform.localRotation = Quaternion.Slerp(
                 target.transform.localRotation,
                 initialRotation,
