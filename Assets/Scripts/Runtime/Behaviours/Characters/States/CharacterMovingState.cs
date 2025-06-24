@@ -15,16 +15,10 @@ namespace Universal.Runtime.Behaviours.Characters
                 controller.CameraController.CameraRotation.IsRotatingBack)
                 return;
 
+            controller.CharacterMovement.HandleMovementInput();
             controller.CharacterMovement.UpdatePosition();
-            if (!controller.CharacterRotation.IsRotating)
-                controller.CharacterMovement.HandleMovementInput();
-
             controller.CharacterRotation.UpdateRotation();
-            if (!controller.CharacterMovement.IsMoving)
-                controller.CharacterRotation.HandleRotationInput();
-
             controller.CameraEffects.HandleCameraSway();
-            controller.CameraEffects.HandleRunFOV();
         }
     }
 }

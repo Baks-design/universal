@@ -2,7 +2,8 @@
     "name": "Universal.Runtime.Utilities.Helpers",
     "rootNamespace": "Universal.Runtime.Utilities.Helpers",
     "references": [
-        "GUID:d8b63aba1907145bea998dd612889d6b"
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:6071c9f2ce0a4407c93af459fa416e54"
     ],
     "includePlatforms": [
         "Editor",

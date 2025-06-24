@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {

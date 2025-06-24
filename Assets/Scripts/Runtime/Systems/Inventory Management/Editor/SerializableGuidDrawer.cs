@@ -29,7 +29,7 @@ namespace Universal.Runtime.Systems.InventoryManagement
             else
                 EditorGUI.SelectableLabel(position, "GUID Not Initialized");
 
-            var hasClicked = Event.current.type == EventType.MouseUp && Event.current.button == 1;
+            var hasClicked = Event.current.type is EventType.MouseUp && Event.current.button is 1;
             if (hasClicked && position.Contains(Event.current.mousePosition))
             {
                 ShowContextMenu(property);

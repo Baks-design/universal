@@ -1,5 +1,6 @@
 using UnityEngine;
 using Universal.Runtime.Components.Input;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -11,6 +12,12 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly Grid grid;
         readonly Camera camera;
         readonly IPlayerInputReader inputReader;
+        static readonly Vector3Int Right = Vector3Int.right;
+        static readonly Vector3Int Left = Vector3Int.left;
+        static readonly Vector3Int Up = Vector3Int.up;
+        static readonly Vector3Int Down = Vector3Int.down;
+        const float MOVEMENT_THRESHOLD = 0.01f;
+        const float DIRECTION_DEADZONE = 0.1f;
         Vector3 startPosition, targetPosition;
         Vector3Int queuedDirection;
         bool hasMovementInput;
@@ -37,17 +44,48 @@ namespace Universal.Runtime.Behaviours.Characters
             this.camera = camera;
             this.inputReader = inputReader;
 
+            ResetMovementState();
+        }
+
+        void ResetMovementState()
+        {
             startPosition = targetPosition = character.position;
             moveProgress = 0f;
             IsMoving = false;
             InputBuffer = Vector2.zero;
+            queuedDirection = Vector3Int.zero;
+        }
+
+        public void SnapToGrid()
+        {
+            movement.CurrentGridPosition = grid.WorldToCell(character.position);
+            character.position = grid.GetCellCenterWorld(movement.CurrentGridPosition);
+            FacingDirection = character.forward;
         }
 
         public void HandleMovementInput()
         {
+            if (movement.CharacterRotation.IsRotating) return;
+
             // Read and buffer input
             var currentInput = inputReader.MoveDirection;
             hasMovementInput = currentInput.sqrMagnitude > 0.1f;
+
+            UpdateInputBuffer(currentInput);
+
+            // Convert to world direction
+            var worldDirection = GetWorldSpaceDirection(InputBuffer);
+            if (worldDirection.sqrMagnitude > DIRECTION_DEADZONE)
+            {
+                queuedDirection = GetGridAlignedDirection(worldDirection);
+                FacingDirection = new Vector3(queuedDirection.x, 0f, queuedDirection.z).normalized;
+            }
+
+            HandleMovementQueuing();
+        }
+
+        void UpdateInputBuffer(Vector2 currentInput)
+        {
             if (hasMovementInput)
             {
                 InputBuffer = Vector2.Lerp(InputBuffer, currentInput, Time.deltaTime * data.inputResponseSpeed);
@@ -55,30 +93,25 @@ namespace Universal.Runtime.Behaviours.Characters
             }
             else
                 InputBuffer = Vector2.Lerp(InputBuffer, Vector2.zero, Time.deltaTime * data.inputDeceleration);
+        }
 
-            // Convert to world direction
-            var worldDirection = GetWorldSpaceDirection(InputBuffer);
-            if (worldDirection.sqrMagnitude > 0.01f)
-            {
-                queuedDirection = GetGridAlignedDirection(worldDirection);
-                FacingDirection = new Vector3(queuedDirection.x, 0f, queuedDirection.z).normalized;
-            }
+        void HandleMovementQueuing()
+        {
+            if (queuedDirection == Vector3Int.zero) return;
+
+            var nextCell = movement.CurrentGridPosition + queuedDirection;
+            var cellBlocked = IsCellBlocked(nextCell);
 
             // Queue next movement if current one is almost complete
-            if (IsMoving && moveProgress >= data.moveQueueThreshold && queuedDirection != Vector3Int.zero)
+            if (IsMoving && moveProgress >= data.moveQueueThreshold && !cellBlocked)
             {
-                var nextCell = movement.CurrentGridPosition + queuedDirection;
-                if (!IsCellBlocked(nextCell))
-                {
-                    StartMovement(nextCell);
-                    queuedDirection = Vector3Int.zero;
-                }
+                StartMovement(nextCell);
+                queuedDirection = Vector3Int.zero;
             }
             // Start new movement if not moving
-            else if (!IsMoving && queuedDirection != Vector3Int.zero)
+            else if (!IsMoving)
             {
-                var nextCell = movement.CurrentGridPosition + queuedDirection;
-                if (!IsCellBlocked(nextCell))
+                if (!cellBlocked)
                 {
                     IsBlocked = false;
                     StartMovement(nextCell);
@@ -93,30 +126,36 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (!IsMoving) return;
 
-            var isRunning = inputReader.MoveDirection != Vector2.zero;
-            var targetMoveDuration = isRunning ? data.runDuration : data.moveDuration;
-
-            moveProgress += Time.deltaTime / Mathf.Max(0.0001f, targetMoveDuration);
-            moveProgress = Mathf.Clamp01(moveProgress);
+            moveProgress += Time.deltaTime / Max(0.0001f, data.moveDuration);
+            moveProgress = Clamp01(moveProgress);
 
             // Smooth movement with acceleration/deceleration
             var smoothedProgress = data.moveCurve?.Evaluate(moveProgress) ?? moveProgress;
             character.position = Vector3.Lerp(startPosition, targetPosition, smoothedProgress);
 
             if (moveProgress >= 1f)
-            {
-                character.position = targetPosition;
-                movement.CurrentGridPosition = grid.WorldToCell(targetPosition);
-                IsMoving = false;
-            }
+                CompleteMovement();
+        }
+
+        void CompleteMovement()
+        {
+            character.position = targetPosition;
+            movement.CurrentGridPosition = grid.WorldToCell(targetPosition);
+            IsMoving = false;
         }
 
         Vector3 GetWorldSpaceDirection(Vector2 input)
         {
-            if (input.sqrMagnitude < 0.01f) return Vector3.zero;
+            if (input.sqrMagnitude < DIRECTION_DEADZONE)
+                return Vector3.zero;
 
-            var cameraForward = Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up).normalized;
-            var cameraRight = Vector3.ProjectOnPlane(camera.transform.right, Vector3.up).normalized;
+            var cameraForward = camera != null ?
+                Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up).normalized :
+                Vector3.forward;
+
+            var cameraRight = camera != null ?
+                Vector3.ProjectOnPlane(camera.transform.right, Vector3.up).normalized :
+                Vector3.right;
 
             return (cameraForward * input.y) + (cameraRight * input.x);
         }
@@ -126,12 +165,10 @@ namespace Universal.Runtime.Behaviours.Characters
             startPosition = character.position;
             targetPosition = grid.GetCellCenterWorld(targetCell);
 
-            // Immediately start if very close to target
-            if (Vector3.Distance(startPosition, targetPosition) < 0.01f)
+            if (Vector3.Distance(startPosition, targetPosition) < MOVEMENT_THRESHOLD)
             {
                 character.position = targetPosition;
                 movement.CurrentGridPosition = targetCell;
-                IsMoving = false;
                 return;
             }
 
@@ -141,17 +178,15 @@ namespace Universal.Runtime.Behaviours.Characters
 
         Vector3Int GetGridAlignedDirection(Vector3 worldDirection)
         {
-            if (worldDirection.sqrMagnitude < 0.1f) return Vector3Int.zero;
+            if (worldDirection.sqrMagnitude < DIRECTION_DEADZONE)
+                return Vector3Int.zero;
 
-            // Apply hysteresis to prevent direction flips
-            var xAbs = Mathf.Abs(worldDirection.x);
-            var zAbs = Mathf.Abs(worldDirection.z);
-            var threshold = 0.3f;
-            if (xAbs > threshold || zAbs > threshold)
-                return xAbs > zAbs
-                    ? worldDirection.x > 0f ? Vector3Int.right : Vector3Int.left
-                    : worldDirection.z > 0f ? Vector3Int.up : Vector3Int.down;
-            return Vector3Int.zero;
+            var xAbs = Abs(worldDirection.x);
+            var zAbs = Abs(worldDirection.z);
+
+            return xAbs > zAbs ?
+                (worldDirection.x > 0f ? Right : Left) :
+                (worldDirection.z > 0f ? Up : Down);
         }
 
         bool IsCellBlocked(Vector3Int cell)
@@ -159,5 +194,17 @@ namespace Universal.Runtime.Behaviours.Characters
             var worldPosition = grid.GetCellCenterWorld(cell);
             return Physics.CheckSphere(worldPosition, data.obstacleCheckRadius, data.obstacleMask);
         }
+
+#if UNITY_EDITOR
+        public void DrawMovementGizmos()
+        {
+            // Draw movement path
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(startPosition, targetPosition);
+            // Draw target position
+            Gizmos.color = IsBlocked ? Color.red : Color.blue;
+            Gizmos.DrawWireCube(targetPosition, Vector3.one * 0.8f);
+        }
+#endif
     }
 }

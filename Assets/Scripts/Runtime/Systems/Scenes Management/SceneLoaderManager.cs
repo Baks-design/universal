@@ -2,10 +2,11 @@ using KBCore.Refs;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.ScenesManagement
 {
-    public class SceneLoader : MonoBehaviour //TODO: UI - Make Load Screen
+    public class SceneLoaderManager : MonoBehaviour //TODO: UI - Make Load Screen
     {
         [SerializeField, Child] CinemachineCamera loadingCamera; //TODO: Adjust Scene Loader
         [SerializeField, Child] UIDocument document;
@@ -35,9 +36,9 @@ namespace Universal.Runtime.Systems.ScenesManagement
             if (!isLoading) return;
 
             var currentFillAmount = loadingBar.value / 100f; // ProgressBar uses 0-100 range
-            var progressDifference = Mathf.Abs(currentFillAmount - targetProgress);
+            var progressDifference = Abs(currentFillAmount - targetProgress);
             var dynamicFillSpeed = progressDifference * fillSpeed;
-            var newFillAmount = Mathf.Lerp(currentFillAmount, targetProgress, Time.deltaTime * dynamicFillSpeed);
+            var newFillAmount = Lerp(currentFillAmount, targetProgress, Time.deltaTime * dynamicFillSpeed);
 
             loadingBar.value = newFillAmount * 100f;
         }
@@ -47,11 +48,10 @@ namespace Universal.Runtime.Systems.ScenesManagement
             loadingBar.value = 0f;
             targetProgress = 1f;
 
-            if (index < 0 || index >= sceneGroups.Length)
-                return;
+            if (index < 0 || index >= sceneGroups.Length) return;
 
             var progress = new LoadingProgress();
-            progress.Progressed += target => targetProgress = Mathf.Max(target, targetProgress);
+            progress.Progressed += target => targetProgress = Max(target, targetProgress);
 
             EnableLoadingCanvas(true);
             await manager.LoadScenes(sceneGroups[index], progress);

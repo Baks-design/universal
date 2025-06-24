@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityUtils;
 
 namespace Universal.Runtime.Utilities.Tools.Timers
 {
@@ -16,16 +15,16 @@ namespace Universal.Runtime.Utilities.Tools.Timers
         {
             if (timers.Count == 0) return;
 
-            // sweep.RefreshWith(timers);
-            // for (var i = 0; i < sweep.Count; i++)
-            //     sweep[i].Tick();
+            sweep.RefreshWith(timers); 
+            for (var i = 0; i < sweep.Count; i++)
+                sweep[i].Tick();
         }
 
         public static void Clear()
         {
-            // sweep.RefreshWith(timers);
-            // for (var i = 0; i < sweep.Count; i++)
-            //     sweep[i].Dispose();
+            sweep.RefreshWith(timers);
+            for (var i = 0; i < sweep.Count; i++)
+                sweep[i].Dispose();
 
             timers.Clear();
             sweep.Clear();

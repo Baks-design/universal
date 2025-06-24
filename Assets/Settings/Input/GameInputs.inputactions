@@ -78,15 +78,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Run",
-                    "type": "Value",
-                    "id": "2b36c00b-11f1-4a3a-898a-a3468f1d11da",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "5364e686-a2df-4f84-829b-108552b900a6",
@@ -345,17 +336,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Inspection",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "50dc40a7-90de-48a9-92aa-3ee9ddfb4636",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

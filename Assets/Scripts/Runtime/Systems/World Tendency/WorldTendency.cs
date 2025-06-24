@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Universal.Runtime.Systems.EntitiesPersistence;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.WorldTendency
 {
@@ -38,8 +38,8 @@ namespace Universal.Runtime.Systems.WorldTendency
         {
             if (worldIndex < 0 || worldIndex >= worldTendencies.Length) return;
 
-            var newValue = Mathf.Clamp(worldTendencies[worldIndex] + amount, -1f, 1f);
-            if (Mathf.Abs(newValue - worldTendencies[worldIndex]) > 0.01f)
+            var newValue = Clamp(worldTendencies[worldIndex] + amount, -1f, 1f);
+            if (Abs(newValue - worldTendencies[worldIndex]) > 0.01f)
             {
                 worldTendencies[worldIndex] = newValue;
                 UpdateWorld(worldIndex);

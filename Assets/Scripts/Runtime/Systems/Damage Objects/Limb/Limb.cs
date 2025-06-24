@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
@@ -36,7 +37,7 @@ namespace Universal.Runtime.Systems.DamageObjects
             var severity = weakness?.Severity ?? DamageSeverity.Normal;
 
             var actualDamage = damageInfo.Amount * multiplier;
-            Health = Mathf.Max(0, Health - actualDamage);
+            Health = Max(0, Health - actualDamage);
 
             var wasSevered = false;
             if (Health <= 0f && !IsSevered)
@@ -55,6 +56,6 @@ namespace Universal.Runtime.Systems.DamageObjects
             OnSevered.Invoke(this);
         }
 
-        public void Heal(float amount) => Health = Mathf.Min(MaxHealth, Health + amount);
+        public void Heal(float amount) => Health = Min(MaxHealth, Health + amount);
     }
 }

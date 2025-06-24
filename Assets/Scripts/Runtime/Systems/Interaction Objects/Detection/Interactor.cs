@@ -23,21 +23,27 @@ namespace Universal.Runtime.Systems.InteractionObjects
         public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
 
-        void Start()
+        void Awake()
         {
             interactionHits = new RaycastHit[10];
             mainCamera = Camera.main;
+        }
 
+        void OnEnable() => RegisterInputs();
+
+        void OnDisable() => UnregisterInputs();
+
+        void RegisterInputs()
+        {
             ServiceLocator.Global.Get(out playerInput);
             playerInput.Interact += OnInteractStarted;
         }
 
-        void OnDisable() => playerInput.Interact -= OnInteractStarted;
+        void UnregisterInputs() => playerInput.Interact -= OnInteractStarted;
 
         void OnInteractStarted()
         {
             if (hitCount == 0 || interactable == null) return;
-
             interactable.OnInteract(this);
         }
 

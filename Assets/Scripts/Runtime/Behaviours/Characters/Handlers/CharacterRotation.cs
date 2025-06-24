@@ -1,5 +1,5 @@
 using UnityEngine;
-using Universal.Runtime.Components.Input;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -8,25 +8,32 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CharacterMovementController controller;
         readonly Transform character;
         readonly CharacterData data;
-        readonly IPlayerInputReader inputReader;
         Quaternion startRotation, targetRotation;
         bool isTurningInputPressed;
         float rotationProgress, lastInputTime, inputBufferTimer;
         const float INPUT_BUFFER_TIME = 0.1f;
+        const float ROTATION_ANGLE = 90f;
+        const float ROTATION_OVERSHOOT = 0.0001f; 
+        const float COMPLETION_THRESHOLD = 0.999f;
+        const float ANGLE_EPSILON = 0.1f; 
+        const float MIN_ROTATION_DURATION = 0.01f; 
 
         public bool IsRotating { get; private set; }
 
         public CharacterRotation(
             CharacterMovementController controller,
             Transform character,
-            CharacterData data,
-            IPlayerInputReader inputReader)
+            CharacterData data)
         {
             this.controller = controller;
             this.character = character;
             this.data = data;
-            this.inputReader = inputReader;
 
+            ResetState();
+        }
+
+        void ResetState()
+        {
             targetRotation = startRotation = Quaternion.identity;
             lastInputTime = rotationProgress = inputBufferTimer = 0f;
             IsRotating = isTurningInputPressed = false;
@@ -37,24 +44,31 @@ namespace Universal.Runtime.Behaviours.Characters
             if (!IsRotating) return;
 
             // Frame-rate independent smooth progression
-            rotationProgress += Time.unscaledDeltaTime / Mathf.Max(0.01f, data.rotateDuration);
+            rotationProgress += Time.unscaledDeltaTime / Max(MIN_ROTATION_DURATION, data.rotateDuration);
 
             // Enhanced smoothing with curve evaluation
-            var t = Mathf.Clamp01(data.moveCurve.Evaluate(rotationProgress));
+            var t = Clamp01(data.moveCurve.Evaluate(rotationProgress));
             character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             // Precision completion check
-            if (rotationProgress >= 0.999f || Quaternion.Angle(character.rotation, targetRotation) < 0.1f)
-            {
-                character.rotation = targetRotation;
-                IsRotating = false;
-                controller.CharacterMovement.IsMoving = false;
-            }
+            if (rotationProgress >= COMPLETION_THRESHOLD ||
+                Quaternion.Angle(character.rotation, targetRotation) < ANGLE_EPSILON)
+                CompleteRotation();
         }
 
-        public void HandleRotationInput()
+        void CompleteRotation()
         {
-            // Early exit conditions
+            character.rotation = targetRotation;
+            IsRotating = false;
+            controller.CharacterMovement.IsMoving = false;
+        }
+
+        public void HandleRotationRightInput() => HandleRotationInput(true);
+
+        public void HandleRotationLeftInput() => HandleRotationInput(false);
+
+        void HandleRotationInput(bool clockwise)
+        {
             if (controller.CharacterMovement.IsMoving ||
                 IsRotating ||
                 Time.time < lastInputTime + data.inputCooldown)
@@ -64,24 +78,18 @@ namespace Universal.Runtime.Behaviours.Characters
             if (inputBufferTimer > 0f)
                 inputBufferTimer -= Time.unscaledDeltaTime;
 
-            var rotateInput = inputReader.Turning;
-            var absInput = Mathf.Abs(rotateInput);
-            // Input with deadzone and buffer consideration
-            if (absInput > 0.1f)
+            if (!isTurningInputPressed || inputBufferTimer > 0f)
             {
-                if (!isTurningInputPressed || inputBufferTimer > 0f)
-                {
-                    StartRotation(rotateInput > 0f);
-                    lastInputTime = Time.time;
-                    isTurningInputPressed = true;
-                    inputBufferTimer = 0f; // Clear buffer after use
-                }
+                StartRotation(clockwise);
+                lastInputTime = Time.time;
+                isTurningInputPressed = true;
+                inputBufferTimer = 0f;
             }
             else
             {
                 isTurningInputPressed = false;
                 // Store input in buffer if rotation was blocked
-                if (absInput > 0.1f && (IsRotating || controller.CharacterMovement.IsMoving))
+                if (IsRotating || controller.CharacterMovement.IsMoving)
                     inputBufferTimer = INPUT_BUFFER_TIME;
             }
         }
@@ -89,14 +97,17 @@ namespace Universal.Runtime.Behaviours.Characters
         void StartRotation(bool clockwise)
         {
             startRotation = character.rotation;
-            // Precise target rotation with slight overshoot to ensure completion
-            targetRotation = startRotation * Quaternion.Euler(0f, clockwise ? 90.0001f : -90.0001f, 0f);
+            var rotationAmount = clockwise ?
+                (ROTATION_ANGLE + ROTATION_OVERSHOOT) :
+                -(ROTATION_ANGLE + ROTATION_OVERSHOOT);
+
+            targetRotation = startRotation * Quaternion.Euler(0f, rotationAmount, 0f);
             rotationProgress = 0f;
             IsRotating = true;
             controller.CharacterMovement.IsMoving = true;
 
             // Immediate micro-rotation to start the interpolation
-            character.localRotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
+            character.rotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
         }
     }
 }

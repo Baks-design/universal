@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {
@@ -37,8 +38,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         void Play(AudioClip clip)
         {
-            if (current && current.clip == clip)
-                return;
+            if (current && current.clip == clip) return;
 
             if (previous)
             {
@@ -74,9 +74,9 @@ namespace Universal.Runtime.Systems.SoundEffects
 
             fading += deltaTime;
 
-            var fraction = Mathf.Clamp01(fading / crossFadeTime);
+            var fraction = Clamp01(fading / crossFadeTime);
 
-            var logFraction = fraction.ToLogarithmicFraction();
+            float logFraction = fraction.ToLogarithmicFraction();
 
             if (previous)
                 previous.volume = 1f - logFraction;

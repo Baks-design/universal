@@ -26,19 +26,10 @@ namespace Universal.Runtime.Behaviours.Characters
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
 
-        void Start()
+        protected override void Awake()
         {
-            Init();
+            base.Awake();
             StateMachine();
-            SnapToGrid();
-        }
-
-        void Init()
-        {
-            ServiceLocator.Global.Get(out inputReader);
-            CharacterRotation = new CharacterRotation(this, Transform, Data, inputReader);
-            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
-            CameraEffects = new CameraEffects(this, CameraController, inputReader);
         }
 
         void StateMachine()
@@ -52,12 +43,40 @@ namespace Universal.Runtime.Behaviours.Characters
             Set(idlingState);
         }
 
-        void SnapToGrid()
+        void SetupMovement()
         {
-            CurrentGridPosition = Grid.WorldToCell(Transform.position);
-            Transform.position = Grid.GetCellCenterWorld(CurrentGridPosition);
-            CharacterMovement.FacingDirection = Transform.forward;
+            ServiceLocator.Global.Get(out inputReader);
+
+            CharacterRotation = new CharacterRotation(this, Transform, Data);
+            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
+            CameraEffects = new CameraEffects(this, CameraController, inputReader);
         }
+
+        void OnEnable()
+        {
+            SetupMovement();
+            RegisterInputs();
+        }
+
+        void OnDisable() => UnregisterInputs();
+
+        void RegisterInputs()
+        {
+            inputReader.TurnRight += RightRotationInput;
+            inputReader.TurnLeft += LeftRotationInput;
+        }
+
+        void UnregisterInputs()
+        {
+            inputReader.TurnRight -= RightRotationInput;
+            inputReader.TurnLeft -= LeftRotationInput;
+        }
+
+        void RightRotationInput() => CharacterRotation.HandleRotationRightInput();
+
+        void LeftRotationInput() => CharacterRotation.HandleRotationLeftInput();
+
+        void Start() => CharacterMovement.SnapToGrid();
 
         public void Initialize(CharacterData data, Grid grid)
         {
@@ -77,5 +96,14 @@ namespace Universal.Runtime.Behaviours.Characters
             LastRotation = Transform.localRotation;
             gameObject.SetActive(false);
         }
+
+#if UNITY_EDITOR
+        void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+
+            CharacterMovement.DrawMovementGizmos();
+        }
+#endif
     }
 }

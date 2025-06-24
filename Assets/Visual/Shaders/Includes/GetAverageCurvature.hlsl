@@ -2,6 +2,7 @@ float2 SampleSceneNormalBuffer(float2 uv, float3x3 viewMatrix)
 {
     // Optimized normal sampling and transformation
     float3 normalWorldSpace = SHADERGRAPH_SAMPLE_SCENE_NORMAL(uv);
+    
     // Manual matrix multiplication for better performance
     float3 normalViewSpace;
     normalViewSpace.x = dot(viewMatrix[0], normalWorldSpace);
@@ -52,11 +53,8 @@ void GetAverageCurvature_float(
     sharpness = max(1.0 - sharpness, 0.0001);
     float2 invScreenParams = 1.0 / _ScreenParams.xy;
     
-    // Unroll small loops automatically (compiler hint)
-    [unroll]
     for (int i = -radius; i <= radius; i++)
     {
-        [unroll]
         for (int j = -radius; j <= radius; j++)
         {
             float2 pixelOffset = float2(i, j);

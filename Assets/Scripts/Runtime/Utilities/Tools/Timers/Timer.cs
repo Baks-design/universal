@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Utilities.Tools.Timers
 {
@@ -9,7 +10,7 @@ namespace Universal.Runtime.Utilities.Tools.Timers
 
         public float CurrentTime { get; protected set; }
         public bool IsRunning { get; private set; }
-        public float Progress => Mathf.Clamp(CurrentTime / initialTime, 0f, 1f);
+        public float Progress => Clamp(CurrentTime / initialTime, 0f, 1f);
 
         public Action OnTimerStart = delegate { };
         public Action OnTimerStop = delegate { };

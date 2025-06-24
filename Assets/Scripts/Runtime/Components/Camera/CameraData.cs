@@ -13,16 +13,12 @@ namespace Universal.Runtime.Components.Camera
         [MinMaxRangeSlider(0f, 10f)] public Vector2 smoothAmount = new(3f, 3f);
 
         [Header("Recenter Settings")]
-        [Min(0f)] public float recenterDuration = 3f;
+        [Min(0f)] public float recenterDuration = 1f;
 
         [Header("Aiming Settings")]
         [Range(20f, 60f)] public float zoomFOV = 40f;
         public AnimationCurve zoomCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        public float zoomTransitionDuration = 0.3f;
-        [Range(60f, 100f)] public float runFOV = 75f;
-        public AnimationCurve runCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        public float runTransitionDuration = 0.5f;
-        public float runReturnTransitionDuration = 1f;
+        public float zoomTransitionDuration = 1f;
 
         [Header("Swaying Settings")]
         public float swayAmount = 0.1f; 

@@ -9,9 +9,8 @@ namespace Universal.Runtime.Components.Camera
     {
         readonly CameraData data;
         readonly CinemachineCamera target;
-        readonly float initFOV;
+        readonly float originalFOV;
         Coroutine activeCoroutine;
-        bool running;
 
         public bool IsZooming { get; private set; }
 
@@ -19,13 +18,13 @@ namespace Universal.Runtime.Components.Camera
         {
             this.data = data;
             this.target = target;
-
-            initFOV = target.Lens.FieldOfView;
+            
+            originalFOV = target.Lens.FieldOfView;
         }
 
         public void ChangeFOV(MonoBehaviour mono)
         {
-            if (running) return;
+            if (mono == null) return;
 
             IsZooming = !IsZooming;
             StartCoroutine(mono, ChangeFOVRoutine());
@@ -35,35 +34,20 @@ namespace Universal.Runtime.Components.Camera
         {
             var percent = 0f;
             var currentFOV = target.Lens.FieldOfView;
-            var targetFOV = IsZooming ? data.zoomFOV : initFOV;
+            var targetFOV = IsZooming ? data.zoomFOV : originalFOV;
+
+            if (data.zoomTransitionDuration <= 0f)
+            {
+                target.Lens.FieldOfView = targetFOV;
+                yield break;
+            }
+
             var inverseDuration = 1f / data.zoomTransitionDuration;
 
             while (percent < 1f)
             {
                 percent += Time.deltaTime * inverseDuration;
-                var smoothPercent = data.zoomCurve.Evaluate(percent);
-                target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
-                yield return null;
-            }
-        }
-
-        public void ChangeRunFOV(bool returning, MonoBehaviour mono)
-        => StartCoroutine(mono, ChangeRunFOVRoutine(returning));
-
-        private IEnumerator ChangeRunFOVRoutine(bool returning)
-        {
-            var percent = 0f;
-            var currentFOV = target.Lens.FieldOfView;
-            var targetFOV = returning ? initFOV : data.runFOV;
-            var duration = returning ? data.runReturnTransitionDuration : data.runTransitionDuration;
-            var inverseDuration = 1f / duration;
-
-            running = !returning;
-
-            while (percent < 1f)
-            {
-                percent += Time.deltaTime * inverseDuration;
-                var smoothPercent = data.runCurve.Evaluate(percent);
+                var smoothPercent = data.zoomCurve?.Evaluate(percent) ?? percent;
                 target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
                 yield return null;
             }

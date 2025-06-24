@@ -1,5 +1,5 @@
-using Unity.Cinemachine;
 using UnityEngine;
+using Unity.Cinemachine;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
@@ -7,37 +7,37 @@ namespace Universal.Runtime.Components.Camera
     public class CameraSwaying
     {
         readonly CameraData data;
-        readonly Transform targetTransform;
-        bool differentDirection;
-        float scrollSpeed, xAmountThisFrame, xAmountPreviousFrame;
+        readonly CinemachineCamera camera;
         Vector3 currentEulerAngles;
+        bool differentDirection;
+        float scrollSpeed, currentXInput, previousXInput;
+        const float MaxScrollSpeed = 1f;
 
-        public CameraSwaying(CameraData data, CinemachineCamera target)
+        public CameraSwaying(CameraData data, CinemachineCamera camera)
         {
             this.data = data;
+            this.camera = camera;
 
-            targetTransform = target.transform;
-            currentEulerAngles = targetTransform.localEulerAngles;
+            currentEulerAngles = camera.transform.localEulerAngles;
         }
 
         public void SwayPlayer(Vector3 inputVector, float rawXInput)
         {
-            xAmountThisFrame = rawXInput;
+            currentXInput = rawXInput;
 
             if (rawXInput != 0f)
                 HandleMovementInput(inputVector.x);
             else
                 HandleNoInput();
 
-            scrollSpeed = Clamp(scrollSpeed, -1f, 1f);
+            scrollSpeed = Clamp(scrollSpeed, -MaxScrollSpeed, MaxScrollSpeed);
             ApplySway();
-            xAmountPreviousFrame = xAmountThisFrame;
+            previousXInput = currentXInput;
         }
 
         void HandleMovementInput(float xAmount)
         {
-            // Check if direction changed
-            if (xAmountThisFrame != xAmountPreviousFrame && xAmountPreviousFrame != 0f)
+            if (currentXInput != previousXInput && previousXInput != 0f)
                 differentDirection = true;
 
             var speedMultiplier = differentDirection ? data.changeDirectionMultiplier : 1f;
@@ -46,7 +46,7 @@ namespace Universal.Runtime.Components.Camera
 
         void HandleNoInput()
         {
-            if (xAmountThisFrame == xAmountPreviousFrame)
+            if (currentXInput == previousXInput)
                 differentDirection = false;
 
             scrollSpeed = Lerp(scrollSpeed, 0f, Time.deltaTime * data.returnSpeed);
@@ -54,10 +54,10 @@ namespace Universal.Runtime.Components.Camera
 
         void ApplySway()
         {
-            var swayFinalAmount = CalculateSwayAmount();
-            // Update only the Z axis to minimize property access
-            currentEulerAngles.z = swayFinalAmount;
-            targetTransform.localEulerAngles = currentEulerAngles;
+            if (data.swayCurve == null) return;
+
+            currentEulerAngles.z = CalculateSwayAmount();
+            camera.transform.localEulerAngles = currentEulerAngles;
         }
 
         float CalculateSwayAmount()

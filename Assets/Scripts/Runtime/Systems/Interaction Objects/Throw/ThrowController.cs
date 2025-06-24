@@ -14,7 +14,7 @@ namespace Universal.Runtime.Systems.InteractionObjects //TODO: Adjust Trow
         [SerializeField] ThrowConfiguration config;
         IPlayerInputReader inputReader;
 
-        void Start()
+        void OnEnable()
         {
             ServiceLocator.Global.Get(out inputReader);
             inputReader.Throw += OnThrowStarted;

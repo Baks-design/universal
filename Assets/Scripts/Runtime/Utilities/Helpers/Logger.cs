@@ -13,17 +13,20 @@ namespace Universal.Runtime.Utilities.Helpers
             Error,
             Exception
         }
+        
         public static LogLevel CurrentLogLevel = LogLevel.Info;
 
         public static void Info(string message, Object context = null) => Log(LogLevel.Info, message, context);
+
         public static void Warn(string message, Object context = null) => Log(LogLevel.Warning, message, context);
+
         public static void Error(string message, Object context = null) => Log(LogLevel.Error, message, context);
+
         public static void Exception(Exception ex, Object context = null) => Log(LogLevel.Exception, ex.ToString(), context, ex);
 
         public static void Log(LogLevel level, string message, Object context = null, Exception ex = null)
         {
-            if (level < CurrentLogLevel)
-                return;
+            if (level < CurrentLogLevel) return;
 
             switch (level)
             {

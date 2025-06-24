@@ -22,18 +22,17 @@ namespace Universal.Runtime.Components.Camera
         public CameraAiming CameraAiming { get; private set; }
         public CameraSwaying CameraSwaying { get; private set; }
 
-        void Start()
+        protected override void Awake()
         {
+            base.Awake();
             SetupComponents();
             SetupStateMachine();
-            RegisterInputs();
         }
-
-        void OnDisable() => UnregisterInputs();
 
         void SetupComponents()
         {
             ServiceLocator.Global.Get(out inputReader);
+
             CameraRotation = new CameraRotation(cameraData, cinemachine, inputReader);
             CameraAiming = new CameraAiming(cameraData, cinemachine);
             CameraSwaying = new CameraSwaying(cameraData, cinemachine);
@@ -49,6 +48,10 @@ namespace Universal.Runtime.Components.Camera
 
             Set(deactiveState);
         }
+
+        void OnEnable() => RegisterInputs();
+
+        void OnDisable() => UnregisterInputs();
 
         void RegisterInputs()
         {
@@ -68,7 +71,11 @@ namespace Universal.Runtime.Components.Camera
             cinemachine.Priority = IsBodyCameraEnabled ? 9 : 1;
         }
 
-        void OnAiming() => CameraAiming.ChangeFOV(this);
+        void OnAiming()
+        {
+            if (!IsBodyCameraEnabled) return;
+            CameraAiming.ChangeFOV(this);
+        }
 
         protected override void LateUpdate()
         {
@@ -82,8 +89,5 @@ namespace Universal.Runtime.Components.Camera
 
         public void HandleSway(Vector3 inputVector, float rawXInput)
         => CameraSwaying.SwayPlayer(inputVector, rawXInput);
-
-        public void ChangeRunFOV(bool returning)
-        => CameraAiming.ChangeRunFOV(returning, this);
     }
 }

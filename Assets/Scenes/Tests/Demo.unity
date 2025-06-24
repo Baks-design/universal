@@ -6597,10 +6597,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual Effects Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 243770376757355011, guid: 1fb941bd1ae03394c9a17d127aff8cc4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6293587773572548727, guid: 1fb941bd1ae03394c9a17d127aff8cc4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

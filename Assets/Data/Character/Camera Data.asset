@@ -42,34 +42,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  zoomTransitionDuration: 1
-  runFOV: 70
-  runCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.41261172
-      outSlope: 0.41261172
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.102888085
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.054159872
-      outSlope: 0.054159872
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.17418772
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  runTransitionDuration: 1
-  runReturnTransitionDuration: 3
+  zoomTransitionDuration: 0.5
   swayAmount: 1
   swaySpeed: 3
   returnSpeed: 1
@@ -98,11 +71,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  x: 1
-  y: 1
-  z: 0
-  breathingSmoothingSpeed: 8
-  idleIntensity: 0.2
-  walkIntensity: 0.5
-  runIntensity: 1.5
-  sprintIntensity: 2.5

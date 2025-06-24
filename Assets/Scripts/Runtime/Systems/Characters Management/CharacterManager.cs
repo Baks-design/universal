@@ -7,6 +7,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Alchemy.Inspector;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.CharactersManagement
 {
@@ -30,10 +31,10 @@ namespace Universal.Runtime.Systems.CharactersManagement
             ServiceLocator.Global.Register<ICharacterServices>(this);
         }
 
-        void Start()
-        {
-            AddCharacterToRoster(characterData);
+        void Start() => AddCharacterToRoster(characterData);
 
+        void OnEnable()
+        {
             ServiceLocator.Global.Get(out playerInput);
             playerInput.NextCharacter += NextCharacter;
             playerInput.PreviousCharacter += PreviousCharacter;
@@ -41,8 +42,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         void OnDisable()
         {
-            playerInput.NextCharacter += NextCharacter;
-            playerInput.PreviousCharacter += PreviousCharacter;
+            playerInput.NextCharacter -= NextCharacter;
+            playerInput.PreviousCharacter -= PreviousCharacter;
         }
 
         void NextCharacter()
@@ -124,7 +125,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
             if (currentCharacter == character.Key)
             {
-                var newIndex = Mathf.Clamp(index - 1, 0, characterRoster.Count - 2);
+                var newIndex = Clamp(index - 1, 0, characterRoster.Count - 2);
                 SwitchCharacter(newIndex);
             }
 

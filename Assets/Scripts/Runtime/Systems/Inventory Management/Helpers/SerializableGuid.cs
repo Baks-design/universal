@@ -63,7 +63,7 @@ namespace Universal.Runtime.Systems.EntityPersistence
         }
 
         public static implicit operator Guid(SerializableGuid serializableGuid) => serializableGuid.ToGuid();
-        public static implicit operator SerializableGuid(Guid guid) => new SerializableGuid(guid);
+        public static implicit operator SerializableGuid(Guid guid) => new(guid);
 
         public override readonly bool Equals(object obj) => obj is SerializableGuid guid && Equals(guid);
 
