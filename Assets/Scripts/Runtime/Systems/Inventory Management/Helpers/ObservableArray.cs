@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Universal.Runtime.Systems.InventoryManagement
 {
@@ -10,7 +9,7 @@ namespace Universal.Runtime.Systems.InventoryManagement
         T this[int index] { get; }
 
         event Action<T[]> AnyValueChanged;
-        
+
         void Swap(int index1, int index2);
         void Clear();
         bool TryAdd(T item);
@@ -24,7 +23,18 @@ namespace Universal.Runtime.Systems.InventoryManagement
     {
         public T[] items;
 
-        public int Count => items.Count(i => i != null);
+        public int Count
+        {
+            get
+            {
+                var count = 0;
+                for (var i = 0; i < items.Length; i++)
+                    if (items[i] != null)
+                        count++;
+                return count;
+            }
+        }
+
         public int Length => items.Length;
         public T this[int index] => items[index];
 
@@ -35,7 +45,9 @@ namespace Universal.Runtime.Systems.InventoryManagement
             items = new T[size];
             if (initialList != null)
             {
-                initialList.Take(size).ToArray().CopyTo(items, 0);
+                var copyLength = Math.Min(size, initialList.Count);
+                for (var i = 0; i < copyLength; i++)
+                    items[i] = initialList[i];
                 Invoke();
             }
         }
@@ -82,7 +94,8 @@ namespace Universal.Runtime.Systems.InventoryManagement
         {
             if (index < 0 ||
                 index >= items.Length ||
-                items[index] == null) return false;
+                items[index] == null)
+                return false;
             items[index] = default;
             Invoke();
             return true;

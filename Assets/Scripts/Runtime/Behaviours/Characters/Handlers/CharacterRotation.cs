@@ -13,13 +13,13 @@ namespace Universal.Runtime.Behaviours.Characters
         float rotationProgress, lastInputTime, inputBufferTimer;
         const float INPUT_BUFFER_TIME = 0.1f;
         const float ROTATION_ANGLE = 90f;
-        const float ROTATION_OVERSHOOT = 0.0001f; 
+        const float ROTATION_OVERSHOOT = 0.0001f;
         const float COMPLETION_THRESHOLD = 0.999f;
-        const float ANGLE_EPSILON = 0.1f; 
-        const float MIN_ROTATION_DURATION = 0.01f; 
+        const float ANGLE_EPSILON = 0.1f;
+        const float MIN_ROTATION_DURATION = 0.01f;
 
         public bool IsRotating { get; private set; }
-
+      
         public CharacterRotation(
             CharacterMovementController controller,
             Transform character,
@@ -41,7 +41,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void UpdateRotation()
         {
-            if (!IsRotating) return;
+            if (controller.CameraController.IsBodyCameraEnabled ||
+                controller.CameraController.CameraRotation.IsRecentering ||
+                !IsRotating) return;
 
             // Frame-rate independent smooth progression
             rotationProgress += Time.unscaledDeltaTime / Max(MIN_ROTATION_DURATION, data.rotateDuration);
@@ -51,8 +53,9 @@ namespace Universal.Runtime.Behaviours.Characters
             character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             // Precision completion check
-            if (rotationProgress >= COMPLETION_THRESHOLD ||
-                Quaternion.Angle(character.rotation, targetRotation) < ANGLE_EPSILON)
+            var hadCompleted = rotationProgress >= COMPLETION_THRESHOLD;
+            var isUnderAngle = Quaternion.Angle(character.rotation, targetRotation) < ANGLE_EPSILON;
+            if (hadCompleted || isUnderAngle)
                 CompleteRotation();
         }
 
@@ -69,10 +72,10 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void HandleRotationInput(bool clockwise)
         {
-            if (controller.CharacterMovement.IsMoving ||
+            if (controller.CameraController.CameraRotation.IsRecentering ||
+                controller.CharacterMovement.IsMoving ||
                 IsRotating ||
-                Time.time < lastInputTime + data.inputCooldown)
-                return;
+                Time.time < lastInputTime + data.inputCooldown) return;
 
             // Process input buffer
             if (inputBufferTimer > 0f)

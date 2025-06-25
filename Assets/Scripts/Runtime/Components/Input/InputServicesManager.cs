@@ -1,28 +1,58 @@
 using System;
+using System.Collections;
 using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityUtils;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class InputServicesManager : MonoBehaviour, IInputServices
+    public class InputServicesManager : MonoBehaviour, IInputServices //TODO: Redo Input Design
     {
-        [NonSerialized] public GameInputs gameInputs;
+        public GameInputs gameInputs;
         [SerializeField, Self] PlayerInputReader playerInput;
         [SerializeField, Self] UIInputReader uIInput;
+        Gamepad gamepad;
+        Coroutine currentRumbleRoutine;
 
+        #region Initialization
         void Awake()
         {
             ServiceLocator.Global.Register<IInputServices>(this);
             DontDestroyOnLoad(gameObject);
+
             SetCursorLocked(true);
-            EnableActions();
+            SetupActions();
+            UpdateGamepadReference();
         }
 
-        public void SetCursorLocked(bool isSet)
-        => Cursor.lockState = isSet ? CursorLockMode.Locked : CursorLockMode.None;
+        void OnEnable() => InputSystem.onDeviceChange += OnDeviceChange;
 
-        public void EnableActions()
+        void OnDisable() => InputSystem.onDeviceChange -= OnDeviceChange;
+
+        void OnDeviceChange(InputDevice device, InputDeviceChange change)
+        {
+            if (change is not InputDeviceChange.Added &&
+                change is not InputDeviceChange.Removed)
+                return;
+
+            UpdateGamepadReference();
+        }
+
+        void UpdateGamepadReference() => gamepad = Gamepad.current;
+        #endregion
+
+        #region Public Methods
+        public void SetCursorLocked(bool isSet)
+        {
+            Cursor.lockState = isSet ? CursorLockMode.Locked : CursorLockMode.None;
+            Cursor.visible = !isSet;
+        }
+        #endregion
+
+        #region Input Actions Management
+        public void SetupActions()
         {
             if (gameInputs == null)
             {
@@ -30,14 +60,14 @@ namespace Universal.Runtime.Components.Input
                 gameInputs.Player.SetCallbacks(playerInput);
                 gameInputs.UI.SetCallbacks(uIInput);
             }
-
-            ChangeToPlayerMap();
+            EnableGameInput();
+            gameInputs.UI.Disable();
         }
 
         public void ChangeToPlayerMap()
         {
-            gameInputs.Player.Enable();
             gameInputs.UI.Disable();
+            gameInputs.Player.Enable();
         }
 
         public void ChangeToUIMap()
@@ -45,5 +75,77 @@ namespace Universal.Runtime.Components.Input
             gameInputs.Player.Disable();
             gameInputs.UI.Enable();
         }
+
+        public void EnableGameInput() => gameInputs.Enable();
+
+        public void DisableGameInput() => gameInputs.Disable();
+        #endregion
+
+        #region Gamepad Rumble
+        public void PulseRumble(
+            float lowFreq, float highFreq, int pulses, float pulseDuration, float pauseDuration)
+        {
+            StopAllRumbles();
+            var pulseRoutine = PulseRumbleCoroutine(lowFreq, highFreq, pulses, pulseDuration, pauseDuration);
+            currentRumbleRoutine = StartCoroutine(pulseRoutine);
+        }
+
+        public void RampRumble(float duration, bool rampUp)
+        {
+            StopAllRumbles();
+            currentRumbleRoutine = StartCoroutine(RampRumbleCoroutine(duration, rampUp));
+        }
+
+        public void StopAllRumbles()
+        {
+            if (currentRumbleRoutine != null)
+            {
+                StopCoroutine(currentRumbleRoutine);
+                currentRumbleRoutine = null;
+            }
+
+            gamepad.SetMotorSpeeds(0f, 0f);
+        }
+
+        IEnumerator PulseRumbleCoroutine(
+            float lowFreq, float highFreq, int pulses, float pulseDuration, float pauseDuration)
+        {
+            try
+            {
+                for (var i = 0; i < pulses; i++)
+                {
+                    gamepad.SetMotorSpeeds(lowFreq, highFreq);
+                    yield return Helpers.GetWaitForSeconds(pulseDuration);
+                    gamepad.SetMotorSpeeds(0f, 0f);
+                    yield return Helpers.GetWaitForSeconds(pauseDuration);
+                }
+            }
+            finally
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+                currentRumbleRoutine = null;
+            }
+        }
+
+        IEnumerator RampRumbleCoroutine(float duration, bool rampUp)
+        {
+            try
+            {
+                var timer = 0f;
+                while (timer < duration)
+                {
+                    var intensity = rampUp ? (timer / duration) : (1f - (timer / duration));
+                    gamepad.SetMotorSpeeds(intensity, intensity);
+                    timer += Time.deltaTime;
+                    yield return null;
+                }
+            }
+            finally
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+                currentRumbleRoutine = null;
+            }
+        }
+        #endregion
     }
 }

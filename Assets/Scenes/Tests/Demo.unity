@@ -3979,6 +3979,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Camera Brain
       objectReference: {fileID: 0}
+    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
+      propertyPath: orthographic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
+      propertyPath: far clip plane
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
+      propertyPath: near clip plane
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6460,131 +6472,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6046870297379104738, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
       propertyPath: m_Name
-      value: Scenes Manager
+      value: Scene Loader Manager
       objectReference: {fileID: 0}
     - target: {fileID: 6046870297379104738, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: document
-      value: 
-      objectReference: {fileID: 4052279507142007516}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: loadingCamera
-      value: 
-      objectReference: {fileID: 4052279507142007517}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].GroupName
-      value: Init
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].SceneType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[1].SceneType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[2].SceneType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[3].SceneType
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[4].SceneType
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[5].SceneType
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].Reference.guid
-      value: f0017be0b3db3f4478f9aa53cd1398fd
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[1].Reference.guid
-      value: 12967ae04f27b8440b86cf7887554ca0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[2].Reference.guid
-      value: 2d3dfc8c107e1de478792926850eeb44
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[3].Reference.guid
-      value: 06cdc9a970deeb846a8096c148ea32a3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[4].Reference.guid
-      value: 30e31b307b4c5ad40b43159fc9db437d
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[5].Reference.guid
-      value: 30e31b307b4c5ad40b43159fc9db437d
-      objectReference: {fileID: 0}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: f0017be0b3db3f4478f9aa53cd1398fd, type: 3}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[1].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: 12967ae04f27b8440b86cf7887554ca0, type: 3}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[2].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: 2d3dfc8c107e1de478792926850eeb44, type: 3}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[3].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: 06cdc9a970deeb846a8096c148ea32a3, type: 3}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[4].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: 30e31b307b4c5ad40b43159fc9db437d, type: 3}
-    - target: {fileID: 7709722624174326334, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-      propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[5].Reference.asset
-      value: 
-      objectReference: {fileID: 102900000, guid: 30e31b307b4c5ad40b43159fc9db437d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
---- !u!114 &4052279507142007516 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2982761803289306356, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-  m_PrefabInstance: {fileID: 4052279507142007515}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4052279507142007517 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 778494837584201816, guid: 434bae301e45f994993eb9d594b9779c, type: 3}
-  m_PrefabInstance: {fileID: 4052279507142007515}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4101325899999745245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6823,12 +6721,12 @@ SceneRoots:
   - {fileID: 1630602099}
   - {fileID: 4052279507142007515}
   - {fileID: 1861894486}
+  - {fileID: 322636172}
+  - {fileID: 1183545476}
   - {fileID: 2468426280603468360}
   - {fileID: 5783391938846860723}
   - {fileID: 1998019562344838706}
   - {fileID: 4101325899999745245}
-  - {fileID: 1183545476}
-  - {fileID: 322636172}
   - {fileID: 366448544}
   - {fileID: 5576937997926425440}
   - {fileID: 1228733822}

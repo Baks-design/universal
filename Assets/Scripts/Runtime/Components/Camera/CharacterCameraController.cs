@@ -33,7 +33,7 @@ namespace Universal.Runtime.Components.Camera
         {
             ServiceLocator.Global.Get(out inputReader);
 
-            CameraRotation = new CameraRotation(cameraData, cinemachine, inputReader);
+            CameraRotation = new CameraRotation(cameraData, cinemachine, inputReader, this);
             CameraAiming = new CameraAiming(cameraData, cinemachine);
             CameraSwaying = new CameraSwaying(cameraData, cinemachine);
         }
@@ -56,7 +56,7 @@ namespace Universal.Runtime.Components.Camera
         void RegisterInputs()
         {
             inputReader.Inspection += OnInspection;
-            inputReader.Aim += OnAiming;
+            inputReader.Aim += OnAiming; 
         }
 
         void UnregisterInputs()
@@ -77,17 +77,8 @@ namespace Universal.Runtime.Components.Camera
             CameraAiming.ChangeFOV(this);
         }
 
-        protected override void LateUpdate()
-        {
-            base.LateUpdate();
-            CameraRotation.UpdateRotateBackToInitial();
-        }
-
         public void Activate() => gameObject.SetActive(true);
 
         public void Deactivate() => gameObject.SetActive(false);
-
-        public void HandleSway(Vector3 inputVector, float rawXInput)
-        => CameraSwaying.SwayPlayer(inputVector, rawXInput);
     }
 }

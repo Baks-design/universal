@@ -65,7 +65,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void HandleMovementInput()
         {
-            if (movement.CharacterRotation.IsRotating) return;
+            if (movement.CharacterRotation.IsRotating ||
+                movement.CameraController.IsBodyCameraEnabled ||
+                movement.CameraController.CameraRotation.IsRecentering) return;
 
             // Read and buffer input
             var currentInput = inputReader.MoveDirection;
@@ -124,7 +126,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void UpdatePosition()
         {
-            if (!IsMoving) return;
+            if (movement.CameraController.IsBodyCameraEnabled ||
+                movement.CameraController.CameraRotation.IsRecentering ||
+                !IsMoving) return;
 
             moveProgress += Time.deltaTime / Max(0.0001f, data.moveDuration);
             moveProgress = Clamp01(moveProgress);
@@ -152,7 +156,6 @@ namespace Universal.Runtime.Behaviours.Characters
             var cameraForward = camera != null ?
                 Vector3.ProjectOnPlane(camera.transform.forward, Vector3.up).normalized :
                 Vector3.forward;
-
             var cameraRight = camera != null ?
                 Vector3.ProjectOnPlane(camera.transform.right, Vector3.up).normalized :
                 Vector3.right;

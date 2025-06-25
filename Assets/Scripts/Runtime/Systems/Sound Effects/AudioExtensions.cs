@@ -1,4 +1,3 @@
-using UnityEngine;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.SoundEffects
@@ -15,8 +14,7 @@ namespace Universal.Runtime.Systems.SoundEffects
         ///   to what the human ear perceives as a doubling or halving of the volume, hence the multiplication by 20.
         /// This method is useful for normalizing UI Volume Sliders used with Unity's Audio Mixer.
         /// </summary>
-        public static float ToLogarithmicVolume(this float sliderValue)
-        => Mathf.Log10(Mathf.Max(sliderValue, 0.0001f)) * 20f;
+        public static float ToLogarithmicVolume(this float sliderValue) => Log10(Max(sliderValue, 0.0001f)) * 20f;
 
         /// <summary>
         /// Given a fraction in the range of [0, 1], convert it to a logarithmic scale (also in range [0, 1])
@@ -29,7 +27,6 @@ namespace Universal.Runtime.Systems.SoundEffects
         ///   since as we know the input to Log10 function can vary between 1 and 10 after the interpolation.
         /// This method is useful for improved fading effects between Audio Clips.
         /// </summary>
-        public static float ToLogarithmicFraction(this float fraction)
-        => Mathf.Log10(1f + 9f * fraction) / Mathf.Log10(10f);
+        public static float ToLogarithmicFraction(this float fraction) => Log10(1f + 9f * fraction) / Log10(10f);
     }
 }

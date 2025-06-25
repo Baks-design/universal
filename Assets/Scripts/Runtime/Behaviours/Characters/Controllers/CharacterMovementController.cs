@@ -15,12 +15,12 @@ namespace Universal.Runtime.Behaviours.Characters
         [field: SerializeField, Child] public CharacterCameraController CameraController { get; private set; }
         [field: SerializeField, InlineEditor] public CharacterData Data { get; private set; }
         IPlayerInputReader inputReader;
+        IInputServices inputServices;
 
         public CharacterData CharacterData => Data;
         public Transform CharacterTransform => Transform;
         public CharacterRotation CharacterRotation { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
-        public CameraEffects CameraEffects { get; private set; }
         public Grid Grid { get; private set; }
         public Vector3Int CurrentGridPosition { get; set; }
         public Vector3 LastPosition { get; set; }
@@ -49,7 +49,6 @@ namespace Universal.Runtime.Behaviours.Characters
 
             CharacterRotation = new CharacterRotation(this, Transform, Data);
             CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
-            CameraEffects = new CameraEffects(this, CameraController, inputReader);
         }
 
         void OnEnable()
@@ -101,7 +100,6 @@ namespace Universal.Runtime.Behaviours.Characters
         void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
-
             CharacterMovement.DrawMovementGizmos();
         }
 #endif

@@ -8,7 +8,6 @@ namespace Universal.Runtime.Systems.SoundEffects
 {
     public class SoundEffectsManager : MonoBehaviour, ISoundEffectsServices
     {
-        [SerializeField] GameObject parentSounds;
         [SerializeField] AssetReference soundEmitterPrefab;
         [SerializeField] bool collectionCheck = true;
         [SerializeField] int defaultCapacity = 10;
@@ -72,7 +71,7 @@ namespace Universal.Runtime.Systems.SoundEffects
         SoundEmitter CreateSoundEmitter()
         {
             var soundInstantiated = Addressables
-                .InstantiateAsync(soundEmitterPrefab, parentSounds.transform)
+                .InstantiateAsync(soundEmitterPrefab, transform)
                 .WaitForCompletion();
             soundInstantiated.SetActive(false);
             soundInstantiated.TryGetComponent<SoundEmitter>(out var sound);

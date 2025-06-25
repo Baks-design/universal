@@ -11,16 +11,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void Update()
         {
-            if (controller.CameraController.IsBodyCameraEnabled ||
-                controller.CameraController.CameraRotation.IsRotatingBack)
-                return;
-
-            controller.CharacterMovement.UpdatePosition();
             controller.CharacterMovement.HandleMovementInput();
-
+            controller.CharacterMovement.UpdatePosition();
             controller.CharacterRotation.UpdateRotation();
-            
-            controller.CameraEffects.HandleCameraSway();
         }
     }
 }

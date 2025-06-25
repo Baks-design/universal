@@ -31,10 +31,10 @@ namespace Universal.Runtime.Systems.CharactersManagement
             ServiceLocator.Global.Register<ICharacterServices>(this);
         }
 
-        void Start() => AddCharacterToRoster(characterData);
-
-        void OnEnable()
+        void Start()
         {
+            AddCharacterToRoster(characterData);
+
             ServiceLocator.Global.Get(out playerInput);
             playerInput.NextCharacter += NextCharacter;
             playerInput.PreviousCharacter += PreviousCharacter;

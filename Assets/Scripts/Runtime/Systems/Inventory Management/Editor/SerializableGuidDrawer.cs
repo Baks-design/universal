@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -24,8 +23,19 @@ namespace Universal.Runtime.Systems.InventoryManagement
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            if (GetGuidParts(property).All(x => x != null))
-                EditorGUI.LabelField(position, BuildGuidString(GetGuidParts(property)));
+            var allPartsValid = true;
+            var parts = GetGuidParts(property);
+            for (var i = 0; i < parts.Length; i++)
+            {
+                if (parts[i] == null)
+                {
+                    allPartsValid = false;
+                    break;
+                }
+            }
+
+            if (allPartsValid)
+                EditorGUI.LabelField(position, BuildGuidString(parts));
             else
                 EditorGUI.SelectableLabel(position, "GUID Not Initialized");
 
@@ -50,9 +60,19 @@ namespace Universal.Runtime.Systems.InventoryManagement
 
         void CopyGuid(SerializedProperty property)
         {
-            if (GetGuidParts(property).Any(x => x == null)) return;
+            var parts = GetGuidParts(property);
+            var anyNull = false;
+            for (var i = 0; i < parts.Length; i++)
+            {
+                if (parts[i] == null)
+                {
+                    anyNull = true;
+                    break;
+                }
+            }
+            if (anyNull) return;
 
-            var guid = BuildGuidString(GetGuidParts(property));
+            var guid = BuildGuidString(parts);
             EditorGUIUtility.systemCopyBuffer = guid;
             Debug.Log($"GUID copied to clipboard: {guid}");
         }

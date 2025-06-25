@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.VFX;
+using UnityUtils;
 using Universal.Runtime.Systems.SoundEffects;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Random = UnityEngine.Random;
@@ -38,7 +39,7 @@ namespace Universal.Runtime.Systems.DamageObjects
             soundBuilder = soundService.CreateSoundBuilder();
         }
 
-        public void Initialize(GameObject characterModel)
+        public void Initialize( )
         {
             limbVisualsMap = new Dictionary<LimbType, LimbVisuals>();
             for (var i = 0; i < limbVisuals.Length; i++)
@@ -67,9 +68,8 @@ namespace Universal.Runtime.Systems.DamageObjects
                         limb.LimbTransform.position,
                         limb.LimbTransform.rotation
                     ).WaitForCompletion();
-                    if (!severedPart.TryGetComponent<Rigidbody>(out var rb))
-                        rb = severedPart.AddComponent<Rigidbody>();
-                    rb.AddForce(Random.onUnitSphere * 5f, ForceMode.Impulse);
+                    if (severedPart.TryGetComponent<Rigidbody>(out var rb))
+                        rb.AddForce(Random.onUnitSphere * 5f, ForceMode.Impulse);
                 }
                 return;
             }
@@ -100,10 +100,10 @@ namespace Universal.Runtime.Systems.DamageObjects
 
         IEnumerator DamageFlash(Limb limbKey, LimbVisuals visuals, Material targetMaterial)
         {
-            var originalMaterial = visuals.Renderer.material;
+            var originalMaterial = visuals.Renderer.sharedMaterial;
             visuals.Renderer.material = targetMaterial;
 
-            yield return new WaitForSeconds(damageFlashDuration);
+            yield return Helpers.GetWaitForSeconds(damageFlashDuration);
 
             visuals.Renderer.material = originalMaterial;
             flashRoutines.Remove(limbKey);

@@ -31,15 +31,15 @@ namespace Universal.Runtime.Systems.ScenesManagement
 
         async void Start() => await LoadSceneGroup(0);
 
-        void Update()
+        void Update() => LoadBar();
+
+        void LoadBar()
         {
             if (!isLoading) return;
-
             var currentFillAmount = loadingBar.value / 100f; // ProgressBar uses 0-100 range
             var progressDifference = Abs(currentFillAmount - targetProgress);
             var dynamicFillSpeed = progressDifference * fillSpeed;
             var newFillAmount = Lerp(currentFillAmount, targetProgress, Time.deltaTime * dynamicFillSpeed);
-
             loadingBar.value = newFillAmount * 100f;
         }
 

@@ -54,8 +54,6 @@ namespace Universal.Runtime.Components.Camera
 
         void ApplySway()
         {
-            if (data.swayCurve == null) return;
-
             currentEulerAngles.z = CalculateSwayAmount();
             camera.transform.localEulerAngles = currentEulerAngles;
         }

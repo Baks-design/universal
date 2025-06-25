@@ -8,7 +8,6 @@ namespace Universal.Runtime.Systems.VisualEffects
 {
     public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices //TODO: Adjust Visual Effects
     {
-        [SerializeField] GameObject container;
         [SerializeField] AssetReference effectEmitterPrefab;
         [SerializeField] bool collectionCheck = true;
         [SerializeField] int defaultCapacity = 10;
@@ -82,7 +81,7 @@ namespace Universal.Runtime.Systems.VisualEffects
         EffectsEmitter CreateeffectEmitter()
         {
             effectInstantiated = Addressables
-                .InstantiateAsync(effectEmitterPrefab, container.transform)
+                .InstantiateAsync(effectEmitterPrefab, transform)
                 .WaitForCompletion();
             effectInstantiated.SetActive(false);
             effectInstantiated.TryGetComponent<EffectsEmitter>(out var sound);

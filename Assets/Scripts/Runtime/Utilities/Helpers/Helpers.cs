@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-#endif
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Utilities.Helpers

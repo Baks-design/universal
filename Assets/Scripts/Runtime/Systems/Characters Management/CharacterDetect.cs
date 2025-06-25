@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using KBCore.Refs;
 using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;

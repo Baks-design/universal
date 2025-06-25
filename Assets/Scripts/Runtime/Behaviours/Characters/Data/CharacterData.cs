@@ -7,7 +7,6 @@ namespace Universal.Runtime.Behaviours.Characters
     public class CharacterData : ScriptableObject
     {
         [Header("General")]
-        public string characterName;
         public AssetReferenceGameObject characterPrefab;
 
         [Header("Input")]

@@ -21,5 +21,6 @@ namespace Universal.Runtime.Components.Input
         event Action Run;
         event Action Interact;
         event Action Throw;
+        event Action Shoot;
     }
 }
