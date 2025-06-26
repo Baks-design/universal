@@ -9,22 +9,21 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter
+    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter //FIXME Movement
     {
         [field: SerializeField, Self] public Transform Transform { get; private set; }
         [field: SerializeField, Child] public CharacterCameraController CameraController { get; private set; }
         [field: SerializeField, InlineEditor] public CharacterData Data { get; private set; }
-        IPlayerInputReader inputReader;
-        IInputServices inputServices;
+        IPlayerInputReader inputReader = null;
 
         public CharacterData CharacterData => Data;
         public Transform CharacterTransform => Transform;
-        public CharacterRotation CharacterRotation { get; private set; }
-        public CharacterMovement CharacterMovement { get; private set; }
-        public Grid Grid { get; private set; }
-        public Vector3Int CurrentGridPosition { get; set; }
-        public Vector3 LastPosition { get; set; }
-        public Quaternion LastRotation { get; set; }
+        public CharacterRotation CharacterRotation { get; private set; } = null;
+        public CharacterMovement CharacterMovement { get; private set; } = null;
+        public Grid Grid { get; private set; } = null;
+        public Vector3Int CurrentGridPosition { get; set; } = Vector3Int.zero;
+        public Vector3 LastPosition { get; set; } = Vector3.zero;
+        public Quaternion LastRotation { get; set; } = Quaternion.identity;
 
         protected override void Awake()
         {
@@ -43,14 +42,6 @@ namespace Universal.Runtime.Behaviours.Characters
             Set(idlingState);
         }
 
-        void SetupMovement()
-        {
-            ServiceLocator.Global.Get(out inputReader);
-
-            CharacterRotation = new CharacterRotation(this, Transform, Data);
-            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
-        }
-
         void OnEnable()
         {
             SetupMovement();
@@ -58,6 +49,14 @@ namespace Universal.Runtime.Behaviours.Characters
         }
 
         void OnDisable() => UnregisterInputs();
+
+        void SetupMovement()
+        {
+            ServiceLocator.Global.Get(out inputReader);
+
+            CharacterRotation = new CharacterRotation(this, Transform, Data);
+            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
+        }
 
         void RegisterInputs()
         {

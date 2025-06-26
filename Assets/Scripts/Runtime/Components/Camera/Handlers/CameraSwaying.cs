@@ -8,10 +8,12 @@ namespace Universal.Runtime.Components.Camera
     {
         readonly CameraData data;
         readonly CinemachineCamera camera;
-        Vector3 currentEulerAngles;
-        bool differentDirection;
-        float scrollSpeed, currentXInput, previousXInput;
+        Vector3 currentEulerAngles = Vector3.zero;
+        bool differentDirection = false;
         const float MaxScrollSpeed = 1f;
+        float scrollSpeed = 0f;
+        float currentXInput = 0f;
+        float previousXInput = 0f;
 
         public CameraSwaying(CameraData data, CinemachineCamera camera)
         {

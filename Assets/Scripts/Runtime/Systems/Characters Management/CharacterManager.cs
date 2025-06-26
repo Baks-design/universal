@@ -11,19 +11,20 @@ using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.CharactersManagement
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices //TODO: Adjust Character Manager
+    public class CharacterManager : MonoBehaviour, ICharacterServices
     {
         [SerializeField] Grid grid;
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterData characterData;
-        IPlayableCharacter currentCharacter;
-        IEnableComponent enableComponent;
         Vector3 lastActivePosition;
         Quaternion lastActiveRotation;
+        IPlayableCharacter currentCharacter;
+        IEnableComponent enableComponent;
+        IPlayerInputReader playerInput;
+        IInputServices inputServices;
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
         readonly HashSet<CharacterData> rosterData = new(maxCharacters);
-        IPlayerInputReader playerInput;
 
         void Awake()
         {
@@ -35,6 +36,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
         {
             AddCharacterToRoster(characterData);
 
+            ServiceLocator.Global.Get(out inputServices);
+            inputServices.ChangeToPlayerMap();
             ServiceLocator.Global.Get(out playerInput);
             playerInput.NextCharacter += NextCharacter;
             playerInput.PreviousCharacter += PreviousCharacter;

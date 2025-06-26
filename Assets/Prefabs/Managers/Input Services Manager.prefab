@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 173736602959192020}
-  uIInput: {fileID: 308550258573858124}
+  uiInput: {fileID: 308550258573858124}
 --- !u!114 &173736602959192020
 MonoBehaviour:
   m_ObjectHideFlags: 0

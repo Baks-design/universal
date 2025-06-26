@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using Universal.Runtime.Systems.InventoryManagement;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
-namespace Universal.Runtime.Systems.EntitiesPersistence  //TODO: Adjust Persistence
+namespace Universal.Runtime.Systems.EntitiesPersistence 
 {
     public class PersistenceManager : MonoBehaviour, IPersistenceServices
     {

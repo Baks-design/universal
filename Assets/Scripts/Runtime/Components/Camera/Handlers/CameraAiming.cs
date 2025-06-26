@@ -10,9 +10,9 @@ namespace Universal.Runtime.Components.Camera
         readonly CameraData data;
         readonly CinemachineCamera target;
         readonly float originalFOV;
-        Coroutine activeCoroutine;
+        Coroutine activeCoroutine = null;
 
-        public bool IsZooming { get; private set; }
+        public bool IsZooming { get; private set; } = false;
 
         public CameraAiming(CameraData data, CinemachineCamera target)
         {
@@ -24,8 +24,6 @@ namespace Universal.Runtime.Components.Camera
 
         public void ChangeFOV(MonoBehaviour mono)
         {
-            if (mono == null) return;
-
             IsZooming = !IsZooming;
             StartCoroutine(mono, ChangeFOVRoutine());
         }

@@ -5,7 +5,7 @@ using Universal.Runtime.Systems.EntityPersistence;
 
 namespace Universal.Runtime.Systems.InventoryManagement
 {
-    public class InventoryController //TODO: Adjust Inventory
+    public class InventoryController 
     {
         readonly InventoryView view;
         readonly InventoryModel model;

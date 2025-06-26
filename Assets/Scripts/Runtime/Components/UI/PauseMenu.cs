@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class PauseMenu : MonoBehaviour //TODO: UI - Make Pause Menu
+    public class PauseMenu : MonoBehaviour
     {
         [SerializeField, Self] UIDocument uIDocument;
         VisualElement root;

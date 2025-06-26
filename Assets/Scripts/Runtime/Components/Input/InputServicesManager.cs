@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using KBCore.Refs;
 using UnityEngine;
@@ -8,22 +7,22 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class InputServicesManager : MonoBehaviour, IInputServices //TODO: Redo Input Design
+    public class InputServicesManager : MonoBehaviour, IInputServices
     {
-        public GameInputs gameInputs;
         [SerializeField, Self] PlayerInputReader playerInput;
-        [SerializeField, Self] UIInputReader uIInput;
+        [SerializeField, Self] UIInputReader uiInput;
         Gamepad gamepad;
         Coroutine currentRumbleRoutine;
+
+        public GameInputs GameInputs { get; private set; }
 
         #region Initialization
         void Awake()
         {
             ServiceLocator.Global.Register<IInputServices>(this);
             DontDestroyOnLoad(gameObject);
-
-            SetCursorLocked(true);
             SetupActions();
+            SetCursorLocked(true);
             UpdateGamepadReference();
         }
 
@@ -52,33 +51,26 @@ namespace Universal.Runtime.Components.Input
         #endregion
 
         #region Input Actions Management
-        public void SetupActions()
+        void SetupActions()
         {
-            if (gameInputs == null)
-            {
-                gameInputs = new GameInputs();
-                gameInputs.Player.SetCallbacks(playerInput);
-                gameInputs.UI.SetCallbacks(uIInput);
-            }
-            EnableGameInput();
-            gameInputs.UI.Disable();
+            GameInputs = new GameInputs();
+            GameInputs.Player.SetCallbacks(playerInput);
+            GameInputs.UI.SetCallbacks(uiInput);
         }
 
         public void ChangeToPlayerMap()
         {
-            gameInputs.UI.Disable();
-            gameInputs.Player.Enable();
+            GameInputs.Player.Enable();
+            GameInputs.UI.Disable();
         }
 
         public void ChangeToUIMap()
         {
-            gameInputs.Player.Disable();
-            gameInputs.UI.Enable();
+            GameInputs.Player.Disable();
+            GameInputs.UI.Enable();
         }
 
-        public void EnableGameInput() => gameInputs.Enable();
-
-        public void DisableGameInput() => gameInputs.Disable();
+        public void DisableGameInput() => GameInputs.Disable();
         #endregion
 
         #region Gamepad Rumble
@@ -108,7 +100,8 @@ namespace Universal.Runtime.Components.Input
         }
 
         IEnumerator PulseRumbleCoroutine(
-            float lowFreq, float highFreq, int pulses, float pulseDuration, float pauseDuration)
+            float lowFreq, float highFreq, int pulses,
+            float pulseDuration, float pauseDuration)
         {
             try
             {

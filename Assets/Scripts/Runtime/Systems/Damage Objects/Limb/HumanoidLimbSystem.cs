@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
-    public class HumanoidLimbSystem : MonoBehaviour //TODO: Adjust Limb
+    public class HumanoidLimbSystem : MonoBehaviour 
     {
         [SerializeField] LimbSetup[] limbSetups;
         [Serializable]

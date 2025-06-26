@@ -3,11 +3,11 @@ using KBCore.Refs;
 
 namespace Universal.Runtime.Systems.DamageObjects
 {
-    public class Damageable : MonoBehaviour, IDamageable //TODO: Adjust Damageable
+    public class Damageable : MonoBehaviour, IDamageable 
     {
         [SerializeField, Child] HumanoidLimbSystem limbSystem;
         [SerializeField, Child] WeaknessSystem weaknessSystem;
-        //[SerializeField, Child] VisualDamageSystem visualDamageSystem; //TODO: Add Visuals on Damage
+        //[SerializeField, Child] VisualDamageSystem visualDamageSystem; 
 
         void Awake()
         {

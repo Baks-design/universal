@@ -3880,15 +3880,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1793673393517467764, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1793673393517467764, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1793673393517467764, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1793673393517467764, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3921,18 +3921,6 @@ PrefabInstance:
     - target: {fileID: 3669740258403229710, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
       propertyPath: m_Name
       value: Camera Brain
-      objectReference: {fileID: 0}
-    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
-      propertyPath: orthographic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
-      propertyPath: far clip plane
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7625773715740327598, guid: 6e7db3633aca4c345950749bca95772e, type: 3}
-      propertyPath: near clip plane
-      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

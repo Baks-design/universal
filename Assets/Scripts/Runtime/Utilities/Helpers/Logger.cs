@@ -1,18 +1,13 @@
+#if UNITY_EDITOR
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Universal.Runtime.Utilities.Helpers
 {
-    public static class Logger //TODO: Apply
-    { 
-        public enum LogLevel
-        {
-            Info,
-            Warning,
-            Error,
-            Exception
-        }
+    public static class Logger
+    {
+        public enum LogLevel { Info, Warning, Error, Exception }
 
         public static LogLevel CurrentLogLevel = LogLevel.Info;
 
@@ -24,7 +19,6 @@ namespace Universal.Runtime.Utilities.Helpers
 
         public static void Exception(Exception ex, Object context = null) => Log(LogLevel.Exception, ex.ToString(), context, ex);
 
-#if UNITY_EDITOR
         public static void Log(LogLevel level, string message, Object context = null, Exception ex = null)
         {
             if (level < CurrentLogLevel) return;
@@ -45,6 +39,6 @@ namespace Universal.Runtime.Utilities.Helpers
                     break;
             }
         }
-#endif
     }
 }
+#endif

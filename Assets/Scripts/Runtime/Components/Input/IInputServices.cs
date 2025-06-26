@@ -2,12 +2,10 @@ namespace Universal.Runtime.Components.Input
 {
     public interface IInputServices
     {
-        void SetupActions();
         void SetCursorLocked(bool isSet);
         void ChangeToPlayerMap();
         void ChangeToUIMap();
-         void EnableGameInput();
-         void DisableGameInput();
+        void DisableGameInput();
         void PulseRumble(
             float lowFreq, float highFreq, int pulses,
             float pulseDuration, float pauseDuration);

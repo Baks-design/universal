@@ -8,18 +8,18 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CharacterMovementController controller;
         readonly Transform character;
         readonly CharacterData data;
-        Quaternion startRotation, targetRotation;
-        bool isTurningInputPressed;
-        float rotationProgress, lastInputTime, inputBufferTimer;
-        const float INPUT_BUFFER_TIME = 0.1f;
+        Quaternion startRotation = Quaternion.identity;
+        Quaternion targetRotation = Quaternion.identity;
         const float ROTATION_ANGLE = 90f;
         const float ROTATION_OVERSHOOT = 0.0001f;
         const float COMPLETION_THRESHOLD = 0.999f;
         const float ANGLE_EPSILON = 0.1f;
         const float MIN_ROTATION_DURATION = 0.01f;
+        float rotationProgress = 0f;
+        bool isTurningInputPressed = false;
 
-        public bool IsRotating { get; private set; }
-      
+        public bool IsRotating { get; private set; } = false;
+
         public CharacterRotation(
             CharacterMovementController controller,
             Transform character,
@@ -29,41 +29,9 @@ namespace Universal.Runtime.Behaviours.Characters
             this.character = character;
             this.data = data;
 
-            ResetState();
-        }
-
-        void ResetState()
-        {
             targetRotation = startRotation = Quaternion.identity;
-            lastInputTime = rotationProgress = inputBufferTimer = 0f;
+            rotationProgress = 0f;
             IsRotating = isTurningInputPressed = false;
-        }
-
-        public void UpdateRotation()
-        {
-            if (controller.CameraController.IsBodyCameraEnabled ||
-                controller.CameraController.CameraRotation.IsRecentering ||
-                !IsRotating) return;
-
-            // Frame-rate independent smooth progression
-            rotationProgress += Time.unscaledDeltaTime / Max(MIN_ROTATION_DURATION, data.rotateDuration);
-
-            // Enhanced smoothing with curve evaluation
-            var t = Clamp01(data.moveCurve.Evaluate(rotationProgress));
-            character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
-            // Precision completion check
-            var hadCompleted = rotationProgress >= COMPLETION_THRESHOLD;
-            var isUnderAngle = Quaternion.Angle(character.rotation, targetRotation) < ANGLE_EPSILON;
-            if (hadCompleted || isUnderAngle)
-                CompleteRotation();
-        }
-
-        void CompleteRotation()
-        {
-            character.rotation = targetRotation;
-            IsRotating = false;
-            controller.CharacterMovement.IsMoving = false;
         }
 
         public void HandleRotationRightInput() => HandleRotationInput(true);
@@ -72,29 +40,15 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void HandleRotationInput(bool clockwise)
         {
-            if (controller.CameraController.CameraRotation.IsRecentering ||
-                controller.CharacterMovement.IsMoving ||
-                IsRotating ||
-                Time.time < lastInputTime + data.inputCooldown) return;
+            if (IsRotating) return;
 
-            // Process input buffer
-            if (inputBufferTimer > 0f)
-                inputBufferTimer -= Time.unscaledDeltaTime;
-
-            if (!isTurningInputPressed || inputBufferTimer > 0f)
+            if (!isTurningInputPressed)
             {
                 StartRotation(clockwise);
-                lastInputTime = Time.time;
                 isTurningInputPressed = true;
-                inputBufferTimer = 0f;
             }
             else
-            {
                 isTurningInputPressed = false;
-                // Store input in buffer if rotation was blocked
-                if (IsRotating || controller.CharacterMovement.IsMoving)
-                    inputBufferTimer = INPUT_BUFFER_TIME;
-            }
         }
 
         void StartRotation(bool clockwise)
@@ -111,6 +65,28 @@ namespace Universal.Runtime.Behaviours.Characters
 
             // Immediate micro-rotation to start the interpolation
             character.rotation = Quaternion.Slerp(startRotation, targetRotation, 0.001f);
+        }
+
+        public void UpdateRotation()
+        {
+            if (!IsRotating) return;
+
+            // Frame-rate independent smooth progression
+            rotationProgress += Time.unscaledDeltaTime / Max(MIN_ROTATION_DURATION, data.rotateDuration);
+
+            // Enhanced smoothing with curve evaluation
+            var t = Clamp01(data.moveCurve.Evaluate(rotationProgress));
+            character.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            // Precision completion check
+            var hadCompleted = rotationProgress >= COMPLETION_THRESHOLD;
+            var isUnderAngle = Quaternion.Angle(character.rotation, targetRotation) < ANGLE_EPSILON;
+            if (hadCompleted || isUnderAngle)
+            {
+                character.rotation = targetRotation;
+                IsRotating = false;
+                controller.CharacterMovement.IsMoving = false;
+            }
         }
     }
 }

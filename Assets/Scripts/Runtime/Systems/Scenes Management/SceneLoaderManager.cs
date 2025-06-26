@@ -6,9 +6,9 @@ using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.ScenesManagement
 {
-    public class SceneLoaderManager : MonoBehaviour //TODO: UI - Make Load Screen
+    public class SceneLoaderManager : MonoBehaviour
     {
-        [SerializeField, Child] CinemachineCamera loadingCamera; //TODO: Adjust Scene Loader
+        [SerializeField, Child] CinemachineCamera loadingCamera; 
         [SerializeField, Child] UIDocument document;
         [SerializeField] SceneGroup[] sceneGroups;
         VisualElement root;

@@ -14,9 +14,9 @@ namespace Universal.Runtime.Behaviours.Characters
         [SerializeField, InlineEditor] CharacterData data;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
-        SoundBuilder soundBuilder;
-        ISoundEffectsServices soundService;
-        float stepTimer;
+        SoundBuilder soundBuilder = null;
+        ISoundEffectsServices soundService = null;
+        float stepTimer = 0f;
 
         void Start()
         {

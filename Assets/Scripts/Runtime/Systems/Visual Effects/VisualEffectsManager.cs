@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
-    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices //TODO: Adjust Visual Effects
+    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices 
     {
         [SerializeField] AssetReference effectEmitterPrefab;
         [SerializeField] bool collectionCheck = true;
@@ -36,8 +36,7 @@ namespace Universal.Runtime.Systems.VisualEffects
 
         public bool CanPlaySound(EffectsData data)
         {
-            if (!data.frequentEffect)
-                return true;
+            if (!data.frequentEffect) return true;
 
             if (frequentEffectEmitters.Count >= maxSoundInstances)
             {
@@ -107,8 +106,7 @@ namespace Universal.Runtime.Systems.VisualEffects
 
         void OnDestroyPoolObject(EffectsEmitter effectEmitter)
         {
-            if (effectEmitter == null)
-                return;
+            if (effectEmitter == null) return;
 
             Destroy(effectEmitter.gameObject);
         }

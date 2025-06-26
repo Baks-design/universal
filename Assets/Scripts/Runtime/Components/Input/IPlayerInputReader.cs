@@ -13,11 +13,9 @@ namespace Universal.Runtime.Components.Input
         event Action NextCharacter;
         event Action PreviousCharacter;
         event Action Inspection;
-        event Action<Vector2> Look;
         event Action Aim;
         event Action TurnRight;
         event Action TurnLeft;
-        event Action<Vector2> Move;
         event Action Run;
         event Action Interact;
         event Action Throw;

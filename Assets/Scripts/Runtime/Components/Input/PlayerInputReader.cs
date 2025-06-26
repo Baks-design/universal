@@ -13,19 +13,17 @@ namespace Universal.Runtime.Components.Input
     {
         [SerializeField, Self] InputServicesManager inputServices;
 
-        public Vector2 LookDirection => inputServices.gameInputs.Player.Look.ReadValue<Vector2>();
-        public Vector2 MoveDirection => inputServices.gameInputs.Player.Move.ReadValue<Vector2>();
+        public Vector2 LookDirection => inputServices.GameInputs.Player.Look.ReadValue<Vector2>();
+        public Vector2 MoveDirection => inputServices.GameInputs.Player.Move.ReadValue<Vector2>();
 
         public event Action Pause = delegate { };
         public event Action AddCharacter = delegate { };
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
         public event Action Inspection = delegate { };
-        public event Action<Vector2> Look = delegate { };
         public event Action Aim = delegate { };
         public event Action TurnRight = delegate { };
         public event Action TurnLeft = delegate { };
-        public event Action<Vector2> Move = delegate { };
         public event Action Run = delegate { };
         public event Action Interact = delegate { };
         public event Action Throw = delegate { };

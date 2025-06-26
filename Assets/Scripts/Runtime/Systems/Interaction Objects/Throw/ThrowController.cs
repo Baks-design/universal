@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
-namespace Universal.Runtime.Systems.InteractionObjects //TODO: Adjust Trow
+namespace Universal.Runtime.Systems.InteractionObjects 
 {
     public class ThrowController : MonoBehaviour
     {
