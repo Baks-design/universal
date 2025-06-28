@@ -1,15 +1,11 @@
 using UnityEngine;
-using Universal.Runtime.Components.Camera;
-using Universal.Runtime.Components.Input;
 using Universal.Runtime.Systems.InventoryManagement;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class Interactor : MonoBehaviour
+    public class PickupController : MonoBehaviour
     {
         [SerializeField] Inventory inventory;
-        [SerializeField] CharacterCameraController cameraController;
         [SerializeField] LayerMask objectsLayers;
         [SerializeField] float interactionRadius = 0.3f;
         [SerializeField] float interactionRange = 1f;
@@ -18,7 +14,6 @@ namespace Universal.Runtime.Systems.InteractionObjects
         Ray ray;
         Camera mainCamera;
         int hitCount;
-        IPlayerInputReader playerInput;
 
         public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
@@ -29,30 +24,10 @@ namespace Universal.Runtime.Systems.InteractionObjects
             mainCamera = Camera.main;
         }
 
-        void OnEnable() => RegisterInputs();
-
-        void OnDisable() => UnregisterInputs();
-
-        void RegisterInputs()
-        {
-            ServiceLocator.Global.Get(out playerInput);
-            playerInput.Interact += OnInteractStarted;
-        }
-
-        void UnregisterInputs() => playerInput.Interact -= OnInteractStarted;
-
-        void OnInteractStarted()
-        {
-            if (hitCount == 0 || interactable == null) return;
-            interactable.OnInteract(this);
-        }
-
         void Update() => ProcessDetection();
 
         void ProcessDetection()
         {
-            if (!cameraController.IsBodyCameraEnabled) return;
-
             var center = new Vector3(0.5f, 0.5f, 0f);
             ray = mainCamera.ViewportPointToRay(center);
 
@@ -65,6 +40,12 @@ namespace Universal.Runtime.Systems.InteractionObjects
                 interactionHits[i].collider.TryGetComponent(out interactable);
             if (hitCount == 0)
                 interactable = null;
+        }
+
+        public void OnInteractStarted()
+        {
+            if (hitCount == 0 || interactable == null) return;
+            interactable.OnInteract(this);
         }
 
         void OnDrawGizmos()

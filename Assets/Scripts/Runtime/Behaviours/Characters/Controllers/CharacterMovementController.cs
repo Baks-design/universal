@@ -1,98 +1,24 @@
 using UnityEngine;
-using Universal.Runtime.Utilities.Helpers;
-using Universal.Runtime.Components.Camera;
-using Universal.Runtime.Utilities.Tools.StateMachine;
 using KBCore.Refs;
-using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : StatefulEntity, IEnableComponent, IPlayableCharacter //FIXME Movement
+    public class CharacterMovementController : MonoBehaviour
     {
-        [field: SerializeField, Self] public Transform Transform { get; private set; }
-        [field: SerializeField, Child] public CharacterCameraController CameraController { get; private set; }
-        [field: SerializeField, InlineEditor] public CharacterData Data { get; private set; }
-        IPlayerInputReader inputReader = null;
+        [SerializeField, Child] PlayerController controller;
+        [SerializeField] CharacterData data;
+        IPlayerInputReader input;
 
-        public CharacterData CharacterData => Data;
-        public Transform CharacterTransform => Transform;
-        public CharacterRotation CharacterRotation { get; private set; } = null;
-        public CharacterMovement CharacterMovement { get; private set; } = null;
-        public Grid Grid { get; private set; } = null;
-        public Vector3Int CurrentGridPosition { get; set; } = Vector3Int.zero;
-        public Vector3 LastPosition { get; set; } = Vector3.zero;
-        public Quaternion LastRotation { get; set; } = Quaternion.identity;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            StateMachine();
-        }
-
-        void StateMachine()
-        {
-            var idlingState = new CharacterIdlingState(this);
-            var movingState = new CharacterMovingState(this);
-
-            At(idlingState, movingState, () => CharacterMovement.IsMoving);
-            At(movingState, idlingState, () => !CharacterMovement.IsMoving);
-
-            Set(idlingState);
-        }
+        public CharacterRotation CharacterRotation { get; private set; }
+        public CharacterMovement CharacterMovement { get; private set; }
 
         void OnEnable()
         {
-            SetupMovement();
-            RegisterInputs();
-        }
-
-        void OnDisable() => UnregisterInputs();
-
-        void SetupMovement()
-        {
-            ServiceLocator.Global.Get(out inputReader);
-
-            CharacterRotation = new CharacterRotation(this, Transform, Data);
-            CharacterMovement = new CharacterMovement(this, Transform, Data, Grid, Camera.main, inputReader);
-        }
-
-        void RegisterInputs()
-        {
-            inputReader.TurnRight += RightRotationInput;
-            inputReader.TurnLeft += LeftRotationInput;
-        }
-
-        void UnregisterInputs()
-        {
-            inputReader.TurnRight -= RightRotationInput;
-            inputReader.TurnLeft -= LeftRotationInput;
-        }
-
-        void RightRotationInput() => CharacterRotation.HandleRotationRightInput();
-
-        void LeftRotationInput() => CharacterRotation.HandleRotationLeftInput();
-
-        void Start() => CharacterMovement.SnapToGrid();
-
-        public void Initialize(CharacterData data, Grid grid)
-        {
-            Data = data;
-            Grid = grid;
-        }
-
-        public void Activate()
-        {
-            gameObject.SetActive(true);
-            Transform.SetLocalPositionAndRotation(LastPosition, LastRotation);
-        }
-
-        public void Deactivate()
-        {
-            LastPosition = Transform.localPosition;
-            LastRotation = Transform.localRotation;
-            gameObject.SetActive(false);
+            ServiceLocator.Global.Get(out input);
+            CharacterRotation = new CharacterRotation(this, transform, data);
+            CharacterMovement = new CharacterMovement(this, controller, transform, data, Camera.main, input);
         }
 
 #if UNITY_EDITOR

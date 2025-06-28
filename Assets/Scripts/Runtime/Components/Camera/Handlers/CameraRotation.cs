@@ -92,7 +92,7 @@ namespace Universal.Runtime.Components.Camera
         /// <summary>
         /// Cancels any ongoing recentering operation
         /// </summary>
-        public void CancelRecentering()
+        void CancelRecentering()
         {
             if (recenteringCoroutine != null)
             {

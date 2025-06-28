@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 6105000888535693558}
   - component: {fileID: 8773157204679050505}
   - component: {fileID: 2335871156229631570}
+  - component: {fileID: 2676070784679009607}
   - component: {fileID: 5912417900615756030}
   - component: {fileID: 7228022705273790349}
   m_Layer: 3
@@ -185,6 +186,24 @@ MonoBehaviour:
     Part2: 1124798992
     Part3: 3097086873
     Part4: 54178845
+--- !u!114 &2676070784679009607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588946117734807384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6597d92cdf6f3e4692b20894d41adf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tr: {fileID: 6105000888535693558}
+  movementController: {fileID: 5912417900615756030}
+  cameraController: {fileID: 332088360065323903}
+  pickupController: {fileID: 7338831354204029381}
+  throwController: {fileID: 395793492286962780}
+  Data: {fileID: 0}
 --- !u!114 &5912417900615756030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,9 +216,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1796df8eed5e8a749926c749d99be58a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Transform>k__BackingField: {fileID: 6105000888535693558}
-  <CameraController>k__BackingField: {fileID: 332088360065323903}
-  <Data>k__BackingField: {fileID: 0}
+  controller: {fileID: 2676070784679009607}
+  data: {fileID: 0}
 --- !u!114 &7228022705273790349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +279,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 6279667040325846009}
-  cameraController: {fileID: 332088360065323903}
   objectsLayers:
     serializedVersion: 2
     m_Bits: 256

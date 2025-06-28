@@ -6,10 +6,10 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovement
     {
+        private readonly PlayerController controller;
         readonly CharacterMovementController movement;
         readonly Transform character;
         readonly CharacterData data;
-        readonly Grid grid;
         readonly Camera camera;
         readonly IPlayerInputReader inputReader;
         Vector3Int queuedDirection = Vector3Int.zero;
@@ -27,31 +27,20 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public CharacterMovement(
             CharacterMovementController movement,
+            PlayerController controller,
             Transform character,
             CharacterData data,
-            Grid grid,
             Camera camera,
             IPlayerInputReader inputReader)
         {
             this.movement = movement;
+            this.controller = controller;
             this.character = character;
             this.data = data;
-            this.grid = grid;
             this.camera = camera;
             this.inputReader = inputReader;
 
             startPosition = targetPosition = character.position;
-            moveProgress = 0f;
-            IsMoving = false;
-            InputBuffer = Vector2.zero;
-            queuedDirection = Vector3Int.zero;
-        }
-
-        public void SnapToGrid()
-        {
-            movement.CurrentGridPosition = grid.WorldToCell(character.position);
-            character.position = grid.GetCellCenterWorld(movement.CurrentGridPosition);
-            FacingDirection = character.forward;
         }
 
         public void HandleMovementInput()
@@ -116,7 +105,7 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (queuedDirection == Vector3Int.zero) return;
 
-            var nextCell = movement.CurrentGridPosition + queuedDirection;
+            var nextCell = controller.CurrentGridPosition + queuedDirection;
             var cellBlocked = IsCellBlocked(nextCell);
 
             // Queue next movement if current one is almost complete
@@ -141,19 +130,19 @@ namespace Universal.Runtime.Behaviours.Characters
 
         bool IsCellBlocked(Vector3Int cell)
         {
-            var worldPosition = grid.GetCellCenterWorld(cell);
+            var worldPosition = controller.Grid.GetCellCenterWorld(cell);
             return Physics.CheckSphere(worldPosition, data.obstacleCheckRadius, data.obstacleMask);
         }
 
         void StartMovement(Vector3Int targetCell)
         {
             startPosition = character.position;
-            targetPosition = grid.GetCellCenterWorld(targetCell);
+            targetPosition = controller.Grid.GetCellCenterWorld(targetCell);
 
             if (Vector3.Distance(startPosition, targetPosition) < MOVEMENT_THRESHOLD)
             {
                 character.position = targetPosition;
-                movement.CurrentGridPosition = targetCell;
+                controller.CurrentGridPosition = targetCell;
                 return;
             }
 
@@ -175,7 +164,7 @@ namespace Universal.Runtime.Behaviours.Characters
             if (moveProgress >= 1f)
             {
                 character.position = targetPosition;
-                movement.CurrentGridPosition = grid.WorldToCell(targetPosition);
+                controller.CurrentGridPosition = controller.Grid.WorldToCell(targetPosition);
                 IsMoving = false;
             }
         }

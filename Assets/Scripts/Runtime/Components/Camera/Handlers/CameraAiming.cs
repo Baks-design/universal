@@ -10,7 +10,7 @@ namespace Universal.Runtime.Components.Camera
         readonly CameraData data;
         readonly CinemachineCamera target;
         readonly float originalFOV;
-        Coroutine activeCoroutine = null;
+        Coroutine activeCoroutine;
 
         public bool IsZooming { get; private set; } = false;
 
@@ -26,6 +26,14 @@ namespace Universal.Runtime.Components.Camera
         {
             IsZooming = !IsZooming;
             StartCoroutine(mono, ChangeFOVRoutine());
+        }
+
+        void StartCoroutine(MonoBehaviour mono, IEnumerator routine)
+        {
+            if (activeCoroutine != null)
+                mono.StopCoroutine(activeCoroutine);
+
+            activeCoroutine = mono.StartCoroutine(routine);
         }
 
         IEnumerator ChangeFOVRoutine()
@@ -49,14 +57,6 @@ namespace Universal.Runtime.Components.Camera
                 target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
                 yield return null;
             }
-        }
-
-        void StartCoroutine(MonoBehaviour mono, IEnumerator routine)
-        {
-            if (activeCoroutine != null)
-                mono.StopCoroutine(activeCoroutine);
-
-            activeCoroutine = mono.StartCoroutine(routine);
         }
     }
 }

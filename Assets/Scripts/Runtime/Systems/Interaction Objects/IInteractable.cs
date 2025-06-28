@@ -5,6 +5,6 @@ namespace Universal.Runtime.Systems.InteractionObjects
         string InteractionPrompt { get; }
         bool IsInteractable { get; }
 
-        void OnInteract(Interactor interactor);
+        void OnInteract(PickupController interactor);
     }
 }

@@ -31,7 +31,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
         {
             if (!isColl) return;
 
-            if (hitInfo.collider.TryGetComponent(out CharacterMovementController character))
+            if (hitInfo.collider.TryGetComponent(out PlayerController character))
             {
                 if (!characterManager.ContainsCharacter(character.CharacterData))
                 {

@@ -10,7 +10,7 @@ namespace Universal.Runtime.Systems.InteractionObjects
         public bool IsInteractable => true;
         public string InteractionPrompt => "";
 
-        public void OnInteract(Interactor interactor)
+        public void OnInteract(PickupController interactor)
         {
             interactor.Inventory.Controller.AddItems(item);
             Destroy(gameObject);

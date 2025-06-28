@@ -16,7 +16,6 @@ namespace Universal.Runtime.Behaviours.Characters
         const float ANGLE_EPSILON = 0.1f;
         const float MIN_ROTATION_DURATION = 0.01f;
         float rotationProgress = 0f;
-        bool isTurningInputPressed = false;
 
         public bool IsRotating { get; private set; } = false;
 
@@ -28,10 +27,6 @@ namespace Universal.Runtime.Behaviours.Characters
             this.controller = controller;
             this.character = character;
             this.data = data;
-
-            targetRotation = startRotation = Quaternion.identity;
-            rotationProgress = 0f;
-            IsRotating = isTurningInputPressed = false;
         }
 
         public void HandleRotationRightInput() => HandleRotationInput(true);
@@ -41,14 +36,7 @@ namespace Universal.Runtime.Behaviours.Characters
         void HandleRotationInput(bool clockwise)
         {
             if (IsRotating) return;
-
-            if (!isTurningInputPressed)
-            {
-                StartRotation(clockwise);
-                isTurningInputPressed = true;
-            }
-            else
-                isTurningInputPressed = false;
+            StartRotation(clockwise);
         }
 
         void StartRotation(bool clockwise)
