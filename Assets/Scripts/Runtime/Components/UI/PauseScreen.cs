@@ -2,22 +2,20 @@ using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Tools.EventBus;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class PauseMenu : MonoBehaviour
+    public class PauseScreen : MonoBehaviour
     {
         [SerializeField, Self] UIDocument uIDocument;
         VisualElement root;
+        IPlayerInputReader playerInputReader;
+        IUIInputReader uIInputReader;
         // Button resumeButton;
         // Button optionsButton;
         // Button mainMenuButton;
-        IInputServices inputServices;
-        IPlayerInputReader playerInputReader;
-        IUIInputReader uIInputReader;
-
-        public bool IsPaused { get; private set; } = false;
 
         void Awake()
         {
@@ -30,7 +28,6 @@ namespace Universal.Runtime.Components.UI
 
         void Start()
         {
-            ServiceLocator.Global.Get(out inputServices);
             ServiceLocator.Global.Get(out playerInputReader);
             ServiceLocator.Global.Get(out uIInputReader);
 
@@ -52,24 +49,18 @@ namespace Universal.Runtime.Components.UI
 
         void OnPausePressed()
         {
-            IsPaused = true;
-            Time.timeScale = 0f;
+            EventBus<UIEvent>.Raise(new UIEvent { IsPaused = true });
             root.style.display = DisplayStyle.Flex;
-            inputServices.ChangeToUIMap();
-            inputServices.SetCursorLocked(false);
         }
 
         void OnResumePressed()
         {
-            IsPaused = false;
-            Time.timeScale = 1f;
+            EventBus<UIEvent>.Raise(new UIEvent { IsPaused = false });
             root.style.display = DisplayStyle.None;
-            inputServices.ChangeToPlayerMap();
-            inputServices.SetCursorLocked(true);
         }
 
-        void OnOptionsPressed() { /*change to options menu;*/}
+        //void OnOptionsPressed() { /*change to options menu;*/}
 
-        void OnMainMenuPressed() {/*change to main menu;*/}
+        //void OnMainMenuPressed() {/*change to main menu;*/}
     }
 }

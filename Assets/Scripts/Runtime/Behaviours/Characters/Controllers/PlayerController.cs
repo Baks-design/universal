@@ -7,6 +7,7 @@ using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Systems.InteractionObjects;
+using Logger = Universal.Runtime.Utilities.Helpers.Logger;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -108,7 +109,7 @@ namespace Universal.Runtime.Behaviours.Characters
             movementController.CharacterRotation.HandleRotationLeftInput();
         }
 
-        void OnAiming() //FIXME
+        void OnAiming() 
         {
             if (stateMachine.CurrentState != investigationState) return;
             cameraController.CameraAiming.ChangeFOV(this);
@@ -126,13 +127,17 @@ namespace Universal.Runtime.Behaviours.Characters
             throwController.OnThrowStarted();
         }
 
-
-
         void SnapToGrid()
         {
             CurrentGridPosition = grid.WorldToCell(tr.position);
             tr.position = grid.GetCellCenterWorld(CurrentGridPosition);
             MovementController.CharacterMovement.FacingDirection = tr.forward;
         }
+
+        // protected override void Update()
+        // {
+        //     base.Update();
+        //     Logger.Info($"Current Player State: {stateMachine.CurrentState}");
+        // }
     }
 }

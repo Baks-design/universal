@@ -14,26 +14,23 @@ namespace Universal.Runtime.Components.Camera
         readonly CinemachineCamera target;
         readonly IPlayerInputReader inputReader;
         readonly MonoBehaviour monoBehaviour;
-        Coroutine recenteringCoroutine = null;
-        Quaternion currentRotation = Quaternion.identity;
-        Quaternion initialRotation = Quaternion.identity;
-        Quaternion recenteringStartRotation = Quaternion.identity;
+        Coroutine recenteringCoroutine;
+        Quaternion currentRotation;
+        Quaternion initialRotation;
+        Quaternion recenteringStartRotation;
         const float MinRecenterDuration = 0.15f;
         const float AngularDistanceThreshold = 0.1f;
         const float FullRotationDegrees = 180f;
-        float desiredTargetYaw = 0f;
-        float desiredTargetPitch = 0f;
-        float targetYaw = 0f;
-        float targetPitch = 0f;
-        float yawSmoothVelocity = 0f;
-        float pitchSmoothVelocity = 0f;
-        float rotationTimer = 0f;
-        float recenteringAngularDistance = 0f;
+        float desiredTargetYaw;
+        float desiredTargetPitch;
+        float targetYaw;
+        float targetPitch;
+        float yawSmoothVelocity;
+        float pitchSmoothVelocity;
+        float rotationTimer;
+        float recenteringAngularDistance;
 
-        /// <summary>
-        /// Gets whether the camera is currently recentering to its initial rotation
-        /// </summary>
-        public bool IsRecentering { get; private set; } = false;
+        public bool IsRecentering { get; private set; } 
 
         public CameraRotation(
             CameraData data,
@@ -78,28 +75,11 @@ namespace Universal.Runtime.Components.Camera
             target.transform.localRotation = currentRotation;
         }
 
-        /// <summary>
-        /// Initiates a return to the initial camera rotation
-        /// </summary>
         public void ReturnToInitialRotation()
         {
-            if (IsRecentering) return;
+            if (IsRecentering || currentRotation == initialRotation) return;
 
-            CancelRecentering();
-            recenteringCoroutine = monoBehaviour.StartCoroutine(RecenteringCoroutine());
-        }
-
-        /// <summary>
-        /// Cancels any ongoing recentering operation
-        /// </summary>
-        void CancelRecentering()
-        {
-            if (recenteringCoroutine != null)
-            {
-                monoBehaviour.StopCoroutine(recenteringCoroutine);
-                recenteringCoroutine = null;
-            }
-            CompleteRecentering();
+            recenteringCoroutine ??= monoBehaviour.StartCoroutine(RecenteringCoroutine());
         }
 
         IEnumerator RecenteringCoroutine()

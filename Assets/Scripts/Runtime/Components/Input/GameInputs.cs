@@ -153,7 +153,7 @@ namespace Universal.Runtime.Components.Input
                     ""id"": ""57966dae-9fff-4f38-be63-4d0f61b7a33b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {

@@ -6,7 +6,7 @@ using Universal.Runtime.Components.Input;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class OptionsMenu : MonoBehaviour
+    public class OptionsScreen: MonoBehaviour
     {
         [SerializeField, Self] UIDocument document;
         VisualElement root;

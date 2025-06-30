@@ -8,13 +8,13 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public CharacterMovementState(PlayerController controller) => this.controller = controller;
 
-        public void LateUpdate() => controller.CameraController.CameraRotation.ReturnToInitialRotation(); //FIXME
-
         public void Update()
         {
             controller.MovementController.CharacterMovement.HandleMovementInput();
             controller.MovementController.CharacterMovement.UpdatePosition();
             controller.MovementController.CharacterRotation.UpdateRotation();
         }
+
+        public void LateUpdate() => controller.CameraController.CameraRotation.ReturnToInitialRotation(); 
     }
 }

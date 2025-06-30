@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Components.UI
 {
-    public class MainMenu : MonoBehaviour 
+    public class MenuScreen : MonoBehaviour 
     {
         [SerializeField, Self] UIDocument uIDocument;
         //VisualElement root;
