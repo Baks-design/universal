@@ -3,7 +3,9 @@ namespace Universal.Runtime.Components.Input
     public interface IInputServices
     {
         void SetCursorLocked(bool isSet);
-        void ChangeToPlayerMap();
+        void ChangeToMovementMap();
+        void ChangeToInvestigateMap();
+        void ChangeToCombatMap();
         void ChangeToUIMap();
         void DisableGameInput();
         void PulseRumble(

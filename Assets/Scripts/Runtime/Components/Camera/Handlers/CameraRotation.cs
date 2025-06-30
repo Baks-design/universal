@@ -12,7 +12,7 @@ namespace Universal.Runtime.Components.Camera
     {
         readonly CameraData data;
         readonly CinemachineCamera target;
-        readonly IPlayerInputReader inputReader;
+        readonly IInvestigateInputReader investigateInput;
         readonly MonoBehaviour monoBehaviour;
         Coroutine recenteringCoroutine;
         Quaternion currentRotation;
@@ -30,17 +30,17 @@ namespace Universal.Runtime.Components.Camera
         float rotationTimer;
         float recenteringAngularDistance;
 
-        public bool IsRecentering { get; private set; } 
+        public bool IsRecentering { get; private set; }
 
         public CameraRotation(
             CameraData data,
             CinemachineCamera target,
-            IPlayerInputReader inputReader,
+            IInvestigateInputReader investigateInput,
             MonoBehaviour monoBehaviour)
         {
             this.data = data;
             this.target = target;
-            this.inputReader = inputReader;
+            this.investigateInput = investigateInput;
             this.monoBehaviour = monoBehaviour;
 
             initialRotation = target.transform.localRotation;
@@ -52,7 +52,7 @@ namespace Universal.Runtime.Components.Camera
         {
             if (IsRecentering) return;
 
-            var lookInput = inputReader.LookDirection;
+            var lookInput = investigateInput.LookDirection;
 
             desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * Time.deltaTime;
             desiredTargetYaw = Helpers.ClampAngle(

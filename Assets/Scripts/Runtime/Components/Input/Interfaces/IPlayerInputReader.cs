@@ -3,22 +3,43 @@ using UnityEngine;
 
 namespace Universal.Runtime.Components.Input
 {
-    public interface IPlayerInputReader
+    public interface IMovementInputReader
     {
         Vector2 MoveDirection { get; }
+
+        event Action OpenPauseScreen;
+        event Action ToInvestigate;
+        event Action ToCombat;
+        event Action NextCharacter;
+        event Action PreviousCharacter;
+        event Action TurnRight;
+        event Action TurnLeft;
+    }
+
+    public interface IInvestigateInputReader
+    {
         Vector2 LookDirection { get; }
 
-        event Action Pause;
+        event Action OpenPauseScreen;
+        event Action ToMovement;
+        event Action ToCombat;
         event Action AddCharacter;
         event Action NextCharacter;
         event Action PreviousCharacter;
-        event Action Inspection;
         event Action Aim;
-        event Action TurnRight;
-        event Action TurnLeft;
-        event Action Run;
         event Action Interact;
-        event Action Throw;
-        event Action Shoot;
+    }
+
+    public interface ICombatInputReader
+    {
+        Vector2 LookDirection { get; }
+
+        event Action OpenPauseScreen;
+        event Action ToInvestigate;
+        event Action ToCombat;
+        event Action NextCharacter;
+        event Action PreviousCharacter;
+        event Action Aim;
+        event Action Attack;
     }
 }

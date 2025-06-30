@@ -7,7 +7,7 @@ using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Systems.InteractionObjects;
-using Logger = Universal.Runtime.Utilities.Helpers.Logger;
+//using Logger = Universal.Runtime.Utilities.Helpers.Logger;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -20,7 +20,9 @@ namespace Universal.Runtime.Behaviours.Characters
         [SerializeField, Child] ThrowController throwController;
         [SerializeField, InlineEditor] CharacterData Data;
         Grid grid;
-        IPlayerInputReader input;
+        public IInputServices inputServices;
+        IMovementInputReader movementInput;
+        IInvestigateInputReader investigateInput;
         CharacterMovementState movementState;
         CharacterInvestigationState investigationState;
         bool IsInspectionStateEnabled = false;
@@ -72,23 +74,30 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void OnEnable()
         {
-            ServiceLocator.Global.Get(out input);
-            input.Inspection += OnInspection;
-            input.TurnRight += RightRotationInput;
-            input.TurnLeft += LeftRotationInput;
-            input.Aim += OnAiming;
-            input.Interact += OnPicking;
-            input.Throw += OnThrowing;
+            ServiceLocator.Global.Get(out movementInput);
+            ServiceLocator.Global.Get(out investigateInput);
+            ServiceLocator.Global.Get(out inputServices);
+
+            movementInput.ToInvestigate += OnInspection;
+            movementInput.TurnRight += RightRotationInput;
+            movementInput.TurnLeft += LeftRotationInput;
+
+            investigateInput.ToMovement += OnInspection;
+            investigateInput.Aim += OnAiming;
+            investigateInput.Interact += OnPicking;
+            investigateInput.Interact += OnThrowing;
         }
 
         void OnDisable()
         {
-            input.Inspection -= OnInspection;
-            input.TurnRight -= RightRotationInput;
-            input.TurnLeft -= LeftRotationInput;
-            input.Aim -= OnAiming;
-            input.Interact -= OnPicking;
-            input.Throw -= OnThrowing;
+            movementInput.ToInvestigate -= OnInspection;
+            movementInput.TurnRight -= RightRotationInput;
+            movementInput.TurnLeft -= LeftRotationInput;
+
+            investigateInput.ToMovement -= OnInspection;
+            investigateInput.Aim -= OnAiming;
+            investigateInput.Interact -= OnPicking;
+            investigateInput.Interact -= OnThrowing;
         }
 
         void OnInspection()
@@ -109,7 +118,7 @@ namespace Universal.Runtime.Behaviours.Characters
             movementController.CharacterRotation.HandleRotationLeftInput();
         }
 
-        void OnAiming() 
+        void OnAiming()
         {
             if (stateMachine.CurrentState != investigationState) return;
             cameraController.CameraAiming.ChangeFOV(this);

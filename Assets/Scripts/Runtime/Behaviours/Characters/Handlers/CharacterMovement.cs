@@ -6,39 +6,36 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovement
     {
-        private readonly PlayerController controller;
-        readonly CharacterMovementController movement;
+        readonly PlayerController controller;
         readonly Transform character;
         readonly CharacterData data;
         readonly Camera camera;
-        readonly IPlayerInputReader inputReader;
-        Vector3Int queuedDirection = Vector3Int.zero;
-        Vector3 startPosition = Vector3.zero;
-        Vector3 targetPosition = Vector3.zero;
+        readonly IMovementInputReader movementInput;
+        Vector3Int queuedDirection;
+        Vector3 startPosition;
+        Vector3 targetPosition;
         const float MOVEMENT_THRESHOLD = 0.01f;
         const float DIRECTION_DEADZONE = 0.1f;
-        float moveProgress = 0f;
-        bool hasMovementInput = false;
+        float moveProgress;
+        bool hasMovementInput;
 
-        public Vector3 FacingDirection { get; set; } = Vector3.zero;
-        public Vector2 InputBuffer { get; private set; } = Vector2.zero;
-        public bool IsMoving { get; set; } = false;
-        public bool IsBlocked { get; private set; } = false;
+        public Vector3 FacingDirection { get; set; } 
+        public Vector2 InputBuffer { get; private set; } 
+        public bool IsMoving { get; set; } 
+        public bool IsBlocked { get; private set; } 
 
         public CharacterMovement(
-            CharacterMovementController movement,
             PlayerController controller,
             Transform character,
             CharacterData data,
             Camera camera,
-            IPlayerInputReader inputReader)
+            IMovementInputReader movementInput)
         {
-            this.movement = movement;
             this.controller = controller;
             this.character = character;
             this.data = data;
             this.camera = camera;
-            this.inputReader = inputReader;
+            this.movementInput = movementInput;
 
             startPosition = targetPosition = character.position;
         }
@@ -46,7 +43,7 @@ namespace Universal.Runtime.Behaviours.Characters
         public void HandleMovementInput()
         {
             // Read and buffer input
-            var currentInput = inputReader.MoveDirection;
+            var currentInput = movementInput.MoveDirection;
             hasMovementInput = currentInput.sqrMagnitude > 0.1f;
 
             UpdateInputBuffer(currentInput);

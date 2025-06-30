@@ -9,34 +9,36 @@ using static Universal.Runtime.Components.Input.GameInputs;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class PlayerInputReader : MonoBehaviour, IPlayerActions, IPlayerInputReader
+    public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader
     {
         [SerializeField, Self] InputServicesManager inputServices;
 
-        public Vector2 LookDirection => inputServices.GameInputs.Player.Look.ReadValue<Vector2>();
-        public Vector2 MoveDirection => inputServices.GameInputs.Player.Move.ReadValue<Vector2>();
+        public Vector2 LookDirection => inputServices.GameInputs.Investigate.Look.ReadValue<Vector2>();
 
-        public event Action Pause = delegate { };
+        public event Action OpenPauseScreen = delegate { };
+        public event Action ToMovement = delegate { };
+        public event Action ToCombat = delegate { };
         public event Action AddCharacter = delegate { };
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
-        public event Action Inspection = delegate { };
         public event Action Aim = delegate { };
-        public event Action TurnRight = delegate { };
-        public event Action TurnLeft = delegate { };
-        public event Action Run = delegate { };
         public event Action Interact = delegate { };
-        public event Action Throw = delegate { };
-        public event Action Shoot = delegate { };
 
-        void Awake() => ServiceLocator.Global.Register<IPlayerInputReader>(this);
+        void Awake() => ServiceLocator.Global.Register<IInvestigateInputReader>(this);
 
-        public void OnMove(CallbackContext context) { }
-        public void OnLook(CallbackContext context) { }
-
-        public void OnPause(CallbackContext context)
+        public void OnOpenPauseScreen(CallbackContext context)
         {
-            if (context.started) Pause.Invoke();
+            if (context.started) OpenPauseScreen.Invoke();
+        }
+
+        public void OnToMovement(CallbackContext context)
+        {
+            if (context.started) ToMovement.Invoke();
+        }
+
+        public void OnToCombat(CallbackContext context)
+        {
+            if (context.started) ToCombat.Invoke();
         }
 
         public void OnAddCharacter(CallbackContext context)
@@ -54,10 +56,7 @@ namespace Universal.Runtime.Components.Input
             if (context.started) PreviousCharacter.Invoke();
         }
 
-        public void OnInspection(CallbackContext context)
-        {
-            if (context.started) Inspection.Invoke();
-        }
+        public void OnLook(CallbackContext context) { }
 
         public void OnAim(CallbackContext context)
         {
@@ -70,29 +69,9 @@ namespace Universal.Runtime.Components.Input
             }
         }
 
-        public void OnTurnRight(CallbackContext context)
-        {
-            if (context.started) TurnRight.Invoke();
-        }
-
-        public void OnTurnLeft(CallbackContext context)
-        {
-            if (context.started) TurnLeft.Invoke();
-        }
-
         public void OnInteract(CallbackContext context)
         {
             if (context.started) Interact.Invoke();
-        }
-
-        public void OnThrow(CallbackContext context)
-        {
-            if (context.started) Throw.Invoke();
-        }
-
-        public void OnShoot(CallbackContext context)
-        {
-            if (context.started) Shoot.Invoke();
         }
     }
 }

@@ -8,13 +8,13 @@ namespace Universal.Runtime.Components.Input
 {
     public class UIInputReader : MonoBehaviour, IUIActions, IUIInputReader
     {
-        public event Action Unpause = delegate { };
+        public event Action ClosePauseScreen = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IUIInputReader>(this);
 
-        public void OnUnpause(CallbackContext context)
+        public void OnClosePauseScreen(CallbackContext context)
         {
-            if (context.started) Unpause.Invoke();
+            if (context.started) ClosePauseScreen.Invoke();
         }
 
         public void OnCancel(CallbackContext context) { }

@@ -9,16 +9,17 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Child] PlayerController controller;
         [SerializeField] CharacterData data;
-        IPlayerInputReader input;
+        IMovementInputReader movementInput;
 
         public CharacterRotation CharacterRotation { get; private set; }
         public CharacterMovement CharacterMovement { get; private set; }
 
         void OnEnable()
         {
-            ServiceLocator.Global.Get(out input);
+            ServiceLocator.Global.Get(out movementInput);
+            
             CharacterRotation = new CharacterRotation(this, transform, data);
-            CharacterMovement = new CharacterMovement(this, controller, transform, data, Camera.main, input);
+            CharacterMovement = new CharacterMovement(controller, transform, data, Camera.main, movementInput);
         }
 
 #if UNITY_EDITOR

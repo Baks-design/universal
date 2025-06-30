@@ -77,8 +77,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         FootstepsSoundLibrary GetCurrentSurface()
         {
-            if (surfaceLookup == null || surfaceLookup.Count == 0)
-                return default;
+            if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
 
             if (Physics.Raycast(
                 bodyTransfom.position, Vector3.down, out var hit,

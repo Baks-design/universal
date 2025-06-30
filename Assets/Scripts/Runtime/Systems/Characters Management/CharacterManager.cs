@@ -20,7 +20,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
         Quaternion lastActiveRotation;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
-        IPlayerInputReader playerInput;
+        IMovementInputReader movementInput;
         IInputServices inputServices;
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
@@ -34,19 +34,20 @@ namespace Universal.Runtime.Systems.CharactersManagement
 
         void Start()
         {
-            AddCharacterToRoster(characterData);
-
             ServiceLocator.Global.Get(out inputServices);
-            inputServices.ChangeToPlayerMap();
-            ServiceLocator.Global.Get(out playerInput);
-            playerInput.NextCharacter += NextCharacter;
-            playerInput.PreviousCharacter += PreviousCharacter;
+            ServiceLocator.Global.Get(out movementInput);
+
+            inputServices.ChangeToMovementMap();
+            movementInput.NextCharacter += NextCharacter;
+            movementInput.PreviousCharacter += PreviousCharacter;
+
+            AddCharacterToRoster(characterData);
         }
 
         void OnDisable()
         {
-            playerInput.NextCharacter -= NextCharacter;
-            playerInput.PreviousCharacter -= PreviousCharacter;
+            movementInput.NextCharacter -= NextCharacter;
+            movementInput.PreviousCharacter -= PreviousCharacter;
         }
 
         void NextCharacter()

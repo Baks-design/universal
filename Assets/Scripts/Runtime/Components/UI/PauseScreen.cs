@@ -11,7 +11,9 @@ namespace Universal.Runtime.Components.UI
     {
         [SerializeField, Self] UIDocument uIDocument;
         VisualElement root;
-        IPlayerInputReader playerInputReader;
+        IMovementInputReader movementInput;
+        IInvestigateInputReader investigateInput;
+        ICombatInputReader combatInput;
         IUIInputReader uIInputReader;
         // Button resumeButton;
         // Button optionsButton;
@@ -21,28 +23,42 @@ namespace Universal.Runtime.Components.UI
         {
             root = uIDocument.rootVisualElement;
             root.style.display = DisplayStyle.None;
-
             // optionsButton = root.Q<Button>("options-button");
             // mainMenuButton = root.Q<Button>("main-menu-button");
         }
 
         void Start()
         {
-            ServiceLocator.Global.Get(out playerInputReader);
+            GetServices();
+            RegisterInputs();
+        }
+
+        void OnDisable() => UnregisterInputs();
+
+        void GetServices()
+        {
+            ServiceLocator.Global.Get(out movementInput);
+            ServiceLocator.Global.Get(out investigateInput);
+            ServiceLocator.Global.Get(out combatInput);
             ServiceLocator.Global.Get(out uIInputReader);
+        }
 
-            playerInputReader.Pause += OnPausePressed;
-            uIInputReader.Unpause += OnResumePressed;
-
+        void RegisterInputs()
+        {
+            movementInput.OpenPauseScreen += OnPausePressed;
+            investigateInput.OpenPauseScreen += OnPausePressed;
+            combatInput.OpenPauseScreen += OnPausePressed;
+            uIInputReader.ClosePauseScreen += OnResumePressed;
             // optionsButton.clicked += OnOptionsClicked;
             // mainMenuButton.clicked += OnMainMenuClicked;
         }
 
-        void OnDisable()
+        void UnregisterInputs()
         {
-            playerInputReader.Pause -= OnPausePressed;
-            uIInputReader.Unpause -= OnResumePressed;
-
+            movementInput.OpenPauseScreen -= OnPausePressed;
+            investigateInput.OpenPauseScreen -= OnPausePressed;
+            combatInput.OpenPauseScreen -= OnPausePressed;
+            uIInputReader.ClosePauseScreen -= OnResumePressed;
             // optionsButton.clicked -= OnOptionsClicked;
             // mainMenuButton.clicked -= OnMainMenuClicked;
         }

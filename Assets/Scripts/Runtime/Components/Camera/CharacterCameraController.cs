@@ -11,19 +11,24 @@ namespace Universal.Runtime.Components.Camera
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, InlineEditor] CameraData cameraData;
-        IPlayerInputReader inputReader;
+        IInvestigateInputReader investigateInput;
 
         public CinemachineCamera Cinemachine { get => cinemachine; set => cinemachine = value; }
         public CameraRotation CameraRotation { get; private set; }
         public CameraAiming CameraAiming { get; private set; }
-        public CameraSwaying CameraSwaying { get; private set; }
 
         void Awake()
         {
-            ServiceLocator.Global.Get(out inputReader);
-            CameraRotation = new CameraRotation(cameraData, cinemachine, inputReader, this);
+            GetServices();
+            InitClasses();
+        }
+
+        void GetServices() => ServiceLocator.Global.Get(out investigateInput);
+
+        void InitClasses()
+        {
+            CameraRotation = new CameraRotation(cameraData, cinemachine, investigateInput, this);
             CameraAiming = new CameraAiming(cameraData, cinemachine);
-            CameraSwaying = new CameraSwaying(cameraData, cinemachine);
         }
     }
 }

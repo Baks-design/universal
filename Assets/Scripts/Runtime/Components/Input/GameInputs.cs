@@ -90,11 +90,11 @@ namespace Universal.Runtime.Components.Input
     ""name"": ""GameInputs"",
     ""maps"": [
         {
-            ""name"": ""Player"",
+            ""name"": ""Movement"",
             ""id"": ""df70fa95-8a34-4494-b137-73ab6b9c7d37"",
             ""actions"": [
                 {
-                    ""name"": ""Pause"",
+                    ""name"": ""OpenPauseScreen"",
                     ""type"": ""Button"",
                     ""id"": ""7f7a1434-387a-4db7-8b9b-619e3a1f95c4"",
                     ""expectedControlType"": """",
@@ -103,9 +103,18 @@ namespace Universal.Runtime.Components.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AddCharacter"",
+                    ""name"": ""ToInvestigate"",
                     ""type"": ""Button"",
-                    ""id"": ""9c569c45-50c9-4db2-849e-1d5c6d69e92e"",
+                    ""id"": ""7fb3377b-60d5-4796-9fa5-372d5edc8bd7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToCombat"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8dfa8b7-90f3-4a64-b8cb-5cff684acc8d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -130,31 +139,13 @@ namespace Universal.Runtime.Components.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Look"",
+                    ""name"": ""Move"",
                     ""type"": ""Value"",
-                    ""id"": ""6b444451-8a00-4d00-a97e-f47457f736a8"",
+                    ""id"": ""351f2ccd-1f9f-44bf-9bec-d62ac5c5f408"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Inspection"",
-                    ""type"": ""Button"",
-                    ""id"": ""7fb3377b-60d5-4796-9fa5-372d5edc8bd7"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Aim"",
-                    ""type"": ""Button"",
-                    ""id"": ""57966dae-9fff-4f38-be63-4d0f61b7a33b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""TurnRight"",
@@ -169,42 +160,6 @@ namespace Universal.Runtime.Components.Input
                     ""name"": ""TurnLeft"",
                     ""type"": ""Button"",
                     ""id"": ""aff1cb55-657c-4c69-9b39-a76f5f8842a8"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Move"",
-                    ""type"": ""Value"",
-                    ""id"": ""351f2ccd-1f9f-44bf-9bec-d62ac5c5f408"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Interact"",
-                    ""type"": ""Button"",
-                    ""id"": ""5364e686-a2df-4f84-829b-108552b900a6"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Throw"",
-                    ""type"": ""Button"",
-                    ""id"": ""d213af04-689d-4a3d-98e1-2cb5c59249cb"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Shoot"",
-                    ""type"": ""Button"",
-                    ""id"": ""40232ee0-1629-438e-8769-83c1e6f62d69"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -280,56 +235,12 @@ namespace Universal.Runtime.Components.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d809cf76-5601-401d-b30e-0f15c307a18f"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""894101cd-fd1b-45dd-aaf7-12fdf47d43ad"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""AddCharacter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""76df4190-0e26-4639-8977-a9e62c672a5b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""AddCharacter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7504d31d-467c-415a-bf9e-88a579fc5d9d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Pause"",
+                    ""action"": ""OpenPauseScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -340,95 +251,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5fc114cc-5dd5-4052-929d-70906f963d63"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""739836e8-3be1-49ad-b14d-7e5c3dff7b79"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": ""Hold"",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Aim"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d2f403c3-c65d-4ee0-9e75-bb00c470c713"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6b60a364-5ce5-4f1f-a546-8a3994eda121"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3d610424-5ed8-49cf-8315-25de0955ad77"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Throw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""825cc1c2-7468-4fb3-a966-ce5c86717aac"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Throw"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""424ff963-2596-4394-9066-a2b6bd76c489"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Shoot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2efd73ab-7e28-4c9c-a753-6f2acfb2516c"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Shoot"",
+                    ""action"": ""OpenPauseScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -439,7 +262,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Inspection"",
+                    ""action"": ""ToInvestigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -450,7 +273,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Inspection"",
+                    ""action"": ""ToInvestigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -541,6 +364,538 @@ namespace Universal.Runtime.Components.Input
                     ""action"": ""TurnLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2031926b-fd68-4bec-8fb4-44b6d5ce1e51"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToCombat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Investigate"",
+            ""id"": ""1b284463-969d-46ed-ba93-dcf225515745"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenPauseScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""9610bf2f-2b6f-48e3-b5f5-be5003eb8bb0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToMovement"",
+                    ""type"": ""Button"",
+                    ""id"": ""a960855f-4db7-49f7-a5b9-816e266877fc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToCombat"",
+                    ""type"": ""Button"",
+                    ""id"": ""17b9c62f-f31d-481a-9f98-ed025791eee9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AddCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""91e4a1d0-6433-474e-9555-d2239069eb8e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a30df5b-c766-4aef-8427-bdc46b43a471"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""206b1258-ca22-43e1-9f8c-7d2397b908fa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""3510e5d6-3546-473b-b4a4-4d9c3a3e4c98"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""359e09a9-a5cf-47eb-bcdd-ab2864d4ea46"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""c372af67-c6b3-4934-b017-9cdd26233fd0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8e53ed2b-6790-4266-8ddc-cf680ab04fc3"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53334bf5-7751-4b79-9959-c4fda74fa3d6"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7fd36a12-4aa2-4480-8ec0-dcea6864a193"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""AddCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75e6c479-fd3d-4fe6-b7b0-7122423904ea"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""AddCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ecca600-5b31-45d1-93ae-f16681f49a8c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""OpenPauseScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6f6a388-3917-41f0-a013-55c440b0e550"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OpenPauseScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3c5aa36-424d-444e-b4da-4ab81b1c0164"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36215010-86aa-4752-ba73-2336d33d5e22"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b4089a6-2aec-4484-b551-c7a9f9f0cee0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59266543-1948-4a96-8195-bb0f837634a7"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11ceeacb-a511-4cd9-ae92-561f733834c9"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1953b9c0-950d-4626-ba1e-1958d7dea1e8"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ToMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""834ecfb0-e5c2-4d31-9c4d-ee406e2f309a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToCombat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""229d2b43-83a4-4068-a223-3cec76be0d71"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""NextCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a37a62c1-e4de-4c0c-8522-8061a584c5c2"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""NextCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae68f58a-1268-4795-bb6f-610131fd9813"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PreviousCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e0c1a33-c52b-4b61-8846-0487edae85a2"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""PreviousCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Combat"",
+            ""id"": ""5777d3d6-d56c-45dc-9d01-36da5b80081d"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenPauseScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c208c08-dac3-4c36-95d2-6e4112588f71"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToInvestigate"",
+                    ""type"": ""Button"",
+                    ""id"": ""61833e4e-1e8b-4a66-9f68-391865670e67"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToCombat"",
+                    ""type"": ""Button"",
+                    ""id"": ""8fb4045f-2225-490e-80df-cedf6ad81028"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""6d07b734-0f68-42cb-a2ce-9e475e7da992"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousCharacter"",
+                    ""type"": ""Button"",
+                    ""id"": ""3dbc433e-e02f-4a82-802f-b68696cc38fe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""f2fd614d-4c3d-4241-97fd-0433bb73f674"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""1305cbe5-1b2e-4f20-8426-7f286d61812a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""c86dcf78-7f39-4303-a262-3c0264a49688"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4707332e-1510-449d-add4-50bce6dac2c8"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0127bfed-3cb4-41b1-823f-4296638a6a75"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d806254e-2063-46a0-8362-93823760497a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""OpenPauseScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51989a7f-1b16-464e-8c9b-23831506249c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""OpenPauseScreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52eb32fa-e11e-4467-a118-e4acf28cbfb3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""719a7f33-dc32-49c8-a836-b8229bea7223"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8368745-36c8-410b-bb7f-852559ad0e52"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f108b88-2828-4ace-9ddf-eefbc67e916e"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0291b894-42f8-455c-be28-b74de9ef1254"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToInvestigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e38d2c3-e85d-4e97-b914-9be3e0ce42a9"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ToInvestigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b078ab67-a1d3-4113-813d-17f5487052c9"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""NextCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c808a91d-fc0b-41be-b823-7d72e8a7f3b1"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""NextCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c803ac8e-9b68-41de-bb0c-ef9e7bccf5af"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PreviousCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""608b25de-b5d7-4d4e-87da-883c3dd46a34"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""PreviousCharacter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe4146aa-8eb6-4766-b67d-07fb36a6d1a2"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToCombat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -548,6 +903,15 @@ namespace Universal.Runtime.Components.Input
             ""name"": ""UI"",
             ""id"": ""272f6d14-89ba-496f-b7ff-215263d3219f"",
             ""actions"": [
+                {
+                    ""name"": ""ClosePauseScreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""5d3c8cc6-24d4-4f52-aa7c-fa5943d6c40d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
                 {
                     ""name"": ""Navigate"",
                     ""type"": ""PassThrough"",
@@ -634,15 +998,6 @@ namespace Universal.Runtime.Components.Input
                     ""type"": ""PassThrough"",
                     ""id"": ""9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be"",
                     ""expectedControlType"": ""Quaternion"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Unpause"",
-                    ""type"": ""Button"",
-                    ""id"": ""5d3c8cc6-24d4-4f52-aa7c-fa5943d6c40d"",
-                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -887,7 +1242,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Unpause"",
+                    ""action"": ""ClosePauseScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -898,7 +1253,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Unpause"",
+                    ""action"": ""ClosePauseScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -954,37 +1309,43 @@ namespace Universal.Runtime.Components.Input
                     ""isOR"": false
                 }
             ]
-        },
-        {
-            ""name"": ""Gamepad"",
-            ""bindingGroup"": ""Gamepad"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Gamepad>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
         }
     ]
 }");
-            // Player
-            m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-            m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
-            m_Player_AddCharacter = m_Player.FindAction("AddCharacter", throwIfNotFound: true);
-            m_Player_NextCharacter = m_Player.FindAction("NextCharacter", throwIfNotFound: true);
-            m_Player_PreviousCharacter = m_Player.FindAction("PreviousCharacter", throwIfNotFound: true);
-            m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-            m_Player_Inspection = m_Player.FindAction("Inspection", throwIfNotFound: true);
-            m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-            m_Player_TurnRight = m_Player.FindAction("TurnRight", throwIfNotFound: true);
-            m_Player_TurnLeft = m_Player.FindAction("TurnLeft", throwIfNotFound: true);
-            m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-            m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-            m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
-            m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+            // Movement
+            m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
+            m_Movement_OpenPauseScreen = m_Movement.FindAction("OpenPauseScreen", throwIfNotFound: true);
+            m_Movement_ToInvestigate = m_Movement.FindAction("ToInvestigate", throwIfNotFound: true);
+            m_Movement_ToCombat = m_Movement.FindAction("ToCombat", throwIfNotFound: true);
+            m_Movement_NextCharacter = m_Movement.FindAction("NextCharacter", throwIfNotFound: true);
+            m_Movement_PreviousCharacter = m_Movement.FindAction("PreviousCharacter", throwIfNotFound: true);
+            m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
+            m_Movement_TurnRight = m_Movement.FindAction("TurnRight", throwIfNotFound: true);
+            m_Movement_TurnLeft = m_Movement.FindAction("TurnLeft", throwIfNotFound: true);
+            // Investigate
+            m_Investigate = asset.FindActionMap("Investigate", throwIfNotFound: true);
+            m_Investigate_OpenPauseScreen = m_Investigate.FindAction("OpenPauseScreen", throwIfNotFound: true);
+            m_Investigate_ToMovement = m_Investigate.FindAction("ToMovement", throwIfNotFound: true);
+            m_Investigate_ToCombat = m_Investigate.FindAction("ToCombat", throwIfNotFound: true);
+            m_Investigate_AddCharacter = m_Investigate.FindAction("AddCharacter", throwIfNotFound: true);
+            m_Investigate_NextCharacter = m_Investigate.FindAction("NextCharacter", throwIfNotFound: true);
+            m_Investigate_PreviousCharacter = m_Investigate.FindAction("PreviousCharacter", throwIfNotFound: true);
+            m_Investigate_Look = m_Investigate.FindAction("Look", throwIfNotFound: true);
+            m_Investigate_Aim = m_Investigate.FindAction("Aim", throwIfNotFound: true);
+            m_Investigate_Interact = m_Investigate.FindAction("Interact", throwIfNotFound: true);
+            // Combat
+            m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
+            m_Combat_OpenPauseScreen = m_Combat.FindAction("OpenPauseScreen", throwIfNotFound: true);
+            m_Combat_ToInvestigate = m_Combat.FindAction("ToInvestigate", throwIfNotFound: true);
+            m_Combat_ToCombat = m_Combat.FindAction("ToCombat", throwIfNotFound: true);
+            m_Combat_NextCharacter = m_Combat.FindAction("NextCharacter", throwIfNotFound: true);
+            m_Combat_PreviousCharacter = m_Combat.FindAction("PreviousCharacter", throwIfNotFound: true);
+            m_Combat_Look = m_Combat.FindAction("Look", throwIfNotFound: true);
+            m_Combat_Aim = m_Combat.FindAction("Aim", throwIfNotFound: true);
+            m_Combat_Attack = m_Combat.FindAction("Attack", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+            m_UI_ClosePauseScreen = m_UI.FindAction("ClosePauseScreen", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
             m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
             m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
@@ -995,12 +1356,13 @@ namespace Universal.Runtime.Components.Input
             m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-            m_UI_Unpause = m_UI.FindAction("Unpause", throwIfNotFound: true);
         }
 
         ~@GameInputs()
         {
-            UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, GameInputs.Player.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Movement.enabled, "This will cause a leak and performance issues, GameInputs.Movement.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Investigate.enabled, "This will cause a leak and performance issues, GameInputs.Investigate.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_Combat.enabled, "This will cause a leak and performance issues, GameInputs.Combat.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, GameInputs.UI.Disable() has not been called.");
         }
 
@@ -1074,89 +1436,64 @@ namespace Universal.Runtime.Components.Input
             return asset.FindBinding(bindingMask, out action);
         }
 
-        // Player
-        private readonly InputActionMap m_Player;
-        private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-        private readonly InputAction m_Player_Pause;
-        private readonly InputAction m_Player_AddCharacter;
-        private readonly InputAction m_Player_NextCharacter;
-        private readonly InputAction m_Player_PreviousCharacter;
-        private readonly InputAction m_Player_Look;
-        private readonly InputAction m_Player_Inspection;
-        private readonly InputAction m_Player_Aim;
-        private readonly InputAction m_Player_TurnRight;
-        private readonly InputAction m_Player_TurnLeft;
-        private readonly InputAction m_Player_Move;
-        private readonly InputAction m_Player_Interact;
-        private readonly InputAction m_Player_Throw;
-        private readonly InputAction m_Player_Shoot;
+        // Movement
+        private readonly InputActionMap m_Movement;
+        private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
+        private readonly InputAction m_Movement_OpenPauseScreen;
+        private readonly InputAction m_Movement_ToInvestigate;
+        private readonly InputAction m_Movement_ToCombat;
+        private readonly InputAction m_Movement_NextCharacter;
+        private readonly InputAction m_Movement_PreviousCharacter;
+        private readonly InputAction m_Movement_Move;
+        private readonly InputAction m_Movement_TurnRight;
+        private readonly InputAction m_Movement_TurnLeft;
         /// <summary>
-        /// Provides access to input actions defined in input action map "Player".
+        /// Provides access to input actions defined in input action map "Movement".
         /// </summary>
-        public struct PlayerActions
+        public struct MovementActions
         {
             private @GameInputs m_Wrapper;
 
             /// <summary>
             /// Construct a new instance of the input action map wrapper class.
             /// </summary>
-            public PlayerActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+            public MovementActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
             /// <summary>
-            /// Provides access to the underlying input action "Player/Pause".
+            /// Provides access to the underlying input action "Movement/OpenPauseScreen".
             /// </summary>
-            public InputAction @Pause => m_Wrapper.m_Player_Pause;
+            public InputAction @OpenPauseScreen => m_Wrapper.m_Movement_OpenPauseScreen;
             /// <summary>
-            /// Provides access to the underlying input action "Player/AddCharacter".
+            /// Provides access to the underlying input action "Movement/ToInvestigate".
             /// </summary>
-            public InputAction @AddCharacter => m_Wrapper.m_Player_AddCharacter;
+            public InputAction @ToInvestigate => m_Wrapper.m_Movement_ToInvestigate;
             /// <summary>
-            /// Provides access to the underlying input action "Player/NextCharacter".
+            /// Provides access to the underlying input action "Movement/ToCombat".
             /// </summary>
-            public InputAction @NextCharacter => m_Wrapper.m_Player_NextCharacter;
+            public InputAction @ToCombat => m_Wrapper.m_Movement_ToCombat;
             /// <summary>
-            /// Provides access to the underlying input action "Player/PreviousCharacter".
+            /// Provides access to the underlying input action "Movement/NextCharacter".
             /// </summary>
-            public InputAction @PreviousCharacter => m_Wrapper.m_Player_PreviousCharacter;
+            public InputAction @NextCharacter => m_Wrapper.m_Movement_NextCharacter;
             /// <summary>
-            /// Provides access to the underlying input action "Player/Look".
+            /// Provides access to the underlying input action "Movement/PreviousCharacter".
             /// </summary>
-            public InputAction @Look => m_Wrapper.m_Player_Look;
+            public InputAction @PreviousCharacter => m_Wrapper.m_Movement_PreviousCharacter;
             /// <summary>
-            /// Provides access to the underlying input action "Player/Inspection".
+            /// Provides access to the underlying input action "Movement/Move".
             /// </summary>
-            public InputAction @Inspection => m_Wrapper.m_Player_Inspection;
+            public InputAction @Move => m_Wrapper.m_Movement_Move;
             /// <summary>
-            /// Provides access to the underlying input action "Player/Aim".
+            /// Provides access to the underlying input action "Movement/TurnRight".
             /// </summary>
-            public InputAction @Aim => m_Wrapper.m_Player_Aim;
+            public InputAction @TurnRight => m_Wrapper.m_Movement_TurnRight;
             /// <summary>
-            /// Provides access to the underlying input action "Player/TurnRight".
+            /// Provides access to the underlying input action "Movement/TurnLeft".
             /// </summary>
-            public InputAction @TurnRight => m_Wrapper.m_Player_TurnRight;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/TurnLeft".
-            /// </summary>
-            public InputAction @TurnLeft => m_Wrapper.m_Player_TurnLeft;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Move".
-            /// </summary>
-            public InputAction @Move => m_Wrapper.m_Player_Move;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Interact".
-            /// </summary>
-            public InputAction @Interact => m_Wrapper.m_Player_Interact;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Throw".
-            /// </summary>
-            public InputAction @Throw => m_Wrapper.m_Player_Throw;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Shoot".
-            /// </summary>
-            public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+            public InputAction @TurnLeft => m_Wrapper.m_Movement_TurnLeft;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
-            public InputActionMap Get() { return m_Wrapper.m_Player; }
+            public InputActionMap Get() { return m_Wrapper.m_Movement; }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
             public void Enable() { Get().Enable(); }
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -1164,9 +1501,9 @@ namespace Universal.Runtime.Components.Input
             /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
             public bool enabled => Get().enabled;
             /// <summary>
-            /// Implicitly converts an <see ref="PlayerActions" /> to an <see ref="InputActionMap" /> instance.
+            /// Implicitly converts an <see ref="MovementActions" /> to an <see ref="InputActionMap" /> instance.
             /// </summary>
-            public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
             /// <summary>
             /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
             /// </summary>
@@ -1174,14 +1511,198 @@ namespace Universal.Runtime.Components.Input
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
             /// </remarks>
-            /// <seealso cref="PlayerActions" />
-            public void AddCallbacks(IPlayerActions instance)
+            /// <seealso cref="MovementActions" />
+            public void AddCallbacks(IMovementActions instance)
             {
-                if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-                @Pause.started += instance.OnPause;
-                @Pause.performed += instance.OnPause;
-                @Pause.canceled += instance.OnPause;
+                if (instance == null || m_Wrapper.m_MovementActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_MovementActionsCallbackInterfaces.Add(instance);
+                @OpenPauseScreen.started += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled += instance.OnOpenPauseScreen;
+                @ToInvestigate.started += instance.OnToInvestigate;
+                @ToInvestigate.performed += instance.OnToInvestigate;
+                @ToInvestigate.canceled += instance.OnToInvestigate;
+                @ToCombat.started += instance.OnToCombat;
+                @ToCombat.performed += instance.OnToCombat;
+                @ToCombat.canceled += instance.OnToCombat;
+                @NextCharacter.started += instance.OnNextCharacter;
+                @NextCharacter.performed += instance.OnNextCharacter;
+                @NextCharacter.canceled += instance.OnNextCharacter;
+                @PreviousCharacter.started += instance.OnPreviousCharacter;
+                @PreviousCharacter.performed += instance.OnPreviousCharacter;
+                @PreviousCharacter.canceled += instance.OnPreviousCharacter;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @TurnRight.started += instance.OnTurnRight;
+                @TurnRight.performed += instance.OnTurnRight;
+                @TurnRight.canceled += instance.OnTurnRight;
+                @TurnLeft.started += instance.OnTurnLeft;
+                @TurnLeft.performed += instance.OnTurnLeft;
+                @TurnLeft.canceled += instance.OnTurnLeft;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="MovementActions" />
+            private void UnregisterCallbacks(IMovementActions instance)
+            {
+                @OpenPauseScreen.started -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled -= instance.OnOpenPauseScreen;
+                @ToInvestigate.started -= instance.OnToInvestigate;
+                @ToInvestigate.performed -= instance.OnToInvestigate;
+                @ToInvestigate.canceled -= instance.OnToInvestigate;
+                @ToCombat.started -= instance.OnToCombat;
+                @ToCombat.performed -= instance.OnToCombat;
+                @ToCombat.canceled -= instance.OnToCombat;
+                @NextCharacter.started -= instance.OnNextCharacter;
+                @NextCharacter.performed -= instance.OnNextCharacter;
+                @NextCharacter.canceled -= instance.OnNextCharacter;
+                @PreviousCharacter.started -= instance.OnPreviousCharacter;
+                @PreviousCharacter.performed -= instance.OnPreviousCharacter;
+                @PreviousCharacter.canceled -= instance.OnPreviousCharacter;
+                @Move.started -= instance.OnMove;
+                @Move.performed -= instance.OnMove;
+                @Move.canceled -= instance.OnMove;
+                @TurnRight.started -= instance.OnTurnRight;
+                @TurnRight.performed -= instance.OnTurnRight;
+                @TurnRight.canceled -= instance.OnTurnRight;
+                @TurnLeft.started -= instance.OnTurnLeft;
+                @TurnLeft.performed -= instance.OnTurnLeft;
+                @TurnLeft.canceled -= instance.OnTurnLeft;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MovementActions.UnregisterCallbacks(IMovementActions)" />.
+            /// </summary>
+            /// <seealso cref="MovementActions.UnregisterCallbacks(IMovementActions)" />
+            public void RemoveCallbacks(IMovementActions instance)
+            {
+                if (m_Wrapper.m_MovementActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="MovementActions.AddCallbacks(IMovementActions)" />
+            /// <seealso cref="MovementActions.RemoveCallbacks(IMovementActions)" />
+            /// <seealso cref="MovementActions.UnregisterCallbacks(IMovementActions)" />
+            public void SetCallbacks(IMovementActions instance)
+            {
+                foreach (var item in m_Wrapper.m_MovementActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_MovementActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="MovementActions" /> instance referencing this action map.
+        /// </summary>
+        public MovementActions @Movement => new MovementActions(this);
+
+        // Investigate
+        private readonly InputActionMap m_Investigate;
+        private List<IInvestigateActions> m_InvestigateActionsCallbackInterfaces = new List<IInvestigateActions>();
+        private readonly InputAction m_Investigate_OpenPauseScreen;
+        private readonly InputAction m_Investigate_ToMovement;
+        private readonly InputAction m_Investigate_ToCombat;
+        private readonly InputAction m_Investigate_AddCharacter;
+        private readonly InputAction m_Investigate_NextCharacter;
+        private readonly InputAction m_Investigate_PreviousCharacter;
+        private readonly InputAction m_Investigate_Look;
+        private readonly InputAction m_Investigate_Aim;
+        private readonly InputAction m_Investigate_Interact;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Investigate".
+        /// </summary>
+        public struct InvestigateActions
+        {
+            private @GameInputs m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public InvestigateActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/OpenPauseScreen".
+            /// </summary>
+            public InputAction @OpenPauseScreen => m_Wrapper.m_Investigate_OpenPauseScreen;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/ToMovement".
+            /// </summary>
+            public InputAction @ToMovement => m_Wrapper.m_Investigate_ToMovement;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/ToCombat".
+            /// </summary>
+            public InputAction @ToCombat => m_Wrapper.m_Investigate_ToCombat;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/AddCharacter".
+            /// </summary>
+            public InputAction @AddCharacter => m_Wrapper.m_Investigate_AddCharacter;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/NextCharacter".
+            /// </summary>
+            public InputAction @NextCharacter => m_Wrapper.m_Investigate_NextCharacter;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/PreviousCharacter".
+            /// </summary>
+            public InputAction @PreviousCharacter => m_Wrapper.m_Investigate_PreviousCharacter;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/Look".
+            /// </summary>
+            public InputAction @Look => m_Wrapper.m_Investigate_Look;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/Aim".
+            /// </summary>
+            public InputAction @Aim => m_Wrapper.m_Investigate_Aim;
+            /// <summary>
+            /// Provides access to the underlying input action "Investigate/Interact".
+            /// </summary>
+            public InputAction @Interact => m_Wrapper.m_Investigate_Interact;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Investigate; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="InvestigateActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(InvestigateActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="InvestigateActions" />
+            public void AddCallbacks(IInvestigateActions instance)
+            {
+                if (instance == null || m_Wrapper.m_InvestigateActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_InvestigateActionsCallbackInterfaces.Add(instance);
+                @OpenPauseScreen.started += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled += instance.OnOpenPauseScreen;
+                @ToMovement.started += instance.OnToMovement;
+                @ToMovement.performed += instance.OnToMovement;
+                @ToMovement.canceled += instance.OnToMovement;
+                @ToCombat.started += instance.OnToCombat;
+                @ToCombat.performed += instance.OnToCombat;
+                @ToCombat.canceled += instance.OnToCombat;
                 @AddCharacter.started += instance.OnAddCharacter;
                 @AddCharacter.performed += instance.OnAddCharacter;
                 @AddCharacter.canceled += instance.OnAddCharacter;
@@ -1194,30 +1715,12 @@ namespace Universal.Runtime.Components.Input
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @Inspection.started += instance.OnInspection;
-                @Inspection.performed += instance.OnInspection;
-                @Inspection.canceled += instance.OnInspection;
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
-                @TurnRight.started += instance.OnTurnRight;
-                @TurnRight.performed += instance.OnTurnRight;
-                @TurnRight.canceled += instance.OnTurnRight;
-                @TurnLeft.started += instance.OnTurnLeft;
-                @TurnLeft.performed += instance.OnTurnLeft;
-                @TurnLeft.canceled += instance.OnTurnLeft;
-                @Move.started += instance.OnMove;
-                @Move.performed += instance.OnMove;
-                @Move.canceled += instance.OnMove;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @Throw.started += instance.OnThrow;
-                @Throw.performed += instance.OnThrow;
-                @Throw.canceled += instance.OnThrow;
-                @Shoot.started += instance.OnShoot;
-                @Shoot.performed += instance.OnShoot;
-                @Shoot.canceled += instance.OnShoot;
             }
 
             /// <summary>
@@ -1226,12 +1729,18 @@ namespace Universal.Runtime.Components.Input
             /// <remarks>
             /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
             /// </remarks>
-            /// <seealso cref="PlayerActions" />
-            private void UnregisterCallbacks(IPlayerActions instance)
+            /// <seealso cref="InvestigateActions" />
+            private void UnregisterCallbacks(IInvestigateActions instance)
             {
-                @Pause.started -= instance.OnPause;
-                @Pause.performed -= instance.OnPause;
-                @Pause.canceled -= instance.OnPause;
+                @OpenPauseScreen.started -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled -= instance.OnOpenPauseScreen;
+                @ToMovement.started -= instance.OnToMovement;
+                @ToMovement.performed -= instance.OnToMovement;
+                @ToMovement.canceled -= instance.OnToMovement;
+                @ToCombat.started -= instance.OnToCombat;
+                @ToCombat.performed -= instance.OnToCombat;
+                @ToCombat.canceled -= instance.OnToCombat;
                 @AddCharacter.started -= instance.OnAddCharacter;
                 @AddCharacter.performed -= instance.OnAddCharacter;
                 @AddCharacter.canceled -= instance.OnAddCharacter;
@@ -1244,39 +1753,21 @@ namespace Universal.Runtime.Components.Input
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
-                @Inspection.started -= instance.OnInspection;
-                @Inspection.performed -= instance.OnInspection;
-                @Inspection.canceled -= instance.OnInspection;
                 @Aim.started -= instance.OnAim;
                 @Aim.performed -= instance.OnAim;
                 @Aim.canceled -= instance.OnAim;
-                @TurnRight.started -= instance.OnTurnRight;
-                @TurnRight.performed -= instance.OnTurnRight;
-                @TurnRight.canceled -= instance.OnTurnRight;
-                @TurnLeft.started -= instance.OnTurnLeft;
-                @TurnLeft.performed -= instance.OnTurnLeft;
-                @TurnLeft.canceled -= instance.OnTurnLeft;
-                @Move.started -= instance.OnMove;
-                @Move.performed -= instance.OnMove;
-                @Move.canceled -= instance.OnMove;
                 @Interact.started -= instance.OnInteract;
                 @Interact.performed -= instance.OnInteract;
                 @Interact.canceled -= instance.OnInteract;
-                @Throw.started -= instance.OnThrow;
-                @Throw.performed -= instance.OnThrow;
-                @Throw.canceled -= instance.OnThrow;
-                @Shoot.started -= instance.OnShoot;
-                @Shoot.performed -= instance.OnShoot;
-                @Shoot.canceled -= instance.OnShoot;
             }
 
             /// <summary>
-            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />.
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="InvestigateActions.UnregisterCallbacks(IInvestigateActions)" />.
             /// </summary>
-            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-            public void RemoveCallbacks(IPlayerActions instance)
+            /// <seealso cref="InvestigateActions.UnregisterCallbacks(IInvestigateActions)" />
+            public void RemoveCallbacks(IInvestigateActions instance)
             {
-                if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+                if (m_Wrapper.m_InvestigateActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
@@ -1286,25 +1777,199 @@ namespace Universal.Runtime.Components.Input
             /// <remarks>
             /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
             /// </remarks>
-            /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-            /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-            /// <seealso cref="PlayerActions.UnregisterCallbacks(IPlayerActions)" />
-            public void SetCallbacks(IPlayerActions instance)
+            /// <seealso cref="InvestigateActions.AddCallbacks(IInvestigateActions)" />
+            /// <seealso cref="InvestigateActions.RemoveCallbacks(IInvestigateActions)" />
+            /// <seealso cref="InvestigateActions.UnregisterCallbacks(IInvestigateActions)" />
+            public void SetCallbacks(IInvestigateActions instance)
             {
-                foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+                foreach (var item in m_Wrapper.m_InvestigateActionsCallbackInterfaces)
                     UnregisterCallbacks(item);
-                m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+                m_Wrapper.m_InvestigateActionsCallbackInterfaces.Clear();
                 AddCallbacks(instance);
             }
         }
         /// <summary>
-        /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
+        /// Provides a new <see cref="InvestigateActions" /> instance referencing this action map.
         /// </summary>
-        public PlayerActions @Player => new PlayerActions(this);
+        public InvestigateActions @Investigate => new InvestigateActions(this);
+
+        // Combat
+        private readonly InputActionMap m_Combat;
+        private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
+        private readonly InputAction m_Combat_OpenPauseScreen;
+        private readonly InputAction m_Combat_ToInvestigate;
+        private readonly InputAction m_Combat_ToCombat;
+        private readonly InputAction m_Combat_NextCharacter;
+        private readonly InputAction m_Combat_PreviousCharacter;
+        private readonly InputAction m_Combat_Look;
+        private readonly InputAction m_Combat_Aim;
+        private readonly InputAction m_Combat_Attack;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "Combat".
+        /// </summary>
+        public struct CombatActions
+        {
+            private @GameInputs m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public CombatActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/OpenPauseScreen".
+            /// </summary>
+            public InputAction @OpenPauseScreen => m_Wrapper.m_Combat_OpenPauseScreen;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/ToInvestigate".
+            /// </summary>
+            public InputAction @ToInvestigate => m_Wrapper.m_Combat_ToInvestigate;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/ToCombat".
+            /// </summary>
+            public InputAction @ToCombat => m_Wrapper.m_Combat_ToCombat;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/NextCharacter".
+            /// </summary>
+            public InputAction @NextCharacter => m_Wrapper.m_Combat_NextCharacter;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/PreviousCharacter".
+            /// </summary>
+            public InputAction @PreviousCharacter => m_Wrapper.m_Combat_PreviousCharacter;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Look".
+            /// </summary>
+            public InputAction @Look => m_Wrapper.m_Combat_Look;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Aim".
+            /// </summary>
+            public InputAction @Aim => m_Wrapper.m_Combat_Aim;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Attack".
+            /// </summary>
+            public InputAction @Attack => m_Wrapper.m_Combat_Attack;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_Combat; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="CombatActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(CombatActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="CombatActions" />
+            public void AddCallbacks(ICombatActions instance)
+            {
+                if (instance == null || m_Wrapper.m_CombatActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_CombatActionsCallbackInterfaces.Add(instance);
+                @OpenPauseScreen.started += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed += instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled += instance.OnOpenPauseScreen;
+                @ToInvestigate.started += instance.OnToInvestigate;
+                @ToInvestigate.performed += instance.OnToInvestigate;
+                @ToInvestigate.canceled += instance.OnToInvestigate;
+                @ToCombat.started += instance.OnToCombat;
+                @ToCombat.performed += instance.OnToCombat;
+                @ToCombat.canceled += instance.OnToCombat;
+                @NextCharacter.started += instance.OnNextCharacter;
+                @NextCharacter.performed += instance.OnNextCharacter;
+                @NextCharacter.canceled += instance.OnNextCharacter;
+                @PreviousCharacter.started += instance.OnPreviousCharacter;
+                @PreviousCharacter.performed += instance.OnPreviousCharacter;
+                @PreviousCharacter.canceled += instance.OnPreviousCharacter;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="CombatActions" />
+            private void UnregisterCallbacks(ICombatActions instance)
+            {
+                @OpenPauseScreen.started -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.performed -= instance.OnOpenPauseScreen;
+                @OpenPauseScreen.canceled -= instance.OnOpenPauseScreen;
+                @ToInvestigate.started -= instance.OnToInvestigate;
+                @ToInvestigate.performed -= instance.OnToInvestigate;
+                @ToInvestigate.canceled -= instance.OnToInvestigate;
+                @ToCombat.started -= instance.OnToCombat;
+                @ToCombat.performed -= instance.OnToCombat;
+                @ToCombat.canceled -= instance.OnToCombat;
+                @NextCharacter.started -= instance.OnNextCharacter;
+                @NextCharacter.performed -= instance.OnNextCharacter;
+                @NextCharacter.canceled -= instance.OnNextCharacter;
+                @PreviousCharacter.started -= instance.OnPreviousCharacter;
+                @PreviousCharacter.performed -= instance.OnPreviousCharacter;
+                @PreviousCharacter.canceled -= instance.OnPreviousCharacter;
+                @Look.started -= instance.OnLook;
+                @Look.performed -= instance.OnLook;
+                @Look.canceled -= instance.OnLook;
+                @Aim.started -= instance.OnAim;
+                @Aim.performed -= instance.OnAim;
+                @Aim.canceled -= instance.OnAim;
+                @Attack.started -= instance.OnAttack;
+                @Attack.performed -= instance.OnAttack;
+                @Attack.canceled -= instance.OnAttack;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CombatActions.UnregisterCallbacks(ICombatActions)" />.
+            /// </summary>
+            /// <seealso cref="CombatActions.UnregisterCallbacks(ICombatActions)" />
+            public void RemoveCallbacks(ICombatActions instance)
+            {
+                if (m_Wrapper.m_CombatActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="CombatActions.AddCallbacks(ICombatActions)" />
+            /// <seealso cref="CombatActions.RemoveCallbacks(ICombatActions)" />
+            /// <seealso cref="CombatActions.UnregisterCallbacks(ICombatActions)" />
+            public void SetCallbacks(ICombatActions instance)
+            {
+                foreach (var item in m_Wrapper.m_CombatActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_CombatActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="CombatActions" /> instance referencing this action map.
+        /// </summary>
+        public CombatActions @Combat => new CombatActions(this);
 
         // UI
         private readonly InputActionMap m_UI;
         private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+        private readonly InputAction m_UI_ClosePauseScreen;
         private readonly InputAction m_UI_Navigate;
         private readonly InputAction m_UI_Submit;
         private readonly InputAction m_UI_Cancel;
@@ -1315,7 +1980,6 @@ namespace Universal.Runtime.Components.Input
         private readonly InputAction m_UI_ScrollWheel;
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
-        private readonly InputAction m_UI_Unpause;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -1327,6 +1991,10 @@ namespace Universal.Runtime.Components.Input
             /// Construct a new instance of the input action map wrapper class.
             /// </summary>
             public UIActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "UI/ClosePauseScreen".
+            /// </summary>
+            public InputAction @ClosePauseScreen => m_Wrapper.m_UI_ClosePauseScreen;
             /// <summary>
             /// Provides access to the underlying input action "UI/Navigate".
             /// </summary>
@@ -1368,10 +2036,6 @@ namespace Universal.Runtime.Components.Input
             /// </summary>
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
             /// <summary>
-            /// Provides access to the underlying input action "UI/Unpause".
-            /// </summary>
-            public InputAction @Unpause => m_Wrapper.m_UI_Unpause;
-            /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
             public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -1397,6 +2061,9 @@ namespace Universal.Runtime.Components.Input
             {
                 if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+                @ClosePauseScreen.started += instance.OnClosePauseScreen;
+                @ClosePauseScreen.performed += instance.OnClosePauseScreen;
+                @ClosePauseScreen.canceled += instance.OnClosePauseScreen;
                 @Navigate.started += instance.OnNavigate;
                 @Navigate.performed += instance.OnNavigate;
                 @Navigate.canceled += instance.OnNavigate;
@@ -1427,9 +2094,6 @@ namespace Universal.Runtime.Components.Input
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
-                @Unpause.started += instance.OnUnpause;
-                @Unpause.performed += instance.OnUnpause;
-                @Unpause.canceled += instance.OnUnpause;
             }
 
             /// <summary>
@@ -1441,6 +2105,9 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UIActions" />
             private void UnregisterCallbacks(IUIActions instance)
             {
+                @ClosePauseScreen.started -= instance.OnClosePauseScreen;
+                @ClosePauseScreen.performed -= instance.OnClosePauseScreen;
+                @ClosePauseScreen.canceled -= instance.OnClosePauseScreen;
                 @Navigate.started -= instance.OnNavigate;
                 @Navigate.performed -= instance.OnNavigate;
                 @Navigate.canceled -= instance.OnNavigate;
@@ -1471,9 +2138,6 @@ namespace Universal.Runtime.Components.Input
                 @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
-                @Unpause.started -= instance.OnUnpause;
-                @Unpause.performed -= instance.OnUnpause;
-                @Unpause.canceled -= instance.OnUnpause;
             }
 
             /// <summary>
@@ -1520,33 +2184,98 @@ namespace Universal.Runtime.Components.Input
                 return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
             }
         }
-        private int m_GamepadSchemeIndex = -1;
         /// <summary>
-        /// Provides access to the input control scheme.
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Movement" which allows adding and removing callbacks.
         /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
-        public InputControlScheme GamepadScheme
-        {
-            get
-            {
-                if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
-                return asset.controlSchemes[m_GamepadSchemeIndex];
-            }
-        }
-        /// <summary>
-        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
-        /// </summary>
-        /// <seealso cref="PlayerActions.AddCallbacks(IPlayerActions)" />
-        /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
-        public interface IPlayerActions
+        /// <seealso cref="MovementActions.AddCallbacks(IMovementActions)" />
+        /// <seealso cref="MovementActions.RemoveCallbacks(IMovementActions)" />
+        public interface IMovementActions
         {
             /// <summary>
-            /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "OpenPauseScreen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnPause(InputAction.CallbackContext context);
+            void OnOpenPauseScreen(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToInvestigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToInvestigate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToCombat" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToCombat(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "NextCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNextCharacter(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PreviousCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPreviousCharacter(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMove(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TurnRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTurnRight(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "TurnLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTurnLeft(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Investigate" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="InvestigateActions.AddCallbacks(IInvestigateActions)" />
+        /// <seealso cref="InvestigateActions.RemoveCallbacks(IInvestigateActions)" />
+        public interface IInvestigateActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "OpenPauseScreen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenPauseScreen(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToMovement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToMovement(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToCombat" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToCombat(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "AddCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -1576,12 +2305,69 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnLook(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Inspection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnInspection(InputAction.CallbackContext context);
+            void OnAim(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnInteract(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Combat" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="CombatActions.AddCallbacks(ICombatActions)" />
+        /// <seealso cref="CombatActions.RemoveCallbacks(ICombatActions)" />
+        public interface ICombatActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "OpenPauseScreen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnOpenPauseScreen(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToInvestigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToInvestigate(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToCombat" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToCombat(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "NextCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnNextCharacter(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PreviousCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPreviousCharacter(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnLook(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -1590,47 +2376,12 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAim(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "TurnRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnTurnRight(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "TurnLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnTurnLeft(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnMove(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnInteract(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Throw" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnThrow(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Shoot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnShoot(InputAction.CallbackContext context);
+            void OnAttack(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -1639,6 +2390,13 @@ namespace Universal.Runtime.Components.Input
         /// <seealso cref="UIActions.RemoveCallbacks(IUIActions)" />
         public interface IUIActions
         {
+            /// <summary>
+            /// Method invoked when associated input action "ClosePauseScreen" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnClosePauseScreen(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -1709,13 +2467,6 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Unpause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnUnpause(InputAction.CallbackContext context);
         }
     }
 }

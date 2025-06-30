@@ -6,6 +6,8 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         readonly PlayerController controller;
 
+        public void OnEnter() => controller.inputServices.ChangeToInvestigateMap();
+
         public CharacterInvestigationState(PlayerController controller) => this.controller = controller;
 
         public void LateUpdate() => controller.CameraController.CameraRotation.ProcessRotation();

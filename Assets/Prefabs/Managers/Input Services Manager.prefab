@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 228233930292380195}
   - component: {fileID: 811688224172370333}
   - component: {fileID: 173736602959192020}
+  - component: {fileID: 267926152807275296}
+  - component: {fileID: 1419997797873525534}
   - component: {fileID: 308550258573858124}
   m_Layer: 0
   m_Name: Input Services Manager
@@ -46,7 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fed5c86fb0d35442b2afad4b9a83fbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 173736602959192020}
+  movementInput: {fileID: 173736602959192020}
+  investigateInput: {fileID: 267926152807275296}
+  combatInput: {fileID: 1419997797873525534}
   uiInput: {fileID: 308550258573858124}
 --- !u!114 &173736602959192020
 MonoBehaviour:
@@ -58,6 +62,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25e836cb6dfa99c4b910dac75e44c009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputServices: {fileID: 811688224172370333}
+--- !u!114 &267926152807275296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598104212112477635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c42f691278d223440925f2d5b89df73c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputServices: {fileID: 811688224172370333}
+--- !u!114 &1419997797873525534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598104212112477635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb6656fc57c44d41bb52fa25fc8d196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputServices: {fileID: 811688224172370333}

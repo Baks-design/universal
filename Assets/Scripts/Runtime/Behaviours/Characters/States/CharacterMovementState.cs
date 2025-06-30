@@ -8,6 +8,8 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public CharacterMovementState(PlayerController controller) => this.controller = controller;
 
+        public void OnEnter() => controller.inputServices.ChangeToMovementMap();
+
         public void Update()
         {
             controller.MovementController.CharacterMovement.HandleMovementInput();

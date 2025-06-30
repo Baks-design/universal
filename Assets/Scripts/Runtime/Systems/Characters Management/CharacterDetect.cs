@@ -15,17 +15,17 @@ namespace Universal.Runtime.Systems.CharactersManagement
         bool isColl;
         RaycastHit hitInfo;
         Camera mainCamera;
-        IPlayerInputReader inputReader;
+        IInvestigateInputReader investigateInput;
 
         void Start()
         {
-            mainCamera = Camera.main;
+            ServiceLocator.Global.Get(out investigateInput);
+            investigateInput.AddCharacter += OnAddCharacter;
 
-            ServiceLocator.Global.Get(out inputReader);
-            inputReader.AddCharacter += OnAddCharacter;
+            mainCamera = Camera.main;
         }
 
-        void OnDisable() => inputReader.AddCharacter -= OnAddCharacter;
+        void OnDisable() => investigateInput.AddCharacter -= OnAddCharacter;
 
         void OnAddCharacter()
         {
@@ -54,8 +54,8 @@ namespace Universal.Runtime.Systems.CharactersManagement
         void DetectBodies()
         {
             Vector3 mousPos = default;
-            mousPos.x = inputReader.LookDirection.x;
-            mousPos.z = inputReader.LookDirection.y;
+            mousPos.x = investigateInput.LookDirection.x;
+            mousPos.z = investigateInput.LookDirection.y;
             var getRay = mainCamera.ScreenPointToRay(mousPos);
             isColl = Physics.SphereCast(
                 getRay.origin,

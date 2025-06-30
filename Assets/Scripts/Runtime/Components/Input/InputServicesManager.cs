@@ -9,7 +9,9 @@ namespace Universal.Runtime.Components.Input
 {
     public class InputServicesManager : MonoBehaviour, IInputServices
     {
-        [SerializeField, Self] PlayerInputReader playerInput;
+        [SerializeField, Self] MovementInputReader movementInput;
+        [SerializeField, Self] InvestigateInputReader investigateInput;
+        [SerializeField, Self] CombatInputReader combatInput;
         [SerializeField, Self] UIInputReader uiInput;
         Gamepad gamepad;
         Coroutine currentRumbleRoutine;
@@ -54,19 +56,41 @@ namespace Universal.Runtime.Components.Input
         void SetupActions()
         {
             GameInputs = new GameInputs();
-            GameInputs.Player.SetCallbacks(playerInput);
+            GameInputs.Movement.SetCallbacks(movementInput);
+            GameInputs.Investigate.SetCallbacks(investigateInput);
+            GameInputs.Combat.SetCallbacks(combatInput);
             GameInputs.UI.SetCallbacks(uiInput);
         }
 
-        public void ChangeToPlayerMap()
+        public void ChangeToMovementMap()
         {
-            GameInputs.Player.Enable();
+            GameInputs.Movement.Enable();
+            GameInputs.Investigate.Disable();
+            GameInputs.Combat.Disable();
+            GameInputs.UI.Disable();
+        }
+
+        public void ChangeToInvestigateMap()
+        {
+            GameInputs.Movement.Disable();
+            GameInputs.Investigate.Enable();
+            GameInputs.Combat.Disable();
+            GameInputs.UI.Disable();
+        }
+
+        public void ChangeToCombatMap()
+        {
+            GameInputs.Movement.Disable();
+            GameInputs.Investigate.Disable();
+            GameInputs.Combat.Enable();
             GameInputs.UI.Disable();
         }
 
         public void ChangeToUIMap()
         {
-            GameInputs.Player.Disable();
+            GameInputs.Movement.Disable();
+            GameInputs.Investigate.Disable();
+            GameInputs.Combat.Disable();
             GameInputs.UI.Enable();
         }
 

@@ -13,7 +13,7 @@ namespace Universal.Runtime.Systems.StatesManagement
         public void OnEnter()
         {
             Time.timeScale = 1f;
-            gameStateManager.InputServices.ChangeToPlayerMap();
+            gameStateManager.InputServices.ChangeToMovementMap();
             gameStateManager.InputServices.SetCursorLocked(true);
         }
     }
