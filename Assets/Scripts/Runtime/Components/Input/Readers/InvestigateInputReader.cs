@@ -23,6 +23,7 @@ namespace Universal.Runtime.Components.Input
         public event Action PreviousCharacter = delegate { };
         public event Action Aim = delegate { };
         public event Action Interact = delegate { };
+        public event Action RemoveCharacter = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IInvestigateInputReader>(this);
 
@@ -44,6 +45,11 @@ namespace Universal.Runtime.Components.Input
         public void OnAddCharacter(CallbackContext context)
         {
             if (context.started) AddCharacter.Invoke();
+        }
+
+        public void OnRemoveCharacter(CallbackContext context)
+        {
+            if (context.started) RemoveCharacter.Invoke();
         }
 
         public void OnNextCharacter(CallbackContext context)

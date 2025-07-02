@@ -4,19 +4,26 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovementState : IState
     {
-        readonly PlayerController controller;
+        readonly CharacterPlayerController controller;
 
-        public CharacterMovementState(PlayerController controller) => this.controller = controller;
+        public CharacterMovementState(CharacterPlayerController controller) => this.controller = controller;
 
-        public void OnEnter() => controller.inputServices.ChangeToMovementMap();
+        public void OnEnter() => controller.InputServices.ChangeToMovementMap();
 
-        public void Update()
+        public void FixedUpdate()
         {
-            controller.MovementController.CharacterMovement.HandleMovementInput();
-            controller.MovementController.CharacterMovement.UpdatePosition();
-            controller.MovementController.CharacterRotation.UpdateRotation();
+            controller.MovementController.CharacterCollision.UpdateGroundStatus();
+            controller.MovementController.CharacterMovement.MoveToTargetHandle();
+            controller.MovementController.CharacterRotation.RotateToTarget();
         }
 
-        public void LateUpdate() => controller.CameraController.CameraRotation.ReturnToInitialRotation(); 
+        public void LateUpdate()
+        {
+            controller.CameraController.CameraRotation.ReturnToInitialRotation();
+            controller.MovementController.CharacterHeadBobbing.HandleRotationTilt();
+            controller.MovementController.CharacterHeadBobbing.HandleMovementBob();
+            controller.MovementController.CharacterHeadBobbing.ApplyHeadPosition();
+            controller.MovementController.CharacterHeadBobbing.HandleLandingEffect();
+        }
     }
 }

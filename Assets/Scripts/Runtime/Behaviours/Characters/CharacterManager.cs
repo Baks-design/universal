@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
-using Universal.Runtime.Behaviours.Characters;
 using System.Collections;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Components.Input;
@@ -9,18 +8,16 @@ using Universal.Runtime.Utilities.Helpers;
 using Alchemy.Inspector;
 using static Freya.Mathfs;
 
-namespace Universal.Runtime.Systems.CharactersManagement
+namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterManager : MonoBehaviour, ICharacterServices
     {
-        [SerializeField] Grid grid;
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterData characterData;
         Vector3 lastActivePosition;
         Quaternion lastActiveRotation;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
-        IMovementInputReader movementInput;
         IInputServices inputServices;
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
@@ -35,22 +32,11 @@ namespace Universal.Runtime.Systems.CharactersManagement
         void Start()
         {
             ServiceLocator.Global.Get(out inputServices);
-            ServiceLocator.Global.Get(out movementInput);
-
             inputServices.ChangeToMovementMap();
-            movementInput.NextCharacter += NextCharacter;
-            movementInput.PreviousCharacter += PreviousCharacter;
-
             AddCharacterToRoster(characterData);
         }
 
-        void OnDisable()
-        {
-            movementInput.NextCharacter -= NextCharacter;
-            movementInput.PreviousCharacter -= PreviousCharacter;
-        }
-
-        void NextCharacter()
+        public void NextCharacter()
         {
             if (characterRoster.Count == 0) return;
 
@@ -61,7 +47,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
             SwitchCharacter(nextIndex);
         }
 
-        void PreviousCharacter()
+        public void PreviousCharacter()
         {
             if (characterRoster.Count == 0) return;
 
@@ -72,7 +58,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
             SwitchCharacter(prevIndex);
         }
 
-        int GetCurrentCharacterIndex()
+        public int GetCurrentCharacterIndex()
         => characterRoster.FindIndex(kvp => kvp.Key == currentCharacter || kvp.Value == enableComponent);
 
         public bool ContainsCharacter(CharacterData data) => rosterData.Contains(data);
@@ -97,7 +83,7 @@ namespace Universal.Runtime.Systems.CharactersManagement
                 return;
             }
 
-            character.Initialize(characterData, grid);
+            character.Initialize(characterData);
 
             if (characterRoster.Count == 0)
             {

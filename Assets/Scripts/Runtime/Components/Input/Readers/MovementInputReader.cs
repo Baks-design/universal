@@ -9,10 +9,6 @@ namespace Universal.Runtime.Components.Input
 {
     public class MovementInputReader : MonoBehaviour, IMovementActions, IMovementInputReader
     {
-        [SerializeField, Self] InputServicesManager inputServices;
-
-        public Vector2 MoveDirection => inputServices.GameInputs.Movement.Move.ReadValue<Vector2>();
-
         public event Action OpenPauseScreen = delegate { };
         public event Action ToInvestigate = delegate { };
         public event Action ToCombat = delegate { };
@@ -20,6 +16,10 @@ namespace Universal.Runtime.Components.Input
         public event Action PreviousCharacter = delegate { };
         public event Action TurnRight = delegate { };
         public event Action TurnLeft = delegate { };
+        public event Action MoveForward = delegate { };
+        public event Action MoveBackward = delegate { };
+        public event Action StrafeRight = delegate { };
+        public event Action StrafeLeft = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IMovementInputReader>(this);
 
@@ -48,8 +48,6 @@ namespace Universal.Runtime.Components.Input
             if (context.started) PreviousCharacter.Invoke();
         }
 
-        public void OnMove(CallbackContext context) { }
-
         public void OnTurnRight(CallbackContext context)
         {
             if (context.started) TurnRight.Invoke();
@@ -58,6 +56,14 @@ namespace Universal.Runtime.Components.Input
         public void OnTurnLeft(CallbackContext context)
         {
             if (context.started) TurnLeft.Invoke();
+        }
+
+        public void OnMove(CallbackContext context)
+        {
+            if (context.ReadValue<Vector2>().y > 0f) MoveForward.Invoke();
+            if (context.ReadValue<Vector2>().y < 0f) MoveBackward.Invoke();
+            if (context.ReadValue<Vector2>().x > 0f) StrafeRight.Invoke();
+            if (context.ReadValue<Vector2>().x < 0f) StrafeLeft.Invoke();
         }
     }
 }

@@ -105,6 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6105000888535693558}
+  - component: {fileID: 3445531298336619056}
   - component: {fileID: 8773157204679050505}
   - component: {fileID: 2335871156229631570}
   - component: {fileID: 2676070784679009607}
@@ -137,6 +138,33 @@ Transform:
   - {fileID: 1775565060932413372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &3445531298336619056
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588946117734807384}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!136 &8773157204679050505
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -144,7 +172,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3588946117734807384}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 332d90a81098a3f4781c1151ce28abf4, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -157,7 +185,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2335871156229631570
@@ -203,6 +231,7 @@ MonoBehaviour:
   cameraController: {fileID: 332088360065323903}
   pickupController: {fileID: 7338831354204029381}
   throwController: {fileID: 395793492286962780}
+  characterDetect: {fileID: 5368062122950305689}
   Data: {fileID: 0}
 --- !u!114 &5912417900615756030
 MonoBehaviour:
@@ -216,7 +245,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1796df8eed5e8a749926c749d99be58a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 2676070784679009607}
+  rb: {fileID: 3445531298336619056}
+  soundController: {fileID: 3309246745016039530}
+  cameraHead: {fileID: 8322836403441853379}
   data: {fileID: 0}
 --- !u!114 &7228022705273790349
 MonoBehaviour:
@@ -243,6 +274,7 @@ GameObject:
   - component: {fileID: 8519153528729452951}
   - component: {fileID: 7338831354204029381}
   - component: {fileID: 395793492286962780}
+  - component: {fileID: 5368062122950305689}
   m_Layer: 3
   m_Name: Interactor
   m_TagString: Untagged
@@ -307,6 +339,23 @@ MonoBehaviour:
   config:
     Force: 10
     Gravity: -9.81
+--- !u!114 &5368062122950305689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4504538062994894636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f3d59a3b0dbbf45a3a4d4c09469264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  raySphereRadius: 0.3
+  raySphereMaxDistance: 2
 --- !u!1 &5462633736867934069
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,6 +649,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3040206364959241993}
     m_Modifications:
+    - target: {fileID: 1721939916766927164, guid: e32cde9918a906d468911b6603eff686, type: 3}
+      propertyPath: m_DrawDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3028406341300395039, guid: e32cde9918a906d468911b6603eff686, type: 3}
       propertyPath: m_Name
       value: BlobShadow

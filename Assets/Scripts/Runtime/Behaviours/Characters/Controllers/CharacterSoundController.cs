@@ -4,6 +4,8 @@ using Universal.Runtime.Systems.SoundEffects;
 using System.Collections.Generic;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Alchemy.Inspector;
+using static Freya.Random;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -11,12 +13,12 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Self] Transform bodyTransfom;
         [SerializeField, Parent] CharacterMovementController movementController;
-        [SerializeField, InlineEditor] CharacterData data;
+        [SerializeField] CharacterData data;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
-        SoundBuilder soundBuilder = null;
-        ISoundEffectsServices soundService = null;
-        float stepTimer = 0f;
+        SoundBuilder soundBuilder;
+        ISoundEffectsServices soundService;
+        float lastFootstepY;
 
         void Start()
         {
@@ -37,38 +39,44 @@ namespace Universal.Runtime.Behaviours.Characters
                 surfaceLookup[soundLib[i].surfaceType] = soundLib[i];
         }
 
-        void Update() => FootstepsSoundHandler();
-
-        void FootstepsSoundHandler()
+        void Update()
         {
-            if (movementController.CharacterMovement.IsMoving)
-            {
-                var currentStepInterval = GetCurrentStepInterval();
-                stepTimer += Time.deltaTime;
-                if (stepTimer >= currentStepInterval)
-                {
-                    PlayFootstepSound(GetCurrentSurface());
-                    stepTimer = 0f;
-                }
-            }
-            else
-                stepTimer = 0f;
+            PlayFootstepsSFX();
+            PlayLandedSFX();
         }
 
-        float GetCurrentStepInterval()
+        public void PlayFootstepsSFX()
         {
-            var currentStep = 0f;
-            if (movementController.CharacterMovement.IsMoving)
-                return data.walkStepInterval;
-            return currentStep;
+            var result = Abs(movementController.CharacterHeadBobbing.CurrentYPos - lastFootstepY) <= data.footstepThreshold;
+            if (result) return;
+            PlayFootstepSound(GetCurrentSurface());
+            lastFootstepY = movementController.CharacterHeadBobbing.CurrentYPos;
         }
 
         void PlayFootstepSound(FootstepsSoundLibrary surface)
         {
             if (surface == null) return;
 
-            var rnd = Random.Range(0, surface.footstepSounds.Length);
+            var rnd = Range(0, surface.footstepSounds.Length);
             var clip = surface.footstepSounds[rnd];
+            soundBuilder
+                .WithRandomPitch()
+                .WithPosition(bodyTransfom.localPosition)
+                .Play(clip);
+        }
+
+        void PlayLandedSFX()
+        {
+            if (!movementController.CharacterCollision.JustLanded) return;
+            PlayLandedSound(GetCurrentSurface());
+        }
+
+        void PlayLandedSound(FootstepsSoundLibrary surface)
+        {
+            if (surface == null) return;
+
+            var rnd = Range(0, surface.landSounds.Length);
+            var clip = surface.landSounds[rnd];
             soundBuilder
                 .WithRandomPitch()
                 .WithPosition(bodyTransfom.localPosition)
@@ -81,7 +89,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
             if (Physics.Raycast(
                 bodyTransfom.position, Vector3.down, out var hit,
-                data.footstepsDistance, data.floorMask))
+                data.footstepsRayDistance, data.floorMask))
             {
                 hit.collider.TryGetComponent(out SurfaceTag surfaceTag);
                 surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);

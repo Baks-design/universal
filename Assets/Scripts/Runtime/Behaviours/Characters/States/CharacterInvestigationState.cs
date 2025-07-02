@@ -4,11 +4,13 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterInvestigationState : IState
     {
-        readonly PlayerController controller;
+        readonly CharacterPlayerController controller;
 
-        public void OnEnter() => controller.inputServices.ChangeToInvestigateMap();
+        public CharacterInvestigationState(CharacterPlayerController controller) => this.controller = controller;
+      
+        public void OnEnter() => controller.InputServices.ChangeToInvestigateMap();
 
-        public CharacterInvestigationState(PlayerController controller) => this.controller = controller;
+        public void Update() => controller.CharacterDetect.DetectBodies(controller.InvestigateInput);
 
         public void LateUpdate() => controller.CameraController.CameraRotation.ProcessRotation();
     }

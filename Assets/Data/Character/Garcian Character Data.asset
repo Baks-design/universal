@@ -12,58 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c75f72293e57f4a8f173d7aa656d06, type: 3}
   m_Name: Garcian Character Data
   m_EditorClassIdentifier: 
-  characterName: Garcian
   characterPrefab:
     m_AssetGUID: a5c4631b0ceaf5544a5fc5223b4aedbd
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  inputCooldown: 0.1
-  inputResponseSpeed: 10
-  inputDeceleration: 15
-  moveQueueThreshold: 1
-  obstacleMask:
+  obstacleLayers:
     serializedVersion: 2
     m_Bits: 64
-  moveDuration: 0.1
-  obstacleCheckRadius: 0.5
-  rotateDuration: 0.35
-  moveCurve:
+  gridSize: 2
+  rotationSpeed: 250
+  walkBobSpeed: 14
+  walkBobAmount: 0.05
+  runBobSpeed: 18
+  runBobAmount: 0.1
+  transitionSpeed: 10
+  landBobAmount: 0.2
+  landRecoverySpeed: 5
+  tiltAmount: 3
+  tiltSpeed: 8
+  groundLayers:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1.5
-      outSlope: 1.5
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.7
-      value: 1.1
-      inSlope: 0.5
-      outSlope: 0.5
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_Bits: 64
+  groundCheckDistance: 0.2
+  groundSphereRadius: 0.2
+  fallThreshold: 0.5
   floorMask:
     serializedVersion: 2
     m_Bits: 64
-  footstepsDistance: 1
-  walkStepInterval: 0.5
+  footstepsRayDistance: 2
+  footstepThreshold: 0.1

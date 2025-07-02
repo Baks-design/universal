@@ -10,6 +10,6 @@ namespace Universal.Runtime.Behaviours.Characters
         Vector3 LastPosition { get; set; }
         Quaternion LastRotation { get; set; }
 
-        void Initialize(CharacterData data, Grid grid);
+        void Initialize(CharacterData data);
     }
 }

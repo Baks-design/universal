@@ -7,5 +7,6 @@ namespace Universal.Runtime.Systems.SoundEffects
     {
         public SurfaceType surfaceType;
         public SoundData[] footstepSounds;
+        public SoundData[] landSounds;
     }
 }
