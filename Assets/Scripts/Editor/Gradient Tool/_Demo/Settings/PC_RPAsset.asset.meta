@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 68275a2447eeacd4b8ce0948d3b9533e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 324818
+  packageName: Gradient Texture Generator + Colour Editor
+  packageVersion: 1.0.2
+  assetPath: Assets/Mirza/Gradient Tool/_Demo/Settings/PC_RPAsset.asset
+  uploadId: 768879
