@@ -20,6 +20,7 @@ namespace Universal.Runtime.Components.Input
         public event Action MoveBackward = delegate { };
         public event Action StrafeRight = delegate { };
         public event Action StrafeLeft = delegate { };
+        public event Action Crouch = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IMovementInputReader>(this);
 
@@ -64,6 +65,11 @@ namespace Universal.Runtime.Components.Input
             if (context.ReadValue<Vector2>().y < 0f) MoveBackward.Invoke();
             if (context.ReadValue<Vector2>().x > 0f) StrafeRight.Invoke();
             if (context.ReadValue<Vector2>().x < 0f) StrafeLeft.Invoke();
+        }
+
+        public void OnCrouch(CallbackContext context)
+        {
+            if (context.started) Crouch.Invoke();
         }
     }
 }

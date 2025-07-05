@@ -15,5 +15,6 @@ namespace Universal.Runtime.Components.Input
         event Action MoveBackward;
         event Action StrafeRight;
         event Action StrafeLeft;
+        event Action Crouch;
     }
 }

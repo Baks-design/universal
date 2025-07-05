@@ -8,8 +8,7 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CharacterData data;
         Quaternion targetRotation;
 
-        public bool IsRotating { get; set; }
-        public Quaternion TargetRotation => targetRotation;
+        public bool IsRotating { get; private set; }
 
         public CharacterRotation(
             CharacterMovementController controller,
@@ -18,7 +17,7 @@ namespace Universal.Runtime.Behaviours.Characters
             this.controller = controller;
             this.data = data;
 
-            targetRotation = controller.transform.rotation;
+            targetRotation = controller.transform.localRotation;
             IsRotating = false;
         }
 
@@ -38,18 +37,19 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (!IsRotating) return;
 
-            var rotationStep = data.rotationSpeed * Time.fixedDeltaTime;
-            var angleRemaining = Quaternion.Angle(controller.transform.rotation, targetRotation);
+            var locaRotation = controller.transform.localRotation;
+            var angleRemaining = Quaternion.Angle(locaRotation, targetRotation);
+            var rotationStep = data.rotationSpeed * Time.deltaTime;
 
             if (rotationStep >= angleRemaining)
             {
-                controller.transform.rotation = targetRotation;
+                controller.transform.localRotation = targetRotation;
                 IsRotating = false;
                 return;
             }
 
-            controller.transform.rotation = Quaternion.RotateTowards(
-                controller.transform.rotation, targetRotation, rotationStep);
+            controller.transform.localRotation = Quaternion.RotateTowards(
+                locaRotation, targetRotation, rotationStep);
         }
     }
 }

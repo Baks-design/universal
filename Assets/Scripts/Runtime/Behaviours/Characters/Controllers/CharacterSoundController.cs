@@ -13,14 +13,14 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Self] Transform bodyTransfom;
         [SerializeField, Parent] CharacterMovementController movementController;
-        [SerializeField] CharacterData data;
+        [SerializeField, InlineEditor] CharacterData data;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         SoundBuilder soundBuilder;
         ISoundEffectsServices soundService;
         float lastFootstepY;
 
-        void Start()
+        void Awake()
         {
             GetService();
             SetupDictionary();
@@ -45,12 +45,18 @@ namespace Universal.Runtime.Behaviours.Characters
             PlayLandedSFX();
         }
 
-        public void PlayFootstepsSFX()
+        void PlayFootstepsSFX()
         {
-            var result = Abs(movementController.CharacterHeadBobbing.CurrentYPos - lastFootstepY) <= data.footstepThreshold;
-            if (result) return;
+            // Get current head bobbing Y position
+            var currentYPos = movementController.CharacterHeadBobbing.CurrentYPos;
+            // Check if vertical movement exceeds threshold
+            if (Abs(currentYPos - lastFootstepY) <= data.footstepThreshold) return;
+
+            // Play footstep sound for current surface
             PlayFootstepSound(GetCurrentSurface());
-            lastFootstepY = movementController.CharacterHeadBobbing.CurrentYPos;
+
+            // Update last tracked position
+            lastFootstepY = currentYPos;
         }
 
         void PlayFootstepSound(FootstepsSoundLibrary surface)
@@ -87,11 +93,10 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
 
-            if (Physics.Raycast(
-                bodyTransfom.position, Vector3.down, out var hit,
-                data.footstepsRayDistance, data.floorMask))
+            if (movementController.CharacterCollision.IsGrounded)
             {
-                hit.collider.TryGetComponent(out SurfaceTag surfaceTag);
+                movementController.CharacterCollision.GroundHit
+                    .collider.TryGetComponent(out SurfaceTag surfaceTag);
                 surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
                 return data;
             }

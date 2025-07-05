@@ -25,11 +25,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2cb3ea6a9e402bb439040c7b5c65dc29
-    m_Address: Assets/Prefabs/Characters/Dan Character.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2d3dfc8c107e1de478792926850eeb44
     m_Address: Assets/Scenes/Gameplay.unity
     m_ReadOnly: 0

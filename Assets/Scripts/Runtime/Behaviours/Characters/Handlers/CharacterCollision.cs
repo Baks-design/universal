@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -8,101 +7,181 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         readonly CharacterMovementController controller;
         readonly CharacterData data;
-        readonly Collider[] colliderBuffer = new Collider[8];
-        bool isGrounded;
-        bool justLanded;
-        float lastYPosition;
-        RaycastHit groundHit;
+        readonly CapsuleCollider collider;
+        readonly Camera camera;
+        readonly Collider[] colliderBuffer;
         Coroutine resetCoroutine;
+        RaycastHit groundHit;
+        float lastYPosition;
 
-        public bool IsGrounded => isGrounded;
-        public bool JustLanded => justLanded;
-        public float LastYPosition => lastYPosition;
-        public RaycastHit GroundHit => groundHit;
+        public bool JustLanded { get; private set; }
+        public bool IsGrounded { get; private set; }
+        public RaycastHit GroundHit
+        {
+            get => groundHit;
+            set => groundHit = value;
+        }
 
         public CharacterCollision(
             CharacterMovementController controller,
-            CharacterData data)
+            CharacterData data,
+            CapsuleCollider collider,
+            Camera camera)
         {
             this.controller = controller;
             this.data = data;
+            this.collider = collider;
+            this.camera = camera;
+
+            colliderBuffer = new Collider[8];
         }
 
         public bool CanMoveTo(Vector3 direction)
         {
-            Vector3 halfExtents = default;
-            halfExtents.x = 0.4f;
-            halfExtents.y = 0.9f;
-            halfExtents.z = 0.4f;
-
-            var center = controller.transform.position + 0.5f * data.gridSize * direction + Vector3.up * 0.9f;
+            var adjustedGridSize = new Vector3(0.4f, 0.4f, 0.4f);
+            var center = controller.transform.position +
+                        (0.5f * data.gridSize * direction.normalized) +
+                        Vector3.up * 0.9f; // Offset to avoid ground collisions
 
             var hitCount = Physics.OverlapBoxNonAlloc(
                 center,
-                halfExtents,
+                adjustedGridSize,
                 colliderBuffer,
-                Quaternion.identity
+                Quaternion.identity,
+                data.obstacleLayers,
+                QueryTriggerInteraction.Ignore
             );
 
             for (var i = 0; i < hitCount; i++)
-                if (!colliderBuffer[i].isTrigger &&
-                    colliderBuffer[i].gameObject != controller.gameObject)
-                    return false;
+            {
+                var col = colliderBuffer[i];
+                if (!col.isTrigger && col.gameObject != controller.gameObject)
+                    return false; // Blocked by solid obstacle
+            }
 
             return true;
         }
 
-        public Vector3 SnapToGrid(Vector3 position)
-        => new(
-            Round(position.x / data.gridSize) * data.gridSize,
-            position.y,
-            Round(position.z / data.gridSize) * data.gridSize
-        );
-
-        public void CollisionEnter()
-        {
-            if (!controller.CharacterMovement.IsMoving) return;
-
-            controller.CharacterMovement.IsMoving = false;
-            controller.CharacterMovement.TargetPosition = controller.transform.position;
-        }
-
         public void UpdateGroundStatus()
         {
-            var wasGrounded = isGrounded;
-            isGrounded = Physics.SphereCast(
-                controller.transform.transform.position + Vector3.up * 0.1f,
+            var wasGrounded = IsGrounded;
+
+            IsGrounded = Physics.SphereCast(
+                controller.transform.position + Vector3.up * 0.1f,
                 data.groundSphereRadius,
                 Vector3.down,
                 out groundHit,
                 data.groundCheckDistance,
-                data.groundLayers
+                data.groundLayers,
+                QueryTriggerInteraction.Ignore
             );
 
-            // Landing detection
-            if (!wasGrounded && isGrounded)
+            // Landing detection (only trigger if falling from a significant height)
+            if (!wasGrounded && IsGrounded)
             {
                 var fallDistance = lastYPosition - controller.transform.position.y;
                 if (fallDistance > data.fallThreshold)
                 {
-                    justLanded = true;
-
-                    // Automatically reset after one frame
-                    if (resetCoroutine != null)
-                        controller.StopCoroutine(resetCoroutine);
-                    resetCoroutine = controller.StartCoroutine(ResetJustLanded());
+                    JustLanded = true;
+                    ResetJustLandedFlag();
                 }
             }
 
             // Track Y position for fall distance calculation
-            if (!isGrounded)
+            if (!IsGrounded)
                 lastYPosition = controller.transform.position.y;
         }
 
-        IEnumerator ResetJustLanded()
+        void ResetJustLandedFlag()
         {
-            yield return null; // Wait one frame
-            justLanded = false;
+            if (resetCoroutine != null)
+                controller.StopCoroutine(resetCoroutine);
+
+            resetCoroutine = controller.StartCoroutine(ResetJustLandedCoroutine());
         }
+
+        IEnumerator ResetJustLandedCoroutine()
+        {
+            yield return null;
+            JustLanded = false;
+            resetCoroutine = null;
+        }
+
+        public bool CanStandUp()
+        => !Physics.CheckSphere(
+            controller.transform.localPosition + Vector3.up * (data.crouchHeight + 0.1f),
+            collider.radius + 0.1f, // Slightly larger than character radius
+            data.ceilingCheckMask,
+            QueryTriggerInteraction.Ignore
+        );
+
+        public bool HasDetectIt()
+        {
+            var screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+            var getRay = camera.ScreenPointToRay(screenCenter);
+
+            return Physics.SphereCast(
+                getRay.origin,
+                data.raySphereRadius,
+                getRay.direction,
+                out var _,
+                data.raySphereMaxDistance,
+                data.characterLayer,
+                QueryTriggerInteraction.Ignore
+            );
+        }
+
+#if UNITY_EDITOR
+        public void DrawMovementGizmos()
+        {
+            Gizmos.color = Color.blue;
+            var direction = controller.transform.forward;
+            var center = controller.transform.position +
+                        (0.5f * data.gridSize * direction.normalized) +
+                        Vector3.up * 0.9f;
+
+            // Movement overlap box
+            Gizmos.DrawWireCube(center, new Vector3(0.8f, 0.8f, 0.8f)); // 2x halfExtents
+        }
+
+        public void DrawGroundCheckGizmos()
+        {
+            // Ground sphere cast
+            Gizmos.color = IsGrounded ? Color.green : Color.red;
+            var origin = controller.transform.position + Vector3.up * 0.1f;
+            Gizmos.DrawWireSphere(origin, data.groundSphereRadius);
+            Gizmos.DrawLine(origin, origin + Vector3.down * data.groundCheckDistance);
+
+            // Ground hit marker
+            if (IsGrounded)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawSphere(groundHit.point, 0.1f);
+                Gizmos.DrawLine(groundHit.point, groundHit.point + groundHit.normal * 0.5f);
+            }
+        }
+
+        public void DrawCeilingCheckGizmos()
+        {
+            Gizmos.color = Color.magenta;
+            var ceilingCheckPos = controller.transform.position +
+                                Vector3.up * (data.crouchHeight + 0.1f);
+
+            Gizmos.DrawWireSphere(ceilingCheckPos, collider.radius + 0.1f);
+        }
+
+        public void DrawDetectionRayGizmos()
+        {
+            if (camera != null)
+            {
+                var screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+                var ray = camera.ScreenPointToRay(screenCenter);
+
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(ray.origin, ray.origin + ray.direction * data.raySphereMaxDistance);
+                Gizmos.DrawWireSphere(ray.origin, data.raySphereRadius);
+            }
+        }
+#endif
     }
 }

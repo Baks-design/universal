@@ -18,7 +18,6 @@ namespace Universal.Runtime.Utilities.Helpers
             return angle;
         }
 
-        public static float EaseInOutQuad(float t)
-        => t < 0.5f ? 2f * t * t : 1f - Pow(-2f * t + 2f, 2f) / 2f;
+        public static float EaseInOut(float t) => t * t * (3f - 2f * t);
     }
 }

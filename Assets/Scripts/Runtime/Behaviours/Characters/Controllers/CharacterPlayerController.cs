@@ -7,7 +7,6 @@ using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Systems.InteractionObjects;
-using System;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -18,7 +17,7 @@ namespace Universal.Runtime.Behaviours.Characters
         [SerializeField, Child] CharacterCameraController cameraController;
         [SerializeField, Child] PickupController pickupController;
         [SerializeField, Child] ThrowController throwController;
-        [SerializeField, Child] CharacterDetect characterDetect;
+        [SerializeField, Child] CharacterDetectController detectController;
         [SerializeField, InlineEditor] CharacterData Data;
         ICharacterServices characterServices;
         IInvestigateInputReader investigateInput;
@@ -36,7 +35,7 @@ namespace Universal.Runtime.Behaviours.Characters
         public CharacterData CharacterData => Data;
         public CharacterMovementController MovementController => movementController;
         public CharacterCameraController CameraController => cameraController;
-        public CharacterDetect CharacterDetect => characterDetect;
+        public CharacterDetectController CharacterDetectController => detectController;
         public ICharacterServices CharacterServices => characterServices;
         public IInvestigateInputReader InvestigateInput => investigateInput;
         public IInputServices InputServices => inputServices;
@@ -57,13 +56,17 @@ namespace Universal.Runtime.Behaviours.Characters
             gameObject.SetActive(false);
         }
 
-        void OnEnable()
+        protected override void Awake()
         {
+            base.Awake();
             ServiceLocator.Global.Get(out inputServices);
             ServiceLocator.Global.Get(out characterServices);
             ServiceLocator.Global.Get(out movementInput);
             ServiceLocator.Global.Get(out investigateInput);
+        }
 
+        void OnEnable()
+        {
             movementInput.ToInvestigate += OnToInvestigator;
             movementInput.NextCharacter += OnNextCharacter;
             movementInput.PreviousCharacter += OnPreviousCharacter;
@@ -73,6 +76,7 @@ namespace Universal.Runtime.Behaviours.Characters
             movementInput.MoveBackward += MoveBackward;
             movementInput.StrafeRight += StrafeRight;
             movementInput.StrafeLeft += StrafeLeft;
+            movementInput.Crouch += Crouch;
 
             InvestigateInput.ToMovement += OnToMovement;
             InvestigateInput.AddCharacter += OnAddCharacter;
@@ -95,6 +99,7 @@ namespace Universal.Runtime.Behaviours.Characters
             movementInput.MoveBackward -= MoveBackward;
             movementInput.StrafeRight -= StrafeRight;
             movementInput.StrafeLeft -= StrafeLeft;
+            movementInput.Crouch -= Crouch;
 
             InvestigateInput.ToMovement -= OnToMovement;
             InvestigateInput.AddCharacter -= OnAddCharacter;
@@ -174,6 +179,8 @@ namespace Universal.Runtime.Behaviours.Characters
             if (stateMachine.CurrentState != movementState) return;
             movementController.CharacterMovement.MoveInDirection(-tr.right);
         }
+
+        void Crouch() => movementController.CharacterCrouch.HandleCrouchInput();
         #endregion
 
         #region Inventigation
@@ -198,7 +205,7 @@ namespace Universal.Runtime.Behaviours.Characters
         void OnAddCharacter()
         {
             if (stateMachine.CurrentState != investigationState) return;
-            characterDetect.OnAddCharacter();
+            detectController.OnAddCharacter();
         }
 
         void OnRemoveCharacter()

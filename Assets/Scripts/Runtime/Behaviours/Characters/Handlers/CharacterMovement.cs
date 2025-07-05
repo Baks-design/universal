@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using Universal.Runtime.Utilities.Helpers;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -8,87 +8,70 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         readonly CharacterMovementController controller;
         readonly CharacterData data;
-        readonly Rigidbody rigidbody;
         Coroutine movementCoroutine;
 
-        public Vector3 TargetPosition { get; set; }
-        public bool IsMoving { get; set; }
-        public bool IsRunning { get; set; }
-        public bool JustLanded { get; set; }
+        public Vector3 TargetPosition { get; private set; }
+        public bool IsMoving { get; private set; }
 
-        public CharacterMovement(
-            CharacterMovementController controller,
-            CharacterData data,
-            Rigidbody rigidbody)
+        public CharacterMovement(CharacterMovementController controller, CharacterData data)
         {
             this.controller = controller;
             this.data = data;
-            this.rigidbody = rigidbody;
 
-            TargetPosition = controller.transform.position;
+            TargetPosition = controller.transform.localPosition;
             IsMoving = false;
-            IsRunning = false;
-            JustLanded = false;
         }
 
         public void MoveInDirection(Vector3 direction)
         {
             if (IsMoving || controller.CharacterRotation.IsRotating) return;
 
-            if (controller.CharacterCollision.CanMoveTo(direction))
+            var dir = direction.normalized;
+            if (controller.CharacterCollision.CanMoveTo(dir))
             {
-                TargetPosition = controller.CharacterCollision.SnapToGrid(
-                    controller.transform.position + direction * data.gridSize);
+                TargetPosition = SnapToGrid(
+                    controller.transform.localPosition + dir * data.gridSize
+                );
+
+                if (movementCoroutine != null)
+                    controller.StopCoroutine(movementCoroutine);
+                movementCoroutine = controller.StartCoroutine(MoveToTarget());
+
                 IsMoving = true;
             }
         }
 
-        public void MoveToTargetHandle()
+        Vector3 SnapToGrid(Vector3 position)
         {
-            if (!IsMoving) return;
-
-            if (movementCoroutine != null)
-                controller.StopCoroutine(movementCoroutine);
-
-            movementCoroutine = controller.StartCoroutine(MoveToTarget());
+            var gridSize = data.gridSize;
+            return new Vector3(
+                Round(position.x / gridSize) * gridSize,
+                position.y, // Preserve Y for slopes/stairs
+                Round(position.z / gridSize) * gridSize
+            );
         }
 
         IEnumerator MoveToTarget()
         {
-            var startPosition = controller.transform.position;
-            var moveProgress = 0f;
+            var startPosition = controller.transform.localPosition;
+            var distance = Vector3.Distance(startPosition, TargetPosition);
+            var elapsedTime = 0f;
+            var moveDuration = distance / data.moveSpeed;
 
-            // Calculate move direction once
-            var moveDirection = (TargetPosition - startPosition).normalized;
-
-            while (moveProgress < 1f)
+            while (elapsedTime < moveDuration)
             {
-                // Check for obstacles during movement
-                if (Physics.CheckSphere(controller.transform.position + moveDirection * 0.5f, 0.3f, data.obstacleLayers))
-                {
-                    // Abort movement if something blocks the path
-                    TargetPosition = controller.transform.position;
-                    break;
-                }
-
-                // Calculate progress (0 to 1)
-                moveProgress = Mathf.Clamp01(Vector3.Distance(startPosition, controller.transform.position) / data.gridSize);
-
-                // Smooth movement using easing
-                var easedProgress = Helpers.EaseInOutQuad(moveProgress);
-
-                // Physics-based movement
-                rigidbody.MovePosition(Vector3.Lerp(startPosition, TargetPosition, easedProgress));
-
-                // Adjust progress slightly faster near the end to ensure completion
-                if (moveProgress > 0.9f) moveProgress += Time.deltaTime * 2f;
-
+                // Smooth lerp movement
+                controller.transform.localPosition = Vector3.Lerp(
+                    startPosition,
+                    TargetPosition,
+                    elapsedTime / moveDuration
+                );
+                elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            // Final snap to grid position
-            controller.transform.position = TargetPosition;
-            rigidbody.linearVelocity = Vector3.zero;
+            // Finalize movement
+            controller.transform.localPosition = TargetPosition; // Snap to grid
             IsMoving = false;
         }
     }

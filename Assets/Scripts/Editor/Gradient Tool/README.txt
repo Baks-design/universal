@@ -1,4 +1,4 @@
-Right Click (Assets) -> Create -> Gradient.
+Right Click (in or on your Assets folder) -> Create -> Gradient.
 
 That's it!
 
@@ -24,3 +24,12 @@ Please see the live documentation for more information.
 
 - Fixed duplicate GUIDs for the demo URP assets.
 - Reduced sample texture file size.
+
+1.0.3 | July 02, 2025:
+
+- Updated internal custom editor name to better match target.
+- Disabled debug print/log call forgotten from a previous update.
+
+1.1.0 | July 04, 2025:
+
+- Added palette/colour tool prototype (an undocumented, experimental feature).

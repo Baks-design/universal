@@ -164,6 +164,15 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""456856c1-9ad2-44c7-a3e1-eb32210978e5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -362,6 +371,28 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": ""AxisDeadzone"",
                     ""groups"": "";Gamepad"",
                     ""action"": ""TurnLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""350bb5fc-1119-42b3-877c-bcd04931ec94"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""321e98ed-96df-44b9-88c4-a2bc4846927d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1322,6 +1353,7 @@ namespace Universal.Runtime.Components.Input
             m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
             m_Movement_TurnRight = m_Movement.FindAction("TurnRight", throwIfNotFound: true);
             m_Movement_TurnLeft = m_Movement.FindAction("TurnLeft", throwIfNotFound: true);
+            m_Movement_Crouch = m_Movement.FindAction("Crouch", throwIfNotFound: true);
             // Investigate
             m_Investigate = asset.FindActionMap("Investigate", throwIfNotFound: true);
             m_Investigate_OpenPauseScreen = m_Investigate.FindAction("OpenPauseScreen", throwIfNotFound: true);
@@ -1447,6 +1479,7 @@ namespace Universal.Runtime.Components.Input
         private readonly InputAction m_Movement_Move;
         private readonly InputAction m_Movement_TurnRight;
         private readonly InputAction m_Movement_TurnLeft;
+        private readonly InputAction m_Movement_Crouch;
         /// <summary>
         /// Provides access to input actions defined in input action map "Movement".
         /// </summary>
@@ -1490,6 +1523,10 @@ namespace Universal.Runtime.Components.Input
             /// Provides access to the underlying input action "Movement/TurnLeft".
             /// </summary>
             public InputAction @TurnLeft => m_Wrapper.m_Movement_TurnLeft;
+            /// <summary>
+            /// Provides access to the underlying input action "Movement/Crouch".
+            /// </summary>
+            public InputAction @Crouch => m_Wrapper.m_Movement_Crouch;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1540,6 +1577,9 @@ namespace Universal.Runtime.Components.Input
                 @TurnLeft.started += instance.OnTurnLeft;
                 @TurnLeft.performed += instance.OnTurnLeft;
                 @TurnLeft.canceled += instance.OnTurnLeft;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
             }
 
             /// <summary>
@@ -1575,6 +1615,9 @@ namespace Universal.Runtime.Components.Input
                 @TurnLeft.started -= instance.OnTurnLeft;
                 @TurnLeft.performed -= instance.OnTurnLeft;
                 @TurnLeft.canceled -= instance.OnTurnLeft;
+                @Crouch.started -= instance.OnCrouch;
+                @Crouch.performed -= instance.OnCrouch;
+                @Crouch.canceled -= instance.OnCrouch;
             }
 
             /// <summary>
@@ -2247,6 +2290,13 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTurnLeft(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Crouch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCrouch(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Investigate" which allows adding and removing callbacks.
