@@ -620,7 +620,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToCombat",
+                    "name": "ToMovement",
                     "type": "Button",
                     "id": "8fb4045f-2225-490e-80df-cedf6ad81028",
                     "expectedControlType": "",
@@ -672,6 +672,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Target",
+                    "type": "Button",
+                    "id": "8104acff-87f0-434b-a7e1-5037395f7920",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Selection",
+                    "type": "Value",
+                    "id": "6318895b-576b-43d2-826b-ee8d8304818d",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -765,6 +783,50 @@
                 },
                 {
                     "name": "",
+                    "id": "67e3fac1-3707-48ee-9a26-d9c46ea8f02a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Target",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75346c07-ed16-4456-8188-99cc9fac1aba",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Target",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e69bbfb9-9727-46ca-a358-eff98d1e38d1",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Selection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e4874fc-3f83-4c0e-a89a-56618dcaea48",
+                    "path": "<Gamepad>/rightStick/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Selection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "0291b894-42f8-455c-be28-b74de9ef1254",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
@@ -836,7 +898,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "ToCombat",
+                    "action": "ToMovement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

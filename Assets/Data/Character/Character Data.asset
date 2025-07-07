@@ -28,7 +28,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   crouchCameraHeightRatio: 0.5
-  crouchTransitionSpeed: 1
+  crouchTransitionSpeed: 0.5
   walkBobSpeed: 14
   walkBobAmount: 0.05
   transitionSpeed: 10

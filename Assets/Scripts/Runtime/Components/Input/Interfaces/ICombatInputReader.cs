@@ -9,10 +9,12 @@ namespace Universal.Runtime.Components.Input
 
         event Action OpenPauseScreen;
         event Action ToInvestigate;
-        event Action ToCombat;
+        event Action ToMovement;
         event Action NextCharacter;
         event Action PreviousCharacter;
         event Action Aim;
         event Action Attack;
+        event Action Target;
+        event Action<float> Selection;
     }
 }

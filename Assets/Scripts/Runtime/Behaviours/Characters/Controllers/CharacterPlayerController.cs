@@ -10,7 +10,7 @@ using Universal.Runtime.Systems.InteractionObjects;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter
+    public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter //TODO: Add Combat State
     {
         [SerializeField, Self] Transform tr;
         [SerializeField, Self] CharacterMovementController movementController;
@@ -25,8 +25,10 @@ namespace Universal.Runtime.Behaviours.Characters
         IMovementInputReader movementInput;
         CharacterMovementState movementState;
         CharacterInvestigationState investigationState;
+        CharacterCombatState combatState;
         bool isInInvestigatingState;
         bool isInMovementState;
+        bool isInCombatState;
 
         public Vector3Int CurrentGridPosition { get; set; }
         public Vector3 LastPosition { get; set; }
@@ -115,27 +117,44 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             movementState = new CharacterMovementState(this);
             investigationState = new CharacterInvestigationState(this);
+            combatState = new CharacterCombatState(this);
 
             At(movementState, investigationState, () => isInInvestigatingState);
+            At(movementState, combatState, () => isInCombatState);
+
             At(investigationState, movementState, () => isInMovementState);
+            At(investigationState, combatState, () => isInCombatState);
+
+            At(combatState, movementState, () => isInMovementState);
+            At(combatState, investigationState, () => isInInvestigatingState);
 
             Set(movementState);
         }
         #endregion
 
         #region Shared
+        void OnToMovement()
+        {
+            isInMovementState = true;
+            isInInvestigatingState = false;
+            isInCombatState = false;
+            CameraController.Cinemachine.Priority = 1;
+        }
+
         void OnToInvestigator()
         {
-            isInInvestigatingState = true;
             isInMovementState = false;
+            isInInvestigatingState = true;
+            isInCombatState = false;
             CameraController.Cinemachine.Priority = 9;
         }
 
-        void OnToMovement()
+        void OnToCombat()
         {
+            isInMovementState = false;
             isInInvestigatingState = false;
-            isInMovementState = true;
-            CameraController.Cinemachine.Priority = 1;
+            isInCombatState = true;
+            CameraController.Cinemachine.Priority = 9;
         }
 
         void OnNextCharacter() => CharacterServices.NextCharacter();

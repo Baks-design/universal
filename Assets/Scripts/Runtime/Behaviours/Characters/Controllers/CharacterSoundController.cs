@@ -12,7 +12,7 @@ namespace Universal.Runtime.Behaviours.Characters
     public class CharacterSoundController : MonoBehaviour
     {
         [SerializeField, Self] Transform bodyTransfom;
-        [SerializeField, Parent] CharacterMovementController movementController;
+        [SerializeField, Parent] CharacterMovementController controller;
         [SerializeField, InlineEditor] CharacterData data;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
@@ -47,8 +47,10 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void PlayFootstepsSFX()
         {
+            if (!controller.CharacterMovement.IsMoving) return;
+
             // Get current head bobbing Y position
-            var currentYPos = movementController.CharacterHeadBobbing.CurrentYPos;
+            var currentYPos = controller.CharacterHeadBobbing.CurrentYPos;
             // Check if vertical movement exceeds threshold
             if (Abs(currentYPos - lastFootstepY) <= data.footstepThreshold) return;
 
@@ -73,7 +75,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void PlayLandedSFX()
         {
-            if (!movementController.CharacterCollision.JustLanded) return;
+            if (!controller.CharacterCollision.JustLanded) return;
             PlayLandedSound(GetCurrentSurface());
         }
 
@@ -93,9 +95,9 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
 
-            if (movementController.CharacterCollision.IsGrounded)
+            if (controller.CharacterCollision.IsGrounded)
             {
-                movementController.CharacterCollision.GroundHit
+                controller.CharacterCollision.GroundHit
                     .collider.TryGetComponent(out SurfaceTag surfaceTag);
                 surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
                 return data;

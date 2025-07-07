@@ -48,6 +48,8 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void HandleCrouchInput()
         {
+            if (!controller.CharacterCollision.CanStandUp()) return;
+            
             if (crouchCoroutine != null)
                 controller.StopCoroutine(crouchCoroutine);
 

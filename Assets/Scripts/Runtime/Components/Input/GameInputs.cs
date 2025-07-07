@@ -708,7 +708,7 @@ namespace Universal.Runtime.Components.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ToCombat"",
+                    ""name"": ""ToMovement"",
                     ""type"": ""Button"",
                     ""id"": ""8fb4045f-2225-490e-80df-cedf6ad81028"",
                     ""expectedControlType"": """",
@@ -760,6 +760,24 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target"",
+                    ""type"": ""Button"",
+                    ""id"": ""8104acff-87f0-434b-a7e1-5037395f7920"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Selection"",
+                    ""type"": ""Value"",
+                    ""id"": ""6318895b-576b-43d2-826b-ee8d8304818d"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -853,6 +871,50 @@ namespace Universal.Runtime.Components.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""67e3fac1-3707-48ee-9a26-d9c46ea8f02a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75346c07-ed16-4456-8188-99cc9fac1aba"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e69bbfb9-9727-46ca-a358-eff98d1e38d1"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Selection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e4874fc-3f83-4c0e-a89a-56618dcaea48"",
+                    ""path"": ""<Gamepad>/rightStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Selection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""0291b894-42f8-455c-be28-b74de9ef1254"",
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
@@ -924,7 +986,7 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""ToCombat"",
+                    ""action"": ""ToMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1369,12 +1431,14 @@ namespace Universal.Runtime.Components.Input
             m_Combat = asset.FindActionMap("Combat", throwIfNotFound: true);
             m_Combat_OpenPauseScreen = m_Combat.FindAction("OpenPauseScreen", throwIfNotFound: true);
             m_Combat_ToInvestigate = m_Combat.FindAction("ToInvestigate", throwIfNotFound: true);
-            m_Combat_ToCombat = m_Combat.FindAction("ToCombat", throwIfNotFound: true);
+            m_Combat_ToMovement = m_Combat.FindAction("ToMovement", throwIfNotFound: true);
             m_Combat_NextCharacter = m_Combat.FindAction("NextCharacter", throwIfNotFound: true);
             m_Combat_PreviousCharacter = m_Combat.FindAction("PreviousCharacter", throwIfNotFound: true);
             m_Combat_Look = m_Combat.FindAction("Look", throwIfNotFound: true);
             m_Combat_Aim = m_Combat.FindAction("Aim", throwIfNotFound: true);
             m_Combat_Attack = m_Combat.FindAction("Attack", throwIfNotFound: true);
+            m_Combat_Target = m_Combat.FindAction("Target", throwIfNotFound: true);
+            m_Combat_Selection = m_Combat.FindAction("Selection", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_ClosePauseScreen = m_UI.FindAction("ClosePauseScreen", throwIfNotFound: true);
@@ -1841,12 +1905,14 @@ namespace Universal.Runtime.Components.Input
         private List<ICombatActions> m_CombatActionsCallbackInterfaces = new List<ICombatActions>();
         private readonly InputAction m_Combat_OpenPauseScreen;
         private readonly InputAction m_Combat_ToInvestigate;
-        private readonly InputAction m_Combat_ToCombat;
+        private readonly InputAction m_Combat_ToMovement;
         private readonly InputAction m_Combat_NextCharacter;
         private readonly InputAction m_Combat_PreviousCharacter;
         private readonly InputAction m_Combat_Look;
         private readonly InputAction m_Combat_Aim;
         private readonly InputAction m_Combat_Attack;
+        private readonly InputAction m_Combat_Target;
+        private readonly InputAction m_Combat_Selection;
         /// <summary>
         /// Provides access to input actions defined in input action map "Combat".
         /// </summary>
@@ -1867,9 +1933,9 @@ namespace Universal.Runtime.Components.Input
             /// </summary>
             public InputAction @ToInvestigate => m_Wrapper.m_Combat_ToInvestigate;
             /// <summary>
-            /// Provides access to the underlying input action "Combat/ToCombat".
+            /// Provides access to the underlying input action "Combat/ToMovement".
             /// </summary>
-            public InputAction @ToCombat => m_Wrapper.m_Combat_ToCombat;
+            public InputAction @ToMovement => m_Wrapper.m_Combat_ToMovement;
             /// <summary>
             /// Provides access to the underlying input action "Combat/NextCharacter".
             /// </summary>
@@ -1890,6 +1956,14 @@ namespace Universal.Runtime.Components.Input
             /// Provides access to the underlying input action "Combat/Attack".
             /// </summary>
             public InputAction @Attack => m_Wrapper.m_Combat_Attack;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Target".
+            /// </summary>
+            public InputAction @Target => m_Wrapper.m_Combat_Target;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Selection".
+            /// </summary>
+            public InputAction @Selection => m_Wrapper.m_Combat_Selection;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1922,9 +1996,9 @@ namespace Universal.Runtime.Components.Input
                 @ToInvestigate.started += instance.OnToInvestigate;
                 @ToInvestigate.performed += instance.OnToInvestigate;
                 @ToInvestigate.canceled += instance.OnToInvestigate;
-                @ToCombat.started += instance.OnToCombat;
-                @ToCombat.performed += instance.OnToCombat;
-                @ToCombat.canceled += instance.OnToCombat;
+                @ToMovement.started += instance.OnToMovement;
+                @ToMovement.performed += instance.OnToMovement;
+                @ToMovement.canceled += instance.OnToMovement;
                 @NextCharacter.started += instance.OnNextCharacter;
                 @NextCharacter.performed += instance.OnNextCharacter;
                 @NextCharacter.canceled += instance.OnNextCharacter;
@@ -1940,6 +2014,12 @@ namespace Universal.Runtime.Components.Input
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Target.started += instance.OnTarget;
+                @Target.performed += instance.OnTarget;
+                @Target.canceled += instance.OnTarget;
+                @Selection.started += instance.OnSelection;
+                @Selection.performed += instance.OnSelection;
+                @Selection.canceled += instance.OnSelection;
             }
 
             /// <summary>
@@ -1957,9 +2037,9 @@ namespace Universal.Runtime.Components.Input
                 @ToInvestigate.started -= instance.OnToInvestigate;
                 @ToInvestigate.performed -= instance.OnToInvestigate;
                 @ToInvestigate.canceled -= instance.OnToInvestigate;
-                @ToCombat.started -= instance.OnToCombat;
-                @ToCombat.performed -= instance.OnToCombat;
-                @ToCombat.canceled -= instance.OnToCombat;
+                @ToMovement.started -= instance.OnToMovement;
+                @ToMovement.performed -= instance.OnToMovement;
+                @ToMovement.canceled -= instance.OnToMovement;
                 @NextCharacter.started -= instance.OnNextCharacter;
                 @NextCharacter.performed -= instance.OnNextCharacter;
                 @NextCharacter.canceled -= instance.OnNextCharacter;
@@ -1975,6 +2055,12 @@ namespace Universal.Runtime.Components.Input
                 @Attack.started -= instance.OnAttack;
                 @Attack.performed -= instance.OnAttack;
                 @Attack.canceled -= instance.OnAttack;
+                @Target.started -= instance.OnTarget;
+                @Target.performed -= instance.OnTarget;
+                @Target.canceled -= instance.OnTarget;
+                @Selection.started -= instance.OnSelection;
+                @Selection.performed -= instance.OnSelection;
+                @Selection.canceled -= instance.OnSelection;
             }
 
             /// <summary>
@@ -2391,12 +2477,12 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnToInvestigate(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "ToCombat" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "ToMovement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnToCombat(InputAction.CallbackContext context);
+            void OnToMovement(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "NextCharacter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
@@ -2432,6 +2518,20 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Target" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTarget(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Selection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelection(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

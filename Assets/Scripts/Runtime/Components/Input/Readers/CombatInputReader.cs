@@ -17,11 +17,13 @@ namespace Universal.Runtime.Components.Input
 
         public event Action OpenPauseScreen = delegate { };
         public event Action ToInvestigate = delegate { };
-        public event Action ToCombat = delegate { };
+        public event Action ToMovement = delegate { };
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
         public event Action Aim = delegate { };
         public event Action Attack = delegate { };
+        public event Action Target = delegate { };
+        public event Action<float> Selection = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<ICombatInputReader>(this);
 
@@ -35,9 +37,9 @@ namespace Universal.Runtime.Components.Input
             if (context.started) ToInvestigate.Invoke();
         }
 
-        public void OnToCombat(CallbackContext context)
+        public void OnToMovement(CallbackContext context)
         {
-            if (context.started) ToCombat.Invoke();
+            if (context.started) ToMovement.Invoke();
         }
 
         public void OnNextCharacter(CallbackContext context)
@@ -66,6 +68,17 @@ namespace Universal.Runtime.Components.Input
         public void OnAttack(CallbackContext context)
         {
             if (context.started) Attack.Invoke();
+        }
+
+        public void OnTarget(CallbackContext context)
+        {
+            if (context.started) Target.Invoke();
+        }
+
+        public void OnSelection(CallbackContext context)
+        {
+            var value = context.ReadValue<float>();
+            if (value != 0f) Selection.Invoke(value);
         }
     }
 }
