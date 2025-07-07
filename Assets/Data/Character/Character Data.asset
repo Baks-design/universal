@@ -27,8 +27,8 @@ MonoBehaviour:
   ceilingCheckMask:
     serializedVersion: 2
     m_Bits: 64
-  crouchHeight: 1
-  crouchTransitionSpeed: 5
+  crouchCameraHeightRatio: 0.5
+  crouchTransitionSpeed: 1
   walkBobSpeed: 14
   walkBobAmount: 0.05
   transitionSpeed: 10

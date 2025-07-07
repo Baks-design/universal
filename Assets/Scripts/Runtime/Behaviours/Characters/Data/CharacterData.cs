@@ -17,7 +17,6 @@ namespace Universal.Runtime.Behaviours.Characters
 
         [Header("Crouch Settings")]
         public LayerMask ceilingCheckMask;
-        public float crouchHeight = 1f;
         [Range(0.1f, 0.9f)] public float crouchCameraHeightRatio = 0.6f;
         public float crouchTransitionSpeed = 2f;
 

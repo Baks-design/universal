@@ -24,14 +24,14 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void MoveInDirection(Vector3 direction)
         {
-            if (IsMoving || controller.CharacterRotation.IsRotating) return;
+            if (IsMoving ||
+                controller.CharacterRotation.IsRotating ||
+                controller.CharacterCrouch.IsCrouching) return;
 
             var dir = direction.normalized;
             if (controller.CharacterCollision.CanMoveTo(dir))
             {
-                TargetPosition = SnapToGrid(
-                    controller.transform.localPosition + dir * data.gridSize
-                );
+                TargetPosition = SnapToGrid(controller.transform.localPosition + dir * data.gridSize);
 
                 if (movementCoroutine != null)
                     controller.StopCoroutine(movementCoroutine);

@@ -109,7 +109,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public bool CanStandUp()
         => !Physics.CheckSphere(
-            controller.transform.localPosition + Vector3.up * (data.crouchHeight + 0.1f),
+            controller.transform.localPosition + Vector3.up * (collider.height * data.crouchCameraHeightRatio + 0.1f),
             collider.radius + 0.1f, // Slightly larger than character radius
             data.ceilingCheckMask,
             QueryTriggerInteraction.Ignore
@@ -165,7 +165,7 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             Gizmos.color = Color.magenta;
             var ceilingCheckPos = controller.transform.position +
-                                Vector3.up * (data.crouchHeight + 0.1f);
+                Vector3.up * (collider.height * data.crouchCameraHeightRatio + 0.1f);
 
             Gizmos.DrawWireSphere(ceilingCheckPos, collider.radius + 0.1f);
         }

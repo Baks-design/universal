@@ -10,12 +10,13 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly CapsuleCollider collider;
         readonly CharacterData data;
         readonly Transform cameraTransform;
+        readonly Vector3 initCenter;
+        readonly Vector3 crouchCenter;
+        readonly float crouchHeight;
         readonly float initCamHeight;
         readonly float crouchCamHeight;
         readonly float initHeight;
         Coroutine crouchCoroutine;
-        Vector3 initCenter;
-        Vector3 crouchCenter;
 
         public bool IsCrouching { get; private set; }
 
@@ -34,55 +35,54 @@ namespace Universal.Runtime.Behaviours.Characters
 
             collider.center = new Vector3(0f, collider.height / 2f, 0f);
 
-            initCenter = collider.center;
             initHeight = collider.height;
+            initCenter = collider.center;
+            initCamHeight = cameraTransform.localPosition.y;
 
-            var crouchHeight = initHeight * data.crouchCameraHeightRatio;
+            crouchHeight = Clamp01(initHeight * data.crouchCameraHeightRatio);
             crouchCenter = crouchHeight / 2f * Vector3.up;
 
             var crouchStandHeightDifference = initHeight - crouchHeight;
-            initCamHeight = cameraTransform.localPosition.y;
-            crouchCamHeight = initCamHeight - crouchStandHeightDifference;
+            crouchCamHeight = Clamp01(initCamHeight - crouchStandHeightDifference);
         }
 
         public void HandleCrouchInput()
         {
             if (crouchCoroutine != null)
-            {
                 controller.StopCoroutine(crouchCoroutine);
-                crouchCoroutine = null;
-            }
-
-            IsCrouching = !IsCrouching;
 
             crouchCoroutine = controller.StartCoroutine(SmoothCrouchTransition());
         }
 
         IEnumerator SmoothCrouchTransition()
         {
+            var startHeight = collider.height;
+            var startCenter = collider.center;
+            var startCamHeight = cameraTransform.localPosition.y;
+
+            var targetHeight = IsCrouching ? initHeight : crouchHeight;
+            var targetCenter = IsCrouching ? initCenter : crouchCenter;
+            var targetCamHeight = IsCrouching ? initCamHeight : crouchCamHeight;
+
+            IsCrouching = !IsCrouching;
+
             var elapsed = 0f;
-            var speed = 1f / data.crouchTransitionSpeed;
-
-            var targetColliderHeight = IsCrouching ? initHeight : data.crouchHeight;
-            var targetColliderCenter = IsCrouching ? initCenter : crouchCenter;
-
-            var targetCameraHeight = IsCrouching ? crouchCamHeight: initCamHeight;
+            var speed = data.crouchTransitionSpeed > 0f ? 1f / data.crouchTransitionSpeed : 1f;
 
             while (elapsed < 1f)
             {
                 elapsed += Time.deltaTime * speed;
 
-                // Update collider
-                collider.height = Lerp(collider.height, targetColliderHeight, elapsed);
-                collider.center = Vector3.Lerp(collider.center, targetColliderCenter, elapsed);
-
-                // Update camera height
-                controller.CharacterHeadBobbing.AdjustBaseHeight(
-                    Lerp(cameraTransform.position.y, targetCameraHeight, elapsed)
-                );
+                collider.height = Lerp(startHeight, targetHeight, elapsed);
+                collider.center = Vector3.Lerp(startCenter, targetCenter, elapsed);
+                controller.CharacterHeadBobbing.AdjustBaseHeight(Lerp(startCamHeight, targetCamHeight, elapsed));
 
                 yield return null;
             }
+
+            collider.height = targetHeight;
+            collider.center = targetCenter;
+            controller.CharacterHeadBobbing.AdjustBaseHeight(targetCamHeight);
         }
     }
 }
