@@ -13,7 +13,11 @@ namespace Universal.Runtime.Components.Camera
         [SerializeField, InlineEditor] CameraData cameraData;
         IInvestigateInputReader investigateInput;
 
-        public CinemachineCamera Cinemachine { get => cinemachine; set => cinemachine = value; }
+        public CinemachineCamera Cinemachine
+        {
+            get => cinemachine;
+            set => cinemachine = value;
+        }
         public CameraRotation CameraRotation { get; private set; }
         public CameraAiming CameraAiming { get; private set; }
 

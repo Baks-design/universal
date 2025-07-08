@@ -7,19 +7,16 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterDetectController : MonoBehaviour
     {
-        [SerializeField, Parent] CharacterMovementController movementController;
+        [SerializeField, Parent] CharacterMovementController controller;
         [SerializeField, InlineEditor] CharacterData data;
         RaycastHit hitInfo;
         ICharacterServices characterServices;
-        bool isColl;
 
         void Awake() => ServiceLocator.Global.Get(out characterServices);
 
-        public void DetectBodies() => isColl = movementController.CharacterCollision.HasDetectIt();
-
         public void OnAddCharacter()
         {
-            if (!isColl) return;
+            if (!controller.CollisionChecker.HasCharacter) return;
 
             if (hitInfo.collider.TryGetComponent(out CharacterPlayerController character))
             {

@@ -1,5 +1,4 @@
 using System;
-using KBCore.Refs;
 using UnityEngine;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using static UnityEngine.InputSystem.InputAction;
@@ -16,11 +15,8 @@ namespace Universal.Runtime.Components.Input
         public event Action PreviousCharacter = delegate { };
         public event Action TurnRight = delegate { };
         public event Action TurnLeft = delegate { };
-        public event Action MoveForward = delegate { };
-        public event Action MoveBackward = delegate { };
-        public event Action StrafeRight = delegate { };
-        public event Action StrafeLeft = delegate { };
-        public event Action Crouch = delegate { };
+        public event Action<Vector2> Move = delegate { };
+        public event Action<bool> Run = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IMovementInputReader>(this);
 
@@ -60,16 +56,12 @@ namespace Universal.Runtime.Components.Input
         }
 
         public void OnMove(CallbackContext context)
-        {
-            if (context.ReadValue<Vector2>().y > 0f) MoveForward.Invoke();
-            if (context.ReadValue<Vector2>().y < 0f) MoveBackward.Invoke();
-            if (context.ReadValue<Vector2>().x > 0f) StrafeRight.Invoke();
-            if (context.ReadValue<Vector2>().x < 0f) StrafeLeft.Invoke();
-        }
+        => Move.Invoke(context.ReadValue<Vector2>());
 
-        public void OnCrouch(CallbackContext context)
+        public void OnRun(CallbackContext context)
         {
-            if (context.started) Crouch.Invoke();
+            if (context.started) Run.Invoke(true);
+            else if (context.canceled) Run.Invoke(false);
         }
     }
 }

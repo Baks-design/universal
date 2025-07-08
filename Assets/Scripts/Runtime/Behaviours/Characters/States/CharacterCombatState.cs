@@ -10,11 +10,5 @@ namespace Universal.Runtime.Behaviours.Characters
         => this.controller = controller;
 
         public void OnEnter() => controller.InputServices.ChangeToCombatMap();
-
-        public void LateUpdate()
-        {
-            controller.CameraController.CameraRotation.ReturnToInitialRotation();
-            controller.CameraController.CameraRotation.ProcessRotation();
-        }
     }
 }

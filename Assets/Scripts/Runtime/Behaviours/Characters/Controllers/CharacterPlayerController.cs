@@ -1,49 +1,130 @@
 using UnityEngine;
-using Universal.Runtime.Utilities.Helpers;
-using Universal.Runtime.Components.Camera;
-using Universal.Runtime.Utilities.Tools.StateMachine;
 using KBCore.Refs;
 using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Components.Camera;
+using Universal.Runtime.Utilities.Helpers;
+using Universal.Runtime.Utilities.Tools.StateMachine;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
-using Universal.Runtime.Systems.InteractionObjects;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter //TODO: Add Combat State
+    public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter
     {
         [SerializeField, Self] Transform tr;
-        [SerializeField, Self] CharacterMovementController movementController;
         [SerializeField, Child] CharacterCameraController cameraController;
-        [SerializeField, Child] PickupController pickupController;
-        [SerializeField, Child] ThrowController throwController;
-        [SerializeField, Child] CharacterDetectController detectController;
-        [SerializeField, InlineEditor] CharacterData Data;
+        [SerializeField, InlineEditor] CharacterData data;
         ICharacterServices characterServices;
-        IInvestigateInputReader investigateInput;
-        IInputServices inputServices;
         IMovementInputReader movementInput;
-        CharacterMovementState movementState;
-        CharacterInvestigationState investigationState;
-        CharacterCombatState combatState;
+        IInvestigateInputReader investigateInput;
+        ICombatInputReader combatInput;
+        public IInputServices InputServices;
+        public CharacterMovementState MovementState;
+        public CharacterInvestigationState InvestigationState;
+        public CharacterCombatState CombatState;
         bool isInInvestigatingState;
         bool isInMovementState;
         bool isInCombatState;
 
+        public Transform CharacterTransform => tr;
+        public CharacterData CharacterData => data;
         public Vector3Int CurrentGridPosition { get; set; }
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
-        public Transform CharacterTransform => tr;
-        public CharacterData CharacterData => Data;
-        public CharacterMovementController MovementController => movementController;
-        public CharacterCameraController CameraController => cameraController;
-        public CharacterDetectController CharacterDetectController => detectController;
-        public ICharacterServices CharacterServices => characterServices;
-        public IInvestigateInputReader InvestigateInput => investigateInput;
-        public IInputServices InputServices => inputServices;
 
-        #region Setup
-        public void Initialize(CharacterData data) => Data = data;
+        protected override void Awake()
+        {
+            base.Awake();
+            ServiceLocator.Global.Get(out characterServices);
+            ServiceLocator.Global.Get(out InputServices);
+            ServiceLocator.Global.Get(out movementInput);
+            ServiceLocator.Global.Get(out investigateInput);
+            ServiceLocator.Global.Get(out combatInput);
+        }
+
+        void OnEnable()
+        {
+            movementInput.ToCombat += OnToCombat;
+            movementInput.ToInvestigate += OnToInvestigator;
+            movementInput.NextCharacter += OnNextCharacter;
+            movementInput.PreviousCharacter += OnPreviousCharacter;
+
+            investigateInput.ToCombat += OnToCombat;
+            investigateInput.ToMovement += OnToMovement;
+            investigateInput.NextCharacter += OnNextCharacter;
+            investigateInput.PreviousCharacter += OnPreviousCharacter;
+
+            combatInput.ToInvestigate += OnToInvestigator;
+            combatInput.ToMovement += OnToMovement;
+            combatInput.NextCharacter += OnNextCharacter;
+            combatInput.PreviousCharacter += OnPreviousCharacter;
+        }
+
+        void OnDisable()
+        {
+            movementInput.ToCombat -= OnToCombat;
+            movementInput.ToInvestigate -= OnToInvestigator;
+            movementInput.NextCharacter -= OnNextCharacter;
+            movementInput.PreviousCharacter -= OnPreviousCharacter;
+
+            investigateInput.ToCombat -= OnToCombat;
+            investigateInput.ToMovement -= OnToMovement;
+            investigateInput.NextCharacter -= OnNextCharacter;
+            investigateInput.PreviousCharacter -= OnPreviousCharacter;
+
+            combatInput.ToInvestigate -= OnToInvestigator;
+            combatInput.ToMovement -= OnToMovement;
+            combatInput.NextCharacter -= OnNextCharacter;
+            combatInput.PreviousCharacter -= OnPreviousCharacter;
+        }
+
+        void OnToMovement()
+        {
+            isInMovementState = true;
+            isInInvestigatingState = false;
+            isInCombatState = false;
+            cameraController.Cinemachine.Priority = 1;
+        }
+
+        void OnToInvestigator()
+        {
+            isInMovementState = false;
+            isInInvestigatingState = true;
+            isInCombatState = false;
+            cameraController.Cinemachine.Priority = 9;
+        }
+
+        void OnToCombat()
+        {
+            isInMovementState = false;
+            isInInvestigatingState = false;
+            isInCombatState = true;
+            cameraController.Cinemachine.Priority = 9;
+        }
+
+        void OnNextCharacter() => characterServices.NextCharacter();
+
+        void OnPreviousCharacter() => characterServices.PreviousCharacter();
+
+        void Start()
+        {
+            MovementState = new CharacterMovementState(this);
+            InvestigationState = new CharacterInvestigationState(this);
+            CombatState = new CharacterCombatState(this);
+
+            At(MovementState, InvestigationState, () => isInInvestigatingState);
+            At(MovementState, CombatState, () => isInCombatState);
+
+            At(InvestigationState, MovementState, () => isInMovementState);
+            At(InvestigationState, CombatState, () => isInCombatState);
+
+            At(CombatState, MovementState, () => isInMovementState);
+            At(CombatState, InvestigationState, () => isInInvestigatingState);
+
+            Set(MovementState);
+        }
+
+        public void Initialize(CharacterData data) => this.data = data;
 
         public void Activate()
         {
@@ -57,181 +138,5 @@ namespace Universal.Runtime.Behaviours.Characters
             LastRotation = tr.localRotation;
             gameObject.SetActive(false);
         }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            ServiceLocator.Global.Get(out inputServices);
-            ServiceLocator.Global.Get(out characterServices);
-            ServiceLocator.Global.Get(out movementInput);
-            ServiceLocator.Global.Get(out investigateInput);
-        }
-
-        void OnEnable()
-        {
-            movementInput.ToInvestigate += OnToInvestigator;
-            movementInput.NextCharacter += OnNextCharacter;
-            movementInput.PreviousCharacter += OnPreviousCharacter;
-            movementInput.TurnRight += RightRotation;
-            movementInput.TurnLeft += LeftRotation;
-            movementInput.MoveForward += MoveForward;
-            movementInput.MoveBackward += MoveBackward;
-            movementInput.StrafeRight += StrafeRight;
-            movementInput.StrafeLeft += StrafeLeft;
-            movementInput.Crouch += Crouch;
-
-            InvestigateInput.ToMovement += OnToMovement;
-            InvestigateInput.AddCharacter += OnAddCharacter;
-            InvestigateInput.RemoveCharacter += OnRemoveCharacter;
-            InvestigateInput.NextCharacter += OnNextCharacter;
-            InvestigateInput.PreviousCharacter += OnPreviousCharacter;
-            InvestigateInput.Aim += OnAiming;
-            InvestigateInput.Interact += OnPicking;
-            InvestigateInput.Interact += OnThrowing;
-        }
-
-        void OnDisable()
-        {
-            movementInput.ToInvestigate -= OnToInvestigator;
-            movementInput.NextCharacter -= OnNextCharacter;
-            movementInput.PreviousCharacter -= OnPreviousCharacter;
-            movementInput.TurnRight -= RightRotation;
-            movementInput.TurnLeft -= LeftRotation;
-            movementInput.MoveForward -= MoveForward;
-            movementInput.MoveBackward -= MoveBackward;
-            movementInput.StrafeRight -= StrafeRight;
-            movementInput.StrafeLeft -= StrafeLeft;
-            movementInput.Crouch -= Crouch;
-
-            InvestigateInput.ToMovement -= OnToMovement;
-            InvestigateInput.AddCharacter -= OnAddCharacter;
-            InvestigateInput.RemoveCharacter -= OnRemoveCharacter;
-            InvestigateInput.NextCharacter -= OnNextCharacter;
-            InvestigateInput.PreviousCharacter -= OnPreviousCharacter;
-            InvestigateInput.Aim -= OnAiming;
-            InvestigateInput.Interact -= OnPicking;
-            InvestigateInput.Interact -= OnThrowing;
-        }
-
-        void Start()
-        {
-            movementState = new CharacterMovementState(this);
-            investigationState = new CharacterInvestigationState(this);
-            combatState = new CharacterCombatState(this);
-
-            At(movementState, investigationState, () => isInInvestigatingState);
-            At(movementState, combatState, () => isInCombatState);
-
-            At(investigationState, movementState, () => isInMovementState);
-            At(investigationState, combatState, () => isInCombatState);
-
-            At(combatState, movementState, () => isInMovementState);
-            At(combatState, investigationState, () => isInInvestigatingState);
-
-            Set(movementState);
-        }
-        #endregion
-
-        #region Shared
-        void OnToMovement()
-        {
-            isInMovementState = true;
-            isInInvestigatingState = false;
-            isInCombatState = false;
-            CameraController.Cinemachine.Priority = 1;
-        }
-
-        void OnToInvestigator()
-        {
-            isInMovementState = false;
-            isInInvestigatingState = true;
-            isInCombatState = false;
-            CameraController.Cinemachine.Priority = 9;
-        }
-
-        void OnToCombat()
-        {
-            isInMovementState = false;
-            isInInvestigatingState = false;
-            isInCombatState = true;
-            CameraController.Cinemachine.Priority = 9;
-        }
-
-        void OnNextCharacter() => CharacterServices.NextCharacter();
-
-        void OnPreviousCharacter() => CharacterServices.PreviousCharacter();
-        #endregion
-
-        #region Movement
-        void RightRotation()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterRotation.RotationRight();
-        }
-
-        void LeftRotation()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterRotation.RotationLeft();
-        }
-
-        void MoveForward()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterMovement.MoveInDirection(tr.forward);
-        }
-
-        void MoveBackward()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterMovement.MoveInDirection(-tr.forward);
-        }
-
-        void StrafeRight()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterMovement.MoveInDirection(tr.right);
-        }
-
-        void StrafeLeft()
-        {
-            if (stateMachine.CurrentState != movementState) return;
-            movementController.CharacterMovement.MoveInDirection(-tr.right);
-        }
-
-        void Crouch() => movementController.CharacterCrouch.HandleCrouchInput();
-        #endregion
-
-        #region Inventigation
-        void OnAiming()
-        {
-            if (stateMachine.CurrentState != investigationState) return;
-            cameraController.CameraAiming.ChangeFOV(this);
-        }
-
-        void OnPicking()
-        {
-            if (stateMachine.CurrentState != investigationState) return;
-            pickupController.OnInteractStarted();
-        }
-
-        void OnThrowing()
-        {
-            if (stateMachine.CurrentState != investigationState) return;
-            throwController.OnThrowStarted();
-        }
-
-        void OnAddCharacter()
-        {
-            if (stateMachine.CurrentState != investigationState) return;
-            detectController.OnAddCharacter();
-        }
-
-        void OnRemoveCharacter()
-        {
-            if (stateMachine.CurrentState != investigationState) return;
-            CharacterServices.RemoveCharacterFromRoster(CharacterServices.GetCurrentCharacterIndex());
-        }
-        #endregion
     }
 }

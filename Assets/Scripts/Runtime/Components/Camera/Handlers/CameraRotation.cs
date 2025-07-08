@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -43,6 +42,7 @@ namespace Universal.Runtime.Components.Camera
             this.investigateInput = investigateInput;
             this.monoBehaviour = monoBehaviour;
 
+            IsRecentering = false;
             initialRotation = target.transform.localRotation;
             currentRotation = initialRotation;
             ResetTargetToInitialValues();
@@ -78,7 +78,6 @@ namespace Universal.Runtime.Components.Camera
         public void ReturnToInitialRotation()
         {
             if (IsRecentering || currentRotation == initialRotation) return;
-
             recenteringCoroutine ??= monoBehaviour.StartCoroutine(RecenteringCoroutine());
         }
 

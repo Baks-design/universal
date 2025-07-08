@@ -12,13 +12,14 @@ namespace Universal.Runtime.Components.Camera
         readonly float originalFOV;
         Coroutine activeCoroutine;
 
-        public bool IsZooming { get; private set; } = false;
+        public bool IsZooming { get; private set; }
 
         public CameraAiming(CameraData data, CinemachineCamera target)
         {
             this.data = data;
             this.target = target;
-            
+
+            IsZooming = false;
             originalFOV = target.Lens.FieldOfView;
         }
 

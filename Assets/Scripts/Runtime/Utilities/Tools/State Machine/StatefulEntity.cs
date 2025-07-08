@@ -10,7 +10,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         protected virtual void Awake() => stateMachine = new StateMachine();
 
         protected virtual void FixedUpdate() => stateMachine.FixedUpdate();
-        
+
         protected virtual void Update() => stateMachine.Update();
 
         protected virtual void LateUpdate() => stateMachine.LateUpdate();
@@ -20,5 +20,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
         protected void Any<T>(IState to, Func<T> condition) => stateMachine.AddAnyTransition(to, condition);
 
         protected void Set(IState setState) => stateMachine.SetState(setState);
+
+        public bool IsCurrentStateEqual(IState state) => stateMachine.CurrentState == state;
     }
 }

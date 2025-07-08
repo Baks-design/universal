@@ -10,13 +10,5 @@ namespace Universal.Runtime.Behaviours.Characters
         => this.controller = controller;
 
         public void OnEnter() => controller.InputServices.ChangeToInvestigateMap();
-
-        public void Update() => controller.CharacterDetectController.DetectBodies();
-
-        public void LateUpdate()
-        {
-            controller.CameraController.CameraRotation.ReturnToInitialRotation();
-            controller.CameraController.CameraRotation.ProcessRotation();
-        }
     }
 }

@@ -78,7 +78,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Crouch",
+                    "name": "Run",
                     "type": "Button",
                     "id": "456856c1-9ad2-44c7-a3e1-eb32210978e5",
                     "expectedControlType": "",
@@ -289,11 +289,11 @@
                 {
                     "name": "",
                     "id": "350bb5fc-1119-42b3-877c-bcd04931ec94",
-                    "path": "<Keyboard>/c",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Crouch",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -304,7 +304,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Crouch",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

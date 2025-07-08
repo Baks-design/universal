@@ -19,12 +19,5 @@ namespace Universal.Runtime.Components.Camera
         [Range(20f, 60f)] public float zoomFOV = 40f;
         public AnimationCurve zoomCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
         public float zoomTransitionDuration = 1f;
-
-        [Header("Swaying Settings")]
-        public float swayAmount = 0.1f; 
-        public float swaySpeed = 1f; 
-        public float returnSpeed = 2f; 
-        public float changeDirectionMultiplier = 1.5f;
-        public AnimationCurve swayCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     }
 }

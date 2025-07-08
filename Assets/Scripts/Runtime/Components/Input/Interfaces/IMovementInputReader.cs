@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Universal.Runtime.Components.Input
 {
@@ -11,10 +12,7 @@ namespace Universal.Runtime.Components.Input
         event Action PreviousCharacter;
         event Action TurnRight;
         event Action TurnLeft;
-        event Action MoveForward;
-        event Action MoveBackward;
-        event Action StrafeRight;
-        event Action StrafeLeft;
-        event Action Crouch;
+        event Action<Vector2> Move;
+        event Action<bool> Run;
     }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Alchemy.Inspector;
 using static Freya.Random;
-using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -13,12 +12,11 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, Self] Transform bodyTransfom;
         [SerializeField, Parent] CharacterMovementController controller;
-        [SerializeField, InlineEditor] CharacterData data;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         SoundBuilder soundBuilder;
         ISoundEffectsServices soundService;
-        float lastFootstepY;
+        bool nextStepLeft = false;
 
         void Awake()
         {
@@ -47,18 +45,18 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void PlayFootstepsSFX()
         {
-            if (!controller.CharacterMovement.IsMoving) return;
+            if (!controller.IsMoving) return;
 
-            // Get current head bobbing Y position
-            var currentYPos = controller.CharacterHeadBobbing.CurrentYPos;
-            // Check if vertical movement exceeds threshold
-            if (Abs(currentYPos - lastFootstepY) <= data.footstepThreshold) return;
-
-            // Play footstep sound for current surface
-            PlayFootstepSound(GetCurrentSurface());
-
-            // Update last tracked position
-            lastFootstepY = currentYPos;
+            if (nextStepLeft)
+            {
+                PlayFootstepSound(GetCurrentSurface());
+                nextStepLeft = !nextStepLeft;
+            }
+            else
+            {
+                PlayFootstepSound(GetCurrentSurface());
+                nextStepLeft = !nextStepLeft;
+            }
         }
 
         void PlayFootstepSound(FootstepsSoundLibrary surface)
@@ -75,7 +73,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void PlayLandedSFX()
         {
-            if (!controller.CharacterCollision.JustLanded) return;
+            if (!controller.CollisionChecker.JustLanded) return;
             PlayLandedSound(GetCurrentSurface());
         }
 
@@ -95,10 +93,9 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
 
-            if (controller.CharacterCollision.IsGrounded)
+            if (controller.CollisionChecker.IsGrounded)
             {
-                controller.CharacterCollision.GroundHit
-                    .collider.TryGetComponent(out SurfaceTag surfaceTag);
+                controller.CollisionChecker.GroundHit.collider.TryGetComponent(out SurfaceTag surfaceTag);
                 surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
                 return data;
             }
