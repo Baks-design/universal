@@ -10,13 +10,14 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterSoundController : MonoBehaviour
     {
-        [SerializeField, Self] Transform bodyTransfom;
-        [SerializeField, Parent] CharacterMovementController controller;
+        [SerializeField, Self] Transform tr;
+        [SerializeField, Parent] CharacterMovementController movement;
+        [SerializeField, Parent] CharacterCollisionController collision;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLib;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         SoundBuilder soundBuilder;
         ISoundEffectsServices soundService;
-        bool nextStepLeft = false;
+        bool hasMovedThisStep;
 
         void Awake()
         {
@@ -45,47 +46,40 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void PlayFootstepsSFX()
         {
-            if (!controller.IsMoving) return;
-
-            if (nextStepLeft)
+            if (movement.IsAnimating && !hasMovedThisStep)
             {
                 PlayFootstepSound(GetCurrentSurface());
-                nextStepLeft = !nextStepLeft;
+                hasMovedThisStep = true;
             }
-            else
-            {
-                PlayFootstepSound(GetCurrentSurface());
-                nextStepLeft = !nextStepLeft;
-            }
+            else if (!movement.IsAnimating)
+                hasMovedThisStep = false;
         }
 
         void PlayFootstepSound(FootstepsSoundLibrary surface)
         {
             if (surface == null) return;
-
             var rnd = Range(0, surface.footstepSounds.Length);
             var clip = surface.footstepSounds[rnd];
             soundBuilder
                 .WithRandomPitch()
-                .WithPosition(bodyTransfom.localPosition)
+                .WithPosition(tr.localPosition)
                 .Play(clip);
         }
 
         void PlayLandedSFX()
         {
-            if (!controller.CollisionChecker.JustLanded) return;
+            if (!collision.JustLanded) return;
             PlayLandedSound(GetCurrentSurface());
         }
 
         void PlayLandedSound(FootstepsSoundLibrary surface)
         {
             if (surface == null) return;
-
             var rnd = Range(0, surface.landSounds.Length);
             var clip = surface.landSounds[rnd];
             soundBuilder
                 .WithRandomPitch()
-                .WithPosition(bodyTransfom.localPosition)
+                .WithPosition(tr.localPosition)
                 .Play(clip);
         }
 
@@ -93,9 +87,9 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (surfaceLookup == null || surfaceLookup.Count == 0) return default;
 
-            if (controller.CollisionChecker.IsGrounded)
+            if (collision.IsGrounded)
             {
-                controller.CollisionChecker.GroundHit.collider.TryGetComponent(out SurfaceTag surfaceTag);
+                collision.GroundHit.collider.TryGetComponent(out SurfaceTag surfaceTag);
                 surfaceLookup.TryGetValue(surfaceTag.SurfaceType, out var data);
                 return data;
             }

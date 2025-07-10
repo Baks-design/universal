@@ -11,6 +11,7 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter
     {
+        public IInputServices InputServices;
         [SerializeField, Self] Transform tr;
         [SerializeField, Child] CharacterCameraController cameraController;
         [SerializeField, InlineEditor] CharacterData data;
@@ -18,19 +19,18 @@ namespace Universal.Runtime.Behaviours.Characters
         IMovementInputReader movementInput;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
-        public IInputServices InputServices;
-        public CharacterMovementState MovementState;
-        public CharacterInvestigationState InvestigationState;
-        public CharacterCombatState CombatState;
         bool isInInvestigatingState;
         bool isInMovementState;
         bool isInCombatState;
 
-        public Transform CharacterTransform => tr;
-        public CharacterData CharacterData => data;
         public Vector3Int CurrentGridPosition { get; set; }
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
+        public Transform CharacterTransform => tr;
+        public CharacterData CharacterData => data;
+        public CharacterMovementState MovementState { get; private set; }
+        public CharacterInvestigationState InvestigationState { get; private set; }
+        public CharacterCombatState CombatState { get; private set; }
 
         protected override void Awake()
         {

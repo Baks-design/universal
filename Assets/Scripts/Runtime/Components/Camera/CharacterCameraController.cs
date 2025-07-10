@@ -11,15 +11,13 @@ namespace Universal.Runtime.Components.Camera
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, InlineEditor] CameraData cameraData;
+        CameraRotation cameraRotation;
+        CameraAiming cameraAiming;
         IInvestigateInputReader investigateInput;
+        ICombatInputReader combatInput;
+        Vector2 lookInput;
 
-        public CinemachineCamera Cinemachine
-        {
-            get => cinemachine;
-            set => cinemachine = value;
-        }
-        public CameraRotation CameraRotation { get; private set; }
-        public CameraAiming CameraAiming { get; private set; }
+        public CinemachineCamera Cinemachine { get => cinemachine; set => cinemachine = value; }
 
         void Awake()
         {
@@ -27,12 +25,42 @@ namespace Universal.Runtime.Components.Camera
             InitClasses();
         }
 
-        void GetServices() => ServiceLocator.Global.Get(out investigateInput);
+        void GetServices()
+        {
+            ServiceLocator.Global.Get(out investigateInput);
+            ServiceLocator.Global.Get(out combatInput);
+        }
 
         void InitClasses()
         {
-            CameraRotation = new CameraRotation(cameraData, cinemachine, investigateInput, this);
-            CameraAiming = new CameraAiming(cameraData, cinemachine);
+            cameraRotation = new CameraRotation(cameraData, cinemachine);
+            cameraAiming = new CameraAiming(cameraData, cinemachine);
+        }
+
+        void OnEnable()
+        {
+            investigateInput.Look += OnLook;
+            investigateInput.Aim += OnAim;
+            combatInput.Look += OnLook;
+            combatInput.Aim += OnAim;
+        }
+
+        void OnDisable()
+        {
+            investigateInput.Look -= OnLook;
+            investigateInput.Aim -= OnAim;
+            combatInput.Look -= OnLook;
+            combatInput.Aim -= OnAim;
+        }
+
+        void OnLook(Vector2 value) => lookInput = value;
+
+        void OnAim() => cameraAiming.ChangeFOV(this);
+
+        void LateUpdate()
+        {
+            cameraRotation.ProcessRotation(lookInput);
+            cameraRotation.ReturnToInitialRotation(this);
         }
     }
 }

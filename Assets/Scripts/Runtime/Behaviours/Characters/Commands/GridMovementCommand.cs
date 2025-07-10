@@ -4,6 +4,8 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public abstract class GridMovementCommand : IMovementCommand
     {
+        public bool HasMove { get; set; } = false;
+
         public abstract Vector3 GetMovementDirection(IGridMover mover);
 
         public virtual bool CanExecute(IGridMover mover)

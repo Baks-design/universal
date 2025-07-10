@@ -12,8 +12,20 @@ PrefabInstance:
       propertyPath: cameraData
       value: 
       objectReference: {fileID: 11400000, guid: fc3789cbb9b3a9143ba00a51064a6b9d, type: 2}
+    - target: {fileID: 535184503864609599, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 2368326732608848225, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
     - target: {fileID: 2676070784679009607, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: Data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 2676070784679009607, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
     - target: {fileID: 3184278700070070321, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
@@ -32,6 +44,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Garcian Character
       objectReference: {fileID: 0}
+    - target: {fileID: 5368062122950305689, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
     - target: {fileID: 5912417900615756030, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: data
       value: 

@@ -102,8 +102,7 @@ namespace Universal.Runtime.Behaviours.Characters
             characterRoster.Add(new KeyValuePair<IPlayableCharacter, IEnableComponent>(character, enableComp));
             enableComp.Deactivate();
 
-            if (currentCharacter == null)
-                SwitchCharacter(0);
+            if (currentCharacter == null) SwitchCharacter(0);
         }
 
         public void RemoveCharacterFromRoster(int index)

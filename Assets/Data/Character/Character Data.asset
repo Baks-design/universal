@@ -21,15 +21,18 @@ MonoBehaviour:
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 64
-  collisionCheckSize: {x: 1.4, y: 1, z: 1.4}
+  obstacleYOffset: 0.51
+  collisionCheckSize: {x: 1, y: 1.8, z: 1}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  groundCheckDistance: 0.2
-  interactableLayer:
+  groundCheckDistance: 0.25
+  groundCheckOffset: 0.58
+  detectionLayer:
     serializedVersion: 2
-    m_Bits: 256
-  interactDistance: 2
+    m_Bits: 8
+  detectionRadius: 0.1
+  detectionDistance: 2
   gridSize: 3
   movementCurve:
     serializedVersion: 2
@@ -55,5 +58,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementSpeed: 1
-  rotationSpeed: 250
+  moveDuration: 5
+  rotationDuration: 5

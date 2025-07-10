@@ -1,7 +1,6 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using static Freya.Mathfs;
 
@@ -11,8 +10,6 @@ namespace Universal.Runtime.Components.Camera
     {
         readonly CameraData data;
         readonly CinemachineCamera target;
-        readonly IInvestigateInputReader investigateInput;
-        readonly MonoBehaviour monoBehaviour;
         Coroutine recenteringCoroutine;
         Quaternion currentRotation;
         Quaternion initialRotation;
@@ -33,14 +30,10 @@ namespace Universal.Runtime.Components.Camera
 
         public CameraRotation(
             CameraData data,
-            CinemachineCamera target,
-            IInvestigateInputReader investigateInput,
-            MonoBehaviour monoBehaviour)
+            CinemachineCamera target)
         {
             this.data = data;
             this.target = target;
-            this.investigateInput = investigateInput;
-            this.monoBehaviour = monoBehaviour;
 
             IsRecentering = false;
             initialRotation = target.transform.localRotation;
@@ -48,37 +41,30 @@ namespace Universal.Runtime.Components.Camera
             ResetTargetToInitialValues();
         }
 
-        public void ProcessRotation()
+        public void ProcessRotation(Vector2 lookInput)
         {
             if (IsRecentering) return;
 
-            var lookInput = investigateInput.LookDirection;
-
             desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * Time.deltaTime;
-            desiredTargetYaw = Helpers.ClampAngle(
-                desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
+            desiredTargetYaw = Helpers.ClampAngle(desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
+
             desiredTargetPitch -= lookInput.y * data.sensitivityAmount.y * Time.deltaTime;
-            desiredTargetPitch = Helpers.ClampAngle(
-                desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
+            desiredTargetPitch = Helpers.ClampAngle(desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
 
-            var yawSmoothTime = Mathf.Approximately(
-                data.smoothAmount.x, 0f) ? float.MaxValue : 1f / data.smoothAmount.x;
-            var pitchSmoothTime = Mathf.Approximately(
-                data.smoothAmount.y, 0f) ? float.MaxValue : 1f / data.smoothAmount.y;
+            var yawSmoothTime = Approximately(data.smoothAmount.x, 0f) ? float.MaxValue : 1f / data.smoothAmount.x;
+            var pitchSmoothTime = Approximately(data.smoothAmount.y, 0f) ? float.MaxValue : 1f / data.smoothAmount.y;
 
-            targetYaw = SmoothDamp(
-                targetYaw, desiredTargetYaw, ref yawSmoothVelocity, yawSmoothTime, Infinity, Time.deltaTime);
-            targetPitch = SmoothDamp(
-                targetPitch, desiredTargetPitch, ref pitchSmoothVelocity, pitchSmoothTime, Infinity, Time.deltaTime);
+            targetYaw = SmoothDamp(targetYaw, desiredTargetYaw, ref yawSmoothVelocity, yawSmoothTime, Infinity, Time.deltaTime);
+            targetPitch = SmoothDamp(targetPitch, desiredTargetPitch, ref pitchSmoothVelocity, pitchSmoothTime, Infinity, Time.deltaTime);
 
             currentRotation = Quaternion.Euler(targetPitch, targetYaw, 0f);
             target.transform.localRotation = currentRotation;
         }
 
-        public void ReturnToInitialRotation()
+        public void ReturnToInitialRotation(MonoBehaviour mono)
         {
             if (IsRecentering || currentRotation == initialRotation) return;
-            recenteringCoroutine ??= monoBehaviour.StartCoroutine(RecenteringCoroutine());
+            recenteringCoroutine ??= mono.StartCoroutine(RecenteringCoroutine());
         }
 
         IEnumerator RecenteringCoroutine()

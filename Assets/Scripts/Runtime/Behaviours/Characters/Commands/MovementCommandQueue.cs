@@ -39,7 +39,6 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             forwardHoldTime += Time.deltaTime;
             if (forwardHoldTime >= runActivationTime)
-                // Special running command could be implemented here
                 EnqueueCommand(moveForwardCommand);
             else
                 EnqueueCommand(moveForwardCommand);

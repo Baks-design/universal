@@ -1,5 +1,7 @@
 using UnityEngine;
+using Universal.Runtime.Components.Input;
 using Universal.Runtime.Systems.InventoryManagement;
+using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
@@ -9,46 +11,44 @@ namespace Universal.Runtime.Systems.InteractionObjects
         [SerializeField] LayerMask objectsLayers;
         [SerializeField] float interactionRadius = 0.3f;
         [SerializeField] float interactionRange = 1f;
-        RaycastHit[] interactionHits;
         IInteractable interactable;
+        IInvestigateInputReader input;
         Ray ray;
-        Camera mainCamera;
-        int hitCount;
+        Transform mainCamera;
+        bool isHit;
 
         public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
 
         void Awake()
         {
-            interactionHits = new RaycastHit[10];
-            mainCamera = Camera.main;
+            mainCamera = Camera.main.transform;
+            ServiceLocator.Global.Get(out input);
+        }
+
+        void OnEnable() => input.Interact += OnInteractStarted;
+
+        void OnDisable() => input.Interact -= OnInteractStarted;
+
+        void OnInteractStarted()
+        {
+            if (!isHit) return;
+            interactable?.OnInteract(this);
         }
 
         void Update() => ProcessDetection();
 
         void ProcessDetection()
         {
-            var center = new Vector3(0.5f, 0.5f, 0f);
-            ray = mainCamera.ViewportPointToRay(center);
-
-            hitCount = Physics.SphereCastNonAlloc(
-                ray.origin, interactionRadius, ray.direction,
-                interactionHits, interactionRange, objectsLayers
-            );
-
-            for (var i = 0; i < hitCount; i++)
-                interactionHits[i].collider.TryGetComponent(out interactable);
-            if (hitCount == 0)
-                interactable = null;
+            var ray = new Ray(mainCamera.localPosition, mainCamera.forward);
+            isHit = Physics.SphereCast(
+                ray.origin, interactionRadius, ray.direction, out var hit,
+                interactionRange, objectsLayers, QueryTriggerInteraction.Ignore);
+            if (isHit)
+                hit.collider.TryGetComponent(out interactable);
         }
 
-        public void OnInteractStarted()
-        {
-            if (hitCount == 0 || interactable == null) return;
-            interactable.OnInteract(this);
-        }
-
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             if (!Application.isPlaying) return;
 

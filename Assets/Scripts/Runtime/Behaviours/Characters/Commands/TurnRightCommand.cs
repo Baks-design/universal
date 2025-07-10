@@ -2,16 +2,13 @@ using UnityEngine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class TurnRightCommand : ITurnCommand
+    public class TurnRightCommand : GridTurnCommand
     {
-        public float TurnAngle { get; } = 90f;
+        public override float TurnAngle { get; } = 90f;
 
-        public bool CanExecute(IGridMover mover)
-        => !mover.IsMoving && !mover.IsRotating;
-
-        public void Execute(IGridMover mover)
+        public override void Execute(IGridMover mover)
         {
-            if (!CanExecute(mover)) return;
+            base.Execute(mover);
             mover.Rotation *= Quaternion.Euler(0f, TurnAngle, 0f);
         }
     }

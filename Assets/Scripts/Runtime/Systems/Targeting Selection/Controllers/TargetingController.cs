@@ -5,25 +5,24 @@ namespace Universal.Runtime.Systems.TargetingSelection
 {
     public class TargetingController : MonoBehaviour, ITargetingSystem
     {
-        [SerializeField] LayerMask targetLayer;
+        [SerializeField] LayerMask targetLayer = Physics.AllLayers;
         [SerializeField] float maxDistance = 20f;
-        Camera playerCamera;
+        Transform mainCam;
         BodyPartCollection currentTarget;
         int currentSelectionIndex = -1;
 
-        public BodyPart CurrentSelectedPart { get; set; }
+        public BodyPart CurrentSelectedPart { get; private set; }
 
         public event Action<BodyPart> OnTargetChanged = delegate { };
 
-        void Awake() => playerCamera = Camera.main;
+        void Awake() => mainCam = Camera.main.transform;
 
         public bool TrySelectTarget(out BodyPart targetPart)
         {
             targetPart = null;
+            var ray = new Ray(mainCam.localPosition, mainCam.forward);
 
-            var ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-            if (Physics.Raycast(ray, out var hit, maxDistance, targetLayer))
+            if (Physics.SphereCast(ray, maxDistance, out var hit, maxDistance, targetLayer, QueryTriggerInteraction.Ignore))
             {
                 currentTarget = hit.collider.GetComponentInParent<BodyPartCollection>();
                 if (currentTarget != null && currentTarget.BodyParts.Count > 0)

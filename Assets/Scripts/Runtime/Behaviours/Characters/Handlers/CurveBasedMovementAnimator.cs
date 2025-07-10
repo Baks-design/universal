@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -13,10 +14,15 @@ namespace Universal.Runtime.Behaviours.Characters
         public Quaternion CurrentRotation => Quaternion.identity;
         public Vector3 CurrentPosition { get; private set; }
 
-        public CurveBasedMovementAnimator(CharacterData data) => this.data = data;
+        public CurveBasedMovementAnimator(CharacterData data)
+        {
+            this.data = data;
+            CurrentPosition = Vector3.zero;
+        }
 
         public void AnimateMovement(Vector3 start, Vector3 end, float duration)
         {
+            if (duration <= Epsilon) return;
             startPosition = start;
             targetPosition = end;
             CurrentPosition = start;
@@ -27,15 +33,18 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (!IsAnimating) return;
 
-            progress += Time.deltaTime * data.movementSpeed;
-            var t = data.movementCurve.Evaluate(progress);
+            progress += Time.deltaTime * data.moveDuration;
+            var t = Clamp01(data.movementCurve.Evaluate(progress));
             CurrentPosition = Vector3.Lerp(startPosition.Value, targetPosition.Value, t);
 
-            if (progress >= 1f)
-            {
-                CurrentPosition = targetPosition.Value;
-                startPosition = targetPosition = null;
-            }
+            if (progress >= 1f) CompleteAnimation();
+        }
+
+        void CompleteAnimation()
+        {
+            CurrentPosition = targetPosition.Value;
+            startPosition = null;
+            targetPosition = null;
         }
     }
 }

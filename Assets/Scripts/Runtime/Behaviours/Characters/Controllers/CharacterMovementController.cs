@@ -8,8 +8,8 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovementController : MonoBehaviour, IGridMover
     {
-        [SerializeField, Self] CharacterPlayerController controller;
-        [SerializeField, Self] MovementCommandQueue movementCommandQueue;
+        [SerializeField, Self] CharacterCollisionController collision;
+        [SerializeField, Self] MovementCommandQueue commandQueue;
         [SerializeField, Self] Transform tr;
         [SerializeField, InlineEditor] CharacterData data;
         readonly TurnRightCommand turnRightCommand = new();
@@ -18,71 +18,63 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly MoveBackwardCommand moveBackwardCommand = new();
         readonly StrafeRightCommand strafeRightCommand = new();
         readonly StrafeLeftCommand strafeLeftCommand = new();
-        IMovementAnimator movementAnimator;
-        IMovementAnimator rotationAnimator;
-        IMovementInputReader movementInput;
-         CollisionChecker collisionChecker;
+        IMovementAnimator movement;
+        IMovementAnimator rotation;
+        IMovementInputReader input;
 
         public float GridSize => data.gridSize;
-        public bool IsMoving => movementAnimator.IsAnimating;
-        public bool IsRotating => rotationAnimator.IsAnimating;
-        public Vector3 Position
-        {
-            get => tr.position;
-            set => tr.position = value;
-        }
-        public Quaternion Rotation
-        {
-            get => tr.rotation;
-            set => tr.rotation = value;
-        }
-        public CollisionChecker CollisionChecker => collisionChecker;
+        public bool IsAnimating { get; private set; }
+        public bool IsMoving => movement.IsAnimating;
+        public bool IsRotating => rotation.IsAnimating;
+        public Vector3 Position { get => tr.position; set => tr.position = value; }
+        public Quaternion Rotation { get => tr.rotation; set => tr.rotation = value; }
+        public CharacterCollisionController Collision => collision;
 
         void Awake()
         {
-            ServiceLocator.Global.Get(out movementInput);
-            collisionChecker = new CollisionChecker(data, tr, Camera.main);
-            movementAnimator = new CurveBasedMovementAnimator(data);
-            rotationAnimator = new QuaternionRotationAnimator(data);
+            ServiceLocator.Global.Get(out input);
+
+            movement = new CurveBasedMovementAnimator(data);
+            rotation = new QuaternionRotationAnimator(data);
+
+            movement.AnimateMovement(tr.localPosition, tr.localPosition, 0f);
+            rotation.AnimateRotation(tr.localRotation, tr.localRotation, 0f);
         }
 
         void OnEnable()
         {
-            movementInput.Move += MoveCommand;
-            movementInput.TurnRight += TurnRightCommand;
-            movementInput.TurnLeft += TurnLeftCommand;
-            movementInput.TurnLeft += RunForwardPress;
-            movementInput.TurnLeft += RunForwardRelease;
+            input.TurnRight += TurnRightCommand;
+            input.TurnLeft += TurnLeftCommand;
+            input.Move += MoveCommand;
+            input.Run += RunForwardPress;
         }
 
         void OnDisable()
         {
-            movementInput.Move -= MoveCommand;
-            movementInput.TurnRight -= TurnRightCommand;
-            movementInput.TurnLeft -= TurnLeftCommand;
-            movementInput.TurnLeft -= RunForwardPress;
-            movementInput.TurnLeft -= RunForwardRelease;
+            input.TurnRight -= TurnRightCommand;
+            input.TurnLeft -= TurnLeftCommand;
+            input.Move -= MoveCommand;
+            input.Run -= RunForwardPress;
         }
 
-        void TurnRightCommand()
-        {
-            if (!controller.IsCurrentStateEqual(controller.MovementState)) return;
-            TryExecuteCommand(turnRightCommand);
-        }
+        void TurnRightCommand() => TryExecuteCommand(turnRightCommand);
 
-        void TurnLeftCommand()
-        {
-            if (!controller.IsCurrentStateEqual(controller.MovementState)) return;
-            TryExecuteCommand(turnLeftCommand);
-        }
+        void TurnLeftCommand() => TryExecuteCommand(turnLeftCommand);
 
         void MoveCommand(Vector2 move)
         {
-            if (!controller.IsCurrentStateEqual(controller.MovementState)) return;
             if (move.y > 0f) TryExecuteCommand(moveForwardCommand);
             if (move.y < 0f) TryExecuteCommand(moveBackwardCommand);
             if (move.x > 0f) TryExecuteCommand(strafeRightCommand);
             if (move.x < 0f) TryExecuteCommand(strafeLeftCommand);
+        }
+
+        void RunForwardPress(bool value)
+        {
+            if (value)
+                commandQueue.HandleForwardPress();
+            else
+                commandQueue.HandleForwardRelease();
         }
 
         public bool TryExecuteCommand(IMovementCommand command)
@@ -90,38 +82,26 @@ namespace Universal.Runtime.Behaviours.Characters
             if (!command.CanExecute(this)) return false;
             switch (command)
             {
-                case GridMovementCommand gridCmd:
-                    var targetPos = Position + gridCmd.GetMovementDirection(this) * GridSize;
-                    if (CollisionChecker.IsPositionFree(targetPos))
-                        movementAnimator.AnimateMovement(Position, targetPos, 1f / data.movementSpeed);
+                case GridMovementCommand gridCommand:
+                    var targetPos = tr.position + gridCommand.GetMovementDirection(this) * data.gridSize;
+                    if (!Collision.IsPositionFree(targetPos)) return false;
+                    IsAnimating = movement.IsAnimating;
+                    movement.AnimateMovement(tr.position, targetPos, data.moveDuration);
                     break;
-                case TurnRightCommand _:
-                    rotationAnimator.AnimateRotation(Rotation, Rotation, 1f / data.rotationSpeed);
-                    break;
-                case TurnLeftCommand _:
-                    rotationAnimator.AnimateRotation(Rotation, Rotation, 1f / data.rotationSpeed);
+                case GridTurnCommand turnCommand:
+                    var targetRot = tr.rotation * Quaternion.Euler(0f, turnCommand.TurnAngle, 0f);
+                    rotation.AnimateRotation(tr.rotation, targetRot, data.rotationDuration);
                     break;
             }
-
             command.Execute(this);
             return true;
         }
 
-        public void RunForwardPress() => movementCommandQueue.HandleForwardPress();
-
-        public void RunForwardRelease() => movementCommandQueue.HandleForwardRelease();
-
         void Update()
         {
-            CollisionChecker.UpdataCharacterDetect();
-            CollisionChecker.UpdateGroundDetect();
-
-            movementAnimator.UpdateAnimation();
-            rotationAnimator.UpdateAnimation();
-            tr.SetPositionAndRotation(
-                movementAnimator.CurrentPosition,
-                rotationAnimator.CurrentRotation
-            );
+            movement.UpdateAnimation();
+            rotation.UpdateAnimation();
+            tr.SetLocalPositionAndRotation(movement.CurrentPosition, rotation.CurrentRotation);
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -21,6 +22,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void AnimateRotation(Quaternion start, Quaternion end, float duration)
         {
+            if (duration <= Epsilon) return;
             startRotation = start;
             targetRotation = end;
             CurrentRotation = start;
@@ -31,14 +33,18 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             if (!IsAnimating) return;
 
-            progress += Time.deltaTime * data.rotationSpeed;
+            progress += Time.deltaTime * data.rotationDuration;
+            progress = Clamp01(progress);
             CurrentRotation = Quaternion.Slerp(startRotation.Value, targetRotation.Value, progress);
 
-            if (progress >= 1f)
-            {
-                CurrentRotation = targetRotation.Value;
-                startRotation = targetRotation = null;
-            }
+            if (progress >= 1f) CompleteAnimation();
+        }
+
+        void CompleteAnimation()
+        {
+            CurrentRotation = targetRotation.Value;
+            startRotation = null;
+            targetRotation = null;
         }
     }
 }

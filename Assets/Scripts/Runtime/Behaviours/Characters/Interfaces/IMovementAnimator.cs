@@ -8,8 +8,8 @@ namespace Universal.Runtime.Behaviours.Characters
         Vector3 CurrentPosition { get; }
         Quaternion CurrentRotation { get; }
 
+        void UpdateAnimation();
         void AnimateMovement(Vector3 start, Vector3 end, float duration) { }
         void AnimateRotation(Quaternion start, Quaternion end, float duration) { }
-        void UpdateAnimation();
     }
 }
