@@ -3,27 +3,29 @@ using UnityEngine;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class ThrowableObject : MonoBehaviour
     {
         [SerializeField, Self] Rigidbody rb;
         [SerializeField] ThrowConfiguration throwConfiguration;
 
-        public bool CanBeThrown => rb != null;
+        public bool CanBeThrown => rb != null && throwConfiguration != null;
 
-        public void Throw(Vector3 trajectory)
+        public void Throw(Vector3 direction, float forceMultiplier = 1f)
         {
             if (!CanBeThrown) return;
+
             rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.freezeRotation = true;
-            rb.linearVelocity = trajectory;
+            rb.useGravity = throwConfiguration.useGravity;
+            rb.freezeRotation = !throwConfiguration.allowRotation;
+
+            var force = forceMultiplier * throwConfiguration.baseForce * direction.normalized;
+
+            rb.AddForce(force, throwConfiguration.forceMode);
         }
 
         void OnCollisionEnter(Collision collision)
         {
-            
+            Debug.Log($"Hit {collision.gameObject.name} with velocity: {rb.linearVelocity.magnitude}");
         }
-
     }
 }

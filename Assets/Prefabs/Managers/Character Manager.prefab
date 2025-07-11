@@ -47,5 +47,4 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   characterData: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}

@@ -5,7 +5,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class PickupController : MonoBehaviour
+    public class PickupController : MonoBehaviour //TODO: Adjust
     {
         [SerializeField] Inventory inventory;
         [SerializeField] LayerMask objectsLayers;

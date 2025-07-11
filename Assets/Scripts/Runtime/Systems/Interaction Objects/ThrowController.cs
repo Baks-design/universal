@@ -6,7 +6,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class ThrowController : MonoBehaviour
+    public class ThrowController : MonoBehaviour //TODO: Adjust
     {
         [SerializeField, Self] PickupController interactor;
         [SerializeField] AssetReferenceGameObject throwableObject;
@@ -26,7 +26,7 @@ namespace Universal.Runtime.Systems.InteractionObjects
                 .InstantiateAsync(throwableObject, spawn.localPosition, Quaternion.identity)
                 .WaitForCompletion();
             if (proj.TryGetComponent(out ThrowableObject throwable))
-                throwable.Throw(interactor.GetAimDirection * config.Force);
+                throwable.Throw(interactor.GetAimDirection);
         }
     }
 }

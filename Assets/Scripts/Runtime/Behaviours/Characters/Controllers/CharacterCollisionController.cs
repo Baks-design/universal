@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterCollisionController : MonoBehaviour
+    public class CharacterCollisionController : MonoBehaviour //TODO: Adjust
     {
         [SerializeField, Self] Transform tr;
         [SerializeField, InlineEditor] CharacterData data;

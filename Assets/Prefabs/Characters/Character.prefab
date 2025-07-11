@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tr: {fileID: 6105000888535693558}
-  cameraController: {fileID: 332088360065323903}
+  cinemachine: {fileID: 5932689844251830603}
   data: {fileID: 0}
 --- !u!114 &535184503864609599
 MonoBehaviour:
@@ -341,8 +341,13 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   spawn: {fileID: 9150647420456271026}
   config:
-    Force: 10
-    Gravity: -9.81
+    baseForce: 10
+    useGravity: 1
+    allowRotation: 0
+    forceMode: 1
+    addRandomSpin: 0
+    spinForce: 1
+    minImpactForce: 2
 --- !u!114 &5368062122950305689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,7 +386,7 @@ Transform:
   m_GameObject: {fileID: 5462633736867934069}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0.5, z: 1.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -507,6 +512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb6546c2e66646c43ab28d082af75c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 2676070784679009607}
   cinemachine: {fileID: 5932689844251830603}
   cameraData: {fileID: 11400000, guid: fc3789cbb9b3a9143ba00a51064a6b9d, type: 2}
 --- !u!1 &7510502827176266112

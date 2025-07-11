@@ -17,7 +17,5 @@ namespace Universal.Runtime.Utilities.Helpers
             if (angle < 0f) angle += 360f;
             return angle;
         }
-
-        public static float EaseInOut(float t) => t * t * (3f - 2f * t);
     }
 }

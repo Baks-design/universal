@@ -2,6 +2,7 @@ using Alchemy.Inspector;
 using KBCore.Refs;
 using Unity.Cinemachine;
 using UnityEngine;
+using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
@@ -9,6 +10,7 @@ namespace Universal.Runtime.Components.Camera
 {
     public class CharacterCameraController : MonoBehaviour
     {
+        [SerializeField, Parent] CharacterPlayerController controller;
         [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, InlineEditor] CameraData cameraData;
         CameraRotation cameraRotation;
@@ -33,7 +35,7 @@ namespace Universal.Runtime.Components.Camera
 
         void InitClasses()
         {
-            cameraRotation = new CameraRotation(cameraData, cinemachine);
+            cameraRotation = new CameraRotation(cameraData, cinemachine, controller);
             cameraAiming = new CameraAiming(cameraData, cinemachine);
         }
 

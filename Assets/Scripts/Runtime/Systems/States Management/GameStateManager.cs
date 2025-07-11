@@ -1,6 +1,8 @@
 using System;
+using UnityEngine;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Components.UI;
+using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.EventBus;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Universal.Runtime.Utilities.Tools.StateMachine;
@@ -49,10 +51,22 @@ namespace Universal.Runtime.Systems.StatesManagement
             stateMachine.SetState(playingState);
         }
 
-        // protected override void Update()
-        // {
-        //     base.Update();
-        //     Logger.Info($"Current Game State: {stateMachine.CurrentState}");
-        // }
+        void OnGUI()
+        {
+            GUIScaler.BeginScaledGUI();
+
+            var style = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = (int)(32 * GUIScaler.GetCurrentScale()),
+                normal = { textColor = Color.white }
+            };
+
+            GUIScaler.DrawProportionalLabel(
+                new Vector2(0f, 0f),
+                $"Current Game State: {stateMachine.CurrentState}",
+                style);
+
+            GUI.matrix = Matrix4x4.identity;
+        }
     }
 }

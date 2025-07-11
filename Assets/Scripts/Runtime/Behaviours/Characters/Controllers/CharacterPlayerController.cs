@@ -2,10 +2,10 @@ using UnityEngine;
 using KBCore.Refs;
 using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Unity.Cinemachine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -13,7 +13,7 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         public IInputServices InputServices;
         [SerializeField, Self] Transform tr;
-        [SerializeField, Child] CharacterCameraController cameraController;
+        [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, InlineEditor] CharacterData data;
         ICharacterServices characterServices;
         IMovementInputReader movementInput;
@@ -83,7 +83,7 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = true;
             isInInvestigatingState = false;
             isInCombatState = false;
-            cameraController.Cinemachine.Priority = 1;
+            cinemachine.Priority = 1;
         }
 
         void OnToInvestigator()
@@ -91,7 +91,7 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = false;
             isInInvestigatingState = true;
             isInCombatState = false;
-            cameraController.Cinemachine.Priority = 9;
+            cinemachine.Priority = 9;
         }
 
         void OnToCombat()
@@ -99,7 +99,7 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = false;
             isInInvestigatingState = false;
             isInCombatState = true;
-            cameraController.Cinemachine.Priority = 9;
+            cinemachine.Priority = 9;
         }
 
         void OnNextCharacter() => characterServices.NextCharacter();
@@ -137,6 +137,24 @@ namespace Universal.Runtime.Behaviours.Characters
             LastPosition = tr.localPosition;
             LastRotation = tr.localRotation;
             gameObject.SetActive(false);
+        }
+
+        void OnGUI()
+        {
+            GUIScaler.BeginScaledGUI();
+
+            var style = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = (int)(32 * GUIScaler.GetCurrentScale()),
+                normal = { textColor = Color.white }
+            };
+
+            GUIScaler.DrawProportionalLabel(
+                new Vector2(0f, 50f),
+                $"Current Player State: {stateMachine.CurrentState}",
+                style);
+
+            GUI.matrix = Matrix4x4.identity;
         }
     }
 }

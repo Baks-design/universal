@@ -17,57 +17,29 @@ MonoBehaviour:
   sensitivityAmount: {x: 10, y: 10}
   smoothAmount: {x: 10, y: 10}
   recenterDuration: 1
-  zoomFOV: 40
   zoomCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.41261172
-      outSlope: 0.41261172
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.102888085
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.054159872
-      outSlope: 0.054159872
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.17418772
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  zoomTransitionDuration: 0.5
-  swayAmount: 1
-  swaySpeed: 3
-  returnSpeed: 1
-  changeDirectionMultiplier: 1
-  swayCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.41261172
-      outSlope: 0.41261172
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.102888085
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.054159872
-      outSlope: 0.054159872
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.17418772
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  zoomFOV: 40
+  zoomTransitionDuration: 0.3
