@@ -26,7 +26,7 @@ namespace Universal.Runtime.Behaviours.Characters
         public bool IsAnimating { get; private set; }
         public bool IsMoving => movement.IsAnimating;
         public bool IsRotating => rotation.IsAnimating;
-        public Vector3 Position { get => tr.position; set => tr.position = value; }
+        public Vector3 Position { get => tr.localPosition; set => tr.localPosition = value; }
         public Quaternion Rotation { get => tr.rotation; set => tr.rotation = value; }
         public CharacterCollisionController Collision => collision;
 
@@ -83,14 +83,14 @@ namespace Universal.Runtime.Behaviours.Characters
             switch (command)
             {
                 case GridMovementCommand gridCommand:
-                    var targetPos = tr.position + gridCommand.GetMovementDirection(this) * data.gridSize;
+                    var targetPos = tr.localPosition + gridCommand.GetMovementDirection(this) * data.gridSize;
                     if (!Collision.IsPositionFree(targetPos)) return false;
                     IsAnimating = movement.IsAnimating;
-                    movement.AnimateMovement(tr.position, targetPos, data.moveDuration);
+                    movement.AnimateMovement(tr.localPosition, targetPos, data.moveDuration);
                     break;
                 case GridTurnCommand turnCommand:
-                    var targetRot = tr.rotation * Quaternion.Euler(0f, turnCommand.TurnAngle, 0f);
-                    rotation.AnimateRotation(tr.rotation, targetRot, data.rotationDuration);
+                    var targetRot = tr.localRotation * Quaternion.Euler(0f, turnCommand.TurnAngle, 0f);
+                    rotation.AnimateRotation(tr.localRotation, targetRot, data.rotationDuration);
                     break;
             }
             command.Execute(this);

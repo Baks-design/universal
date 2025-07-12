@@ -18,22 +18,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  obstacleLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  obstacleYOffset: 0.51
-  collisionCheckSize: {x: 1, y: 1.8, z: 1}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  groundCheckDistance: 0.25
-  groundCheckOffset: 0.58
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  detectionRadius: 0.1
-  detectionDistance: 2
-  gridSize: 3
+  gridSize: 2.5
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -58,5 +43,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  moveDuration: 5
-  rotationDuration: 5
+  moveDuration: 2.5
+  rotationDuration: 2.5
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  obstacleYOffset: 0.5
+  collisionCheckSize: {x: 1.5, y: 1.5, z: 1.5}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  groundCheckDistance: 0.5
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  detectionRadius: 0.1
+  detectionDistance: 2

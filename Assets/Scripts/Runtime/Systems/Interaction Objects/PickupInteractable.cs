@@ -3,7 +3,7 @@ using Universal.Runtime.Systems.InventoryManagement;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class PickupInteractable : MonoBehaviour, IInteractable 
+    public class PickupInteractable : MonoBehaviour, IInteractable
     {
         [SerializeField] Item item;
 

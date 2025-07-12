@@ -21,7 +21,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void OnDisable() => input.AddCharacter -= OnAddCharacter;
 
-        public void OnAddCharacter()
+        void OnAddCharacter()
         {
             if (!collision.HasCharacterHit) return;
 

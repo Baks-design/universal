@@ -72,13 +72,6 @@
       "dependencies": {},
       "hash": "c42b0f4497a2b463490b59be9026cb63b1b884f9"
     },
-    "com.tayx.graphy": {
-      "version": "https://github.com/Tayx94/graphy.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "1cdf31613ea294970560f0bbb2ee2d1f0cd16a22"
-    },
     "com.unity.2d.tilemap": {
       "version": "1.0.0",
       "depth": 0,
@@ -190,7 +183,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.0",
+      "version": "1.14.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -380,12 +373,12 @@
         "com.unity.render-pipelines.core": "17.1.0"
       }
     },
-    "com.yasirkula.ingamedebugconsole": {
-      "version": "https://github.com/yasirkula/UnityIngameDebugConsole.git",
+    "com.witalosk.unistats": {
+      "version": "https://github.com/witalosk/UniStats.git?path=Packages/com.witalosk.unistats",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "80c0c42131d4824f9ff6439eda11c2378251fe6d"
+      "hash": "7e6b7cc08f7c409b08adbb921bd192bae4dbcb9a"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

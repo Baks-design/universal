@@ -5,7 +5,7 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.TargetingSelection
 {
-    public class TargetSelectionController : MonoBehaviour //TODO: Adjust
+    public class TargetSelectionController : MonoBehaviour 
     {
         [SerializeField, Self] TargetingController targetingController;
         [SerializeField, Self] OutlineHighlightController highlightController;

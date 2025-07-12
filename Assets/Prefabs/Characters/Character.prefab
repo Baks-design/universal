@@ -149,10 +149,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6105000888535693558}
+  - component: {fileID: 999535474388821939}
   - component: {fileID: 2335871156229631570}
-  - component: {fileID: 851656172144437175}
   - component: {fileID: 2676070784679009607}
   - component: {fileID: 535184503864609599}
+  - component: {fileID: 851656172144437175}
   - component: {fileID: 2368326732608848225}
   m_Layer: 3
   m_Name: Character
@@ -182,6 +183,27 @@ Transform:
   - {fileID: 5934221381673591935}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &999535474388821939
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588946117734807384}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.5, z: 1}
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!114 &2335871156229631570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,20 +230,6 @@ MonoBehaviour:
     Part2: 1124798992
     Part3: 3097086873
     Part4: 54178845
---- !u!114 &851656172144437175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3588946117734807384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be7ffc0f9568d8b4ebe1fbd01f03f305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  queueDepth: 3
-  runActivationTime: 1
 --- !u!114 &2676070784679009607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +261,20 @@ MonoBehaviour:
   commandQueue: {fileID: 851656172144437175}
   tr: {fileID: 6105000888535693558}
   data: {fileID: 0}
+--- !u!114 &851656172144437175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588946117734807384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7ffc0f9568d8b4ebe1fbd01f03f305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  queueDepth: 3
+  runActivationTime: 1
 --- !u!114 &2368326732608848225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +299,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8519153528729452951}
   - component: {fileID: 7338831354204029381}
-  - component: {fileID: 395793492286962780}
   - component: {fileID: 5368062122950305689}
   m_Layer: 3
   m_Name: Interactor
@@ -319,35 +340,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   interactionRadius: 0.1
-  interactionRange: 1
---- !u!114 &395793492286962780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4504538062994894636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d5abfd01c23cd94e818dd7349e4909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactor: {fileID: 7338831354204029381}
-  throwableObject:
-    m_AssetGUID: 522ee1cd7c919784cadfc78e299a4f78
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  spawn: {fileID: 9150647420456271026}
-  config:
-    baseForce: 10
-    useGravity: 1
-    allowRotation: 0
-    forceMode: 1
-    addRandomSpin: 0
-    spinForce: 1
-    minImpactForce: 2
+  interactionRange: 2
 --- !u!114 &5368062122950305689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,8 +638,7 @@ MonoBehaviour:
   tr: {fileID: 7517224090028403351}
   movement: {fileID: 535184503864609599}
   collision: {fileID: 2368326732608848225}
-  soundLib:
-  - {fileID: 11400000, guid: 5d5fd1ab07e815545a3f4ade1572a96e, type: 2}
+  soundLibraries: []
 --- !u!1001 &7716549760536062678
 PrefabInstance:
   m_ObjectHideFlags: 0

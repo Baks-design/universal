@@ -5,12 +5,12 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class PickupController : MonoBehaviour //TODO: Adjust
+    public class PickupController : MonoBehaviour 
     {
         [SerializeField] Inventory inventory;
         [SerializeField] LayerMask objectsLayers;
-        [SerializeField] float interactionRadius = 0.3f;
-        [SerializeField] float interactionRange = 1f;
+        [SerializeField] float interactionRadius = 0.1f;
+        [SerializeField] float interactionRange = 2f;
         IInteractable interactable;
         IInvestigateInputReader input;
         Ray ray;
@@ -26,14 +26,16 @@ namespace Universal.Runtime.Systems.InteractionObjects
             ServiceLocator.Global.Get(out input);
         }
 
-        void OnEnable() => input.Interact += OnInteractStarted;
+        void OnEnable() => input.Interact += OnInteract;
 
-        void OnDisable() => input.Interact -= OnInteractStarted;
+        void OnDisable() => input.Interact -= OnInteract;
 
-        void OnInteractStarted()
+        void OnInteract()
         {
-            if (!isHit) return;
-            interactable?.OnInteract(this);
+            if (interactable == null) return;
+            
+            interactable.OnInteract(this);
+            Debug.Log(true);
         }
 
         void Update() => ProcessDetection();
@@ -53,7 +55,7 @@ namespace Universal.Runtime.Systems.InteractionObjects
             if (!Application.isPlaying) return;
 
             // Draw interaction range
-            Gizmos.color = interactable != null ? Color.yellow : Color.red;
+            Gizmos.color = isHit ? Color.green : Color.red;
             Gizmos.DrawRay(ray.origin, ray.direction * interactionRange);
 
             // Draw sphere cast area
