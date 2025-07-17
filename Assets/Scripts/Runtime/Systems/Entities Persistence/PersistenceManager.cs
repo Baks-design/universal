@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Alchemy.Inspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Universal.Runtime.Systems.InventoryManagement;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.EntitiesPersistence 
@@ -31,7 +30,6 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
         {
             if (scene.name.Equals("Menu")) return;
             Bind<EntityPersistence, EntityData>(gameData.EntityData);
-            Bind<InventoryPersistence, InventoryData>(gameData.inventoryData);
         }
 
         void Bind<T, TData>(TData data) where T : MonoBehaviour, IBind<TData> where TData : ISaveable, new()

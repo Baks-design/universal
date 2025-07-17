@@ -65,6 +65,13 @@
       "dependencies": {},
       "hash": "5a7f430586af3cc81dd552a37768ba7f425ad2eb"
     },
+    "com.simonoliver.lightconsole": {
+      "version": "https://github.com/simonoliver/LightConsole.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "993fdf41a00ba1836f53dd7cc9f6669b8487a3c7"
+    },
     "com.smkplus.custom-toolbar": {
       "version": "https://github.com/smkplus/CustomToolbar.git#master",
       "depth": 0,

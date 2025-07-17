@@ -5,6 +5,7 @@ namespace Universal.Runtime.Behaviours.Characters
     public interface IGridMover
     {
         bool IsMoving { get; }
+        bool IsRunning { get; }
         bool IsRotating { get; }
         float GridSize { get; }
         Vector3 Position { get; set; }

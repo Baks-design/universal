@@ -25,6 +25,7 @@ namespace Universal.Runtime.Behaviours.Characters
         public float GridSize => data.gridSize;
         public bool IsAnimating { get; private set; }
         public bool IsMoving => movement.IsAnimating;
+        public bool IsRunning { get; private set; }
         public bool IsRotating => rotation.IsAnimating;
         public Vector3 Position { get => tr.localPosition; set => tr.localPosition = value; }
         public Quaternion Rotation { get => tr.rotation; set => tr.rotation = value; }
@@ -71,6 +72,8 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void RunForwardPress(bool value)
         {
+            IsRunning = value;
+
             if (value)
                 commandQueue.HandleForwardPress();
             else

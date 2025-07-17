@@ -1,13 +1,11 @@
 using UnityEngine;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Systems.InventoryManagement;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
     public class PickupController : MonoBehaviour 
     {
-        [SerializeField] Inventory inventory;
         [SerializeField] LayerMask objectsLayers;
         [SerializeField] float interactionRadius = 0.1f;
         [SerializeField] float interactionRange = 2f;
@@ -17,7 +15,6 @@ namespace Universal.Runtime.Systems.InteractionObjects
         Transform mainCamera;
         bool isHit;
 
-        public Inventory Inventory { get => inventory; set => inventory = value; }
         public Vector3 GetAimDirection => ray.direction;
 
         void Awake()

@@ -23,11 +23,10 @@ namespace Universal.Runtime.Behaviours.Characters
         bool isInMovementState;
         bool isInCombatState;
 
-        public Vector3Int CurrentGridPosition { get; set; }
+        public CharacterData CharacterData => data;
+        public Transform CharacterTransform => tr;
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
-        public Transform CharacterTransform => tr;
-        public CharacterData CharacterData => data;
         public CharacterMovementState MovementState { get; private set; }
         public CharacterInvestigationState InvestigationState { get; private set; }
         public CharacterCombatState CombatState { get; private set; }
@@ -145,7 +144,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
             var style = new GUIStyle(GUI.skin.label)
             {
-                fontSize = (int)(32 * GUIScaler.GetCurrentScale()),
+                fontSize = (int)(32f * GUIScaler.GetCurrentScale()),
                 normal = { textColor = Color.white }
             };
 

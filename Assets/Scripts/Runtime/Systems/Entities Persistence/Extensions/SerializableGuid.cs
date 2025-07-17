@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using Universal.Runtime.Systems.InventoryManagement;
 
-namespace Universal.Runtime.Systems.EntityPersistence
+namespace Universal.Runtime.Systems.EntitiesPersistence
 {
     /// <summary>
     /// Represents a globally unique identifier (GUID) that is serializable with Unity and usable in game scripts.

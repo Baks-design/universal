@@ -12,52 +12,61 @@ namespace Universal.Runtime.Components.Camera
         readonly float originalFOV;
         Coroutine activeCoroutine;
 
-        public bool IsZooming { get; private set; }
+        public bool IsAiming { get; private set; }
 
         public CameraAiming(CameraData data, CinemachineCamera target)
         {
             this.data = data;
             this.target = target;
-
-            IsZooming = false;
             originalFOV = target.Lens.FieldOfView;
         }
 
-        public void ChangeFOV(MonoBehaviour mono)
+        public void ToggleZoom(MonoBehaviour mono)
         {
-            IsZooming = !IsZooming;
-            StartCoroutine(mono, ChangeFOVRoutine());
+            IsAiming = !IsAiming;
+            StartCoroutine(mono, ZoomRoutine());
+        }
+
+        public void SetZoom(MonoBehaviour mono, bool zoomState)
+        {
+            if (IsAiming == zoomState) return;
+            IsAiming = zoomState;
+            StartCoroutine(mono, ZoomRoutine());
         }
 
         void StartCoroutine(MonoBehaviour mono, IEnumerator routine)
         {
             if (activeCoroutine != null)
                 mono.StopCoroutine(activeCoroutine);
-
             activeCoroutine = mono.StartCoroutine(routine);
         }
 
-        IEnumerator ChangeFOVRoutine()
+        IEnumerator ZoomRoutine()
         {
-            var percent = 0f;
+            var startTime = Time.time;
             var currentFOV = target.Lens.FieldOfView;
-            var targetFOV = IsZooming ? data.zoomFOV : originalFOV;
+            var targetFOV = IsAiming ? data.zoomFOV : originalFOV;
+            var remainingDistance = Abs(currentFOV - targetFOV);
 
-            if (data.zoomTransitionDuration <= 0f)
+            if (data.zoomTransitionDuration <= Epsilon)
             {
                 target.Lens.FieldOfView = targetFOV;
                 yield break;
             }
 
-            var inverseDuration = 1f / data.zoomTransitionDuration;
-
-            while (percent < 1f)
+            while (remainingDistance > 0.1f)
             {
-                percent += Time.deltaTime * inverseDuration;
-                var smoothPercent = data.zoomCurve?.Evaluate(percent) ?? percent;
-                target.Lens.FieldOfView = Eerp(currentFOV, targetFOV, smoothPercent);
+                var elapsed = Time.time - startTime;
+                var t = 1f - Exp(-data.zoomSharpness * elapsed * (1f / data.zoomTransitionDuration));
+
+                target.Lens.FieldOfView = Lerp(currentFOV, targetFOV, t);
+                remainingDistance = Abs(target.Lens.FieldOfView - targetFOV);
+
                 yield return null;
             }
+
+            target.Lens.FieldOfView = targetFOV;
+            activeCoroutine = null;
         }
     }
 }

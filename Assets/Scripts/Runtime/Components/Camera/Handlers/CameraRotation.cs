@@ -10,18 +10,14 @@ namespace Universal.Runtime.Components.Camera
     public class CameraRotation
     {
         readonly CameraData data;
-        readonly CinemachineCamera target;
-        readonly CharacterPlayerController controller;
-        const float MINRECENTERDURATION = 0.15f;
+        readonly Transform transform;
+        readonly CharacterPlayerController playerController;
+        readonly CharacterCameraController cameraController;
+        const float MINRECENTERDURATION = 0.3f;
         const float ANGULARDISTANCETHRESHOLD = 0.1f;
-        const float FULLROTATIONDEGREES = 180f;
-        const float INPUTDEADZONE = 0.01f;
-        const float MAXDELTATIME = 0.0333f;
-        const float TIMEOUT = 2f;
         Coroutine recenteringCoroutine;
         Quaternion currentRotation;
         Quaternion initialRotation;
-        Quaternion recenteringStartRotation;
         float desiredTargetYaw;
         float desiredTargetPitch;
         float targetYaw;
@@ -29,62 +25,62 @@ namespace Universal.Runtime.Components.Camera
         float yawSmoothVelocity;
         float pitchSmoothVelocity;
         float rotationTimer;
-        float recenteringAngularDistance;
-        float lastInputMagnitude;
 
         public bool IsRecentering { get; private set; }
 
-        public CameraRotation(CameraData data, CinemachineCamera target, CharacterPlayerController controller)
+        public CameraRotation(
+            CameraData data,
+            CinemachineCamera camera,
+            CharacterPlayerController playerController,
+            CharacterCameraController cameraController)
         {
             this.data = data;
-            this.target = target;
-            this.controller= controller;
+            transform = camera.transform;
+            this.playerController = playerController;
+            this.cameraController = cameraController;
 
-            initialRotation = target.transform.localRotation;
+            initialRotation = camera.transform.localRotation;
             ResetToInitialValues();
         }
 
         public void ProcessRotation(Vector2 lookInput)
         {
-            if (IsRecentering) return;
-
-            var currentInputMag = lookInput.sqrMagnitude;
-            if (currentInputMag < INPUTDEADZONE && lastInputMagnitude < INPUTDEADZONE)
-            {
-                lastInputMagnitude = currentInputMag;
+            if (!playerController.IsCurrentStateEqual(playerController.InvestigationState) &&
+                (!playerController.IsCurrentStateEqual(playerController.CombatState) ||
+                IsRecentering))
                 return;
-            }
-            lastInputMagnitude = currentInputMag;
 
-            var deltaTime = Min(Time.deltaTime, MAXDELTATIME);
+            var frameScale = Time.deltaTime * 60f;
+            var sensitivityScale = cameraController.CameraAiming.IsAiming ? data.aimingSensitivityMultiplier : 1f;
 
-            desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * deltaTime;
-            desiredTargetPitch -= lookInput.y * data.sensitivityAmount.y * deltaTime;
+            desiredTargetYaw += lookInput.x * data.sensitivityAmount.x * frameScale * sensitivityScale;
+            desiredTargetPitch -= lookInput.y * data.sensitivityAmount.y * frameScale * sensitivityScale;
 
             desiredTargetYaw = Helpers.ClampAngle(desiredTargetYaw, data.horizontalClamp.x, data.horizontalClamp.y);
             desiredTargetPitch = Helpers.ClampAngle(desiredTargetPitch, data.verticalClamp.x, data.verticalClamp.y);
 
-            var yawSmoothTime = Approximately(data.smoothAmount.x, 0f) ? 0f : 1f / data.smoothAmount.x;
-            var pitchSmoothTime = Approximately(data.smoothAmount.y, 0f) ? 0f : 1f / data.smoothAmount.y;
-
-            targetYaw = SmoothDamp(targetYaw, desiredTargetYaw, ref yawSmoothVelocity, yawSmoothTime);
-            targetPitch = SmoothDamp(targetPitch, desiredTargetPitch, ref pitchSmoothVelocity, pitchSmoothTime);
+            targetYaw = SmoothDamp(
+                targetYaw, desiredTargetYaw, ref yawSmoothVelocity,
+                data.smoothAmount.x, data.maxRotationSpeed, Time.deltaTime
+            );
+            targetPitch = SmoothDamp(
+                targetPitch, desiredTargetPitch, ref pitchSmoothVelocity,
+                data.smoothAmount.y, data.maxRotationSpeed, Time.deltaTime
+            );
 
             currentRotation = Quaternion.Euler(targetPitch, targetYaw, 0f);
-            target.transform.localRotation = Quaternion.Slerp(
-                target.transform.localRotation,
-                currentRotation,
-                1f - Exp(-data.smoothAmount.magnitude * deltaTime)
-            );
+            transform.localRotation = currentRotation;
         }
 
         public void ReturnToInitialRotation(MonoBehaviour mono)
         {
-            if (!controller.IsCurrentStateEqual(controller.MovementState) ||
-                IsRecentering ||
-                Quaternion.Angle(currentRotation, initialRotation) < ANGULARDISTANCETHRESHOLD)
+            if (IsRecentering || !playerController.IsCurrentStateEqual(playerController.MovementState))
                 return;
-            
+
+            var currentAngle = Quaternion.Angle(currentRotation, initialRotation);
+            if (currentAngle < ANGULARDISTANCETHRESHOLD)
+                return;
+
             if (recenteringCoroutine != null)
                 mono.StopCoroutine(recenteringCoroutine);
             recenteringCoroutine = mono.StartCoroutine(RecenteringCoroutine());
@@ -92,57 +88,61 @@ namespace Universal.Runtime.Components.Camera
 
         IEnumerator RecenteringCoroutine()
         {
-            var startTime = Time.time;
-
             IsRecentering = true;
             rotationTimer = 0f;
-            recenteringStartRotation = currentRotation;
-            recenteringAngularDistance = Quaternion.Angle(currentRotation, initialRotation);
 
-            var dynamicDuration = Max(
+            var startRot = currentRotation;
+            var angularDistance = Quaternion.Angle(startRot, initialRotation);
+
+            var duration = Max(
                 MINRECENTERDURATION,
-                data.recenterDuration * (recenteringAngularDistance / FULLROTATIONDEGREES)
+                angularDistance * (1f / (data.recenterSharpness * 100f))
             );
 
-            while (rotationTimer < dynamicDuration && (Time.time - startTime) < TIMEOUT)
+            while (rotationTimer < duration)
             {
-                if (!IsRecentering) yield break;
+                if (!playerController.IsCurrentStateEqual(playerController.MovementState))
+                {
+                    IsRecentering = false;
+                    yield break;
+                }
 
                 rotationTimer += Time.deltaTime;
-                var progress = Clamp01(rotationTimer / dynamicDuration);
-                var easedProgress = Smoother01(progress);
+                var t = Clamp01(rotationTimer * (1f / duration));
 
-                currentRotation = Quaternion.Slerp(
-                    recenteringStartRotation,
-                    initialRotation,
-                    easedProgress
-                );
+                currentRotation = Quaternion.Slerp(startRot, initialRotation, t * (2f - t));
 
-                target.transform.localRotation = currentRotation;
+                transform.localRotation = currentRotation;
+                UpdateRotationVariables(currentRotation.eulerAngles);
+
                 yield return null;
             }
 
             CompleteRecentering();
-            recenteringCoroutine = null;
+        }
+
+        void UpdateRotationVariables(Vector3 eulerAngles)
+        {
+            desiredTargetYaw = Helpers.NormalizeAngle(eulerAngles.y);
+            desiredTargetPitch = Helpers.NormalizeAngle(eulerAngles.x);
+            targetYaw = desiredTargetYaw;
+            targetPitch = desiredTargetPitch;
         }
 
         void CompleteRecentering()
         {
             currentRotation = initialRotation;
-            target.transform.localRotation = initialRotation;
+            transform.localRotation = initialRotation;
+            UpdateRotationVariables(initialRotation.eulerAngles);
             ResetToInitialValues();
-            IsRecentering = false;
         }
 
         void ResetToInitialValues()
         {
-            var euler = initialRotation.eulerAngles;
-            desiredTargetYaw = Helpers.NormalizeAngle(euler.y);
-            desiredTargetPitch = Helpers.NormalizeAngle(euler.x);
-            targetYaw = desiredTargetYaw;
-            targetPitch = desiredTargetPitch;
             yawSmoothVelocity = 0f;
             pitchSmoothVelocity = 0f;
+            IsRecentering = false;
+            recenteringCoroutine = null;
         }
     }
 }

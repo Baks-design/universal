@@ -12,14 +12,16 @@ namespace Universal.Runtime.Components.Camera
     {
         [SerializeField, Parent] CharacterPlayerController controller;
         [SerializeField, Child] CinemachineCamera cinemachine;
-        [SerializeField, InlineEditor] CameraData cameraData;
+        [SerializeField, Parent] InterfaceRef<IGridMover> mover;
+        [SerializeField] Transform height;
+        [SerializeField, InlineEditor] CameraData data;
         CameraRotation cameraRotation;
-        CameraAiming cameraAiming;
+        CameraHeadbob cameraHeadbob;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
         Vector2 lookInput;
 
-        public CinemachineCamera Cinemachine { get => cinemachine; set => cinemachine = value; }
+        public CameraAiming CameraAiming { get; private set; }
 
         void Awake()
         {
@@ -35,8 +37,9 @@ namespace Universal.Runtime.Components.Camera
 
         void InitClasses()
         {
-            cameraRotation = new CameraRotation(cameraData, cinemachine, controller);
-            cameraAiming = new CameraAiming(cameraData, cinemachine);
+            CameraAiming = new CameraAiming(data, cinemachine);
+            cameraRotation = new CameraRotation(data, cinemachine, controller, this);
+            cameraHeadbob = new CameraHeadbob(height, data);
         }
 
         void OnEnable()
@@ -57,10 +60,11 @@ namespace Universal.Runtime.Components.Camera
 
         void OnLook(Vector2 value) => lookInput = value;
 
-        void OnAim() => cameraAiming.ChangeFOV(this);
+        void OnAim() => CameraAiming.ToggleZoom(this);
 
         void LateUpdate()
         {
+            cameraHeadbob.ProcessHeadbob(mover.Value);
             cameraRotation.ProcessRotation(lookInput);
             cameraRotation.ReturnToInitialRotation(this);
         }

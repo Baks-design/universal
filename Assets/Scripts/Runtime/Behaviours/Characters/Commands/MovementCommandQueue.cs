@@ -11,14 +11,21 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly MoveForwardCommand moveForwardCommand = new();
         IGridMover mover;
         float forwardHoldTime;
+        bool isForwardHeld;
 
         void Awake() => TryGetComponent(out mover);
 
         void Update()
         {
-            if (mover.IsMoving ||
-                mover.IsRotating ||
-                commandQueue.Count <= 0) return;
+            if (isForwardHeld)
+            {
+                forwardHoldTime += Time.deltaTime;
+                if (commandQueue.Count < queueDepth && !mover.IsMoving && !mover.IsRotating)
+                    EnqueueCommand(moveForwardCommand);
+                
+            }
+
+            if (mover.IsMoving || mover.IsRotating || commandQueue.Count <= 0) return;
             var nextCommand = commandQueue.Dequeue();
             mover.TryExecuteCommand(nextCommand);
         }
@@ -37,16 +44,16 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void HandleForwardPress()
         {
-            forwardHoldTime += Time.deltaTime;
-            if (forwardHoldTime >= runActivationTime)
-                EnqueueCommand(moveForwardCommand);
-            else
-                EnqueueCommand(moveForwardCommand);
+            isForwardHeld = true;
+            forwardHoldTime = 0f;
+            EnqueueCommand(moveForwardCommand);
         }
 
         public void HandleForwardRelease()
         {
-            if (forwardHoldTime >= runActivationTime) ClearQueue();
+            isForwardHeld = false;
+            if (forwardHoldTime >= runActivationTime)
+                ClearQueue();
             forwardHoldTime = 0f;
         }
     }

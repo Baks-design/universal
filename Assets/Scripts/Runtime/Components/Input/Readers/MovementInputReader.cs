@@ -61,7 +61,7 @@ namespace Universal.Runtime.Components.Input
         public void OnRun(CallbackContext context)
         {
             if (context.started) Run.Invoke(true);
-            else if (context.canceled) Run.Invoke(false);
+            if (context.canceled) Run.Invoke(false);
         }
     }
 }

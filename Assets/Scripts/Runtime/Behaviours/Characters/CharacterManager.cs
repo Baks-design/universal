@@ -10,7 +10,7 @@ using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices
+    public class CharacterManager : MonoBehaviour, ICharacterServices //FIXME: Player Spawn
     {
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterData characterData;

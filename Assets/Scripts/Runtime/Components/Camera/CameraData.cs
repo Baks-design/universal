@@ -5,18 +5,33 @@ namespace Universal.Runtime.Components.Camera
     [CreateAssetMenu(menuName = "Data/Camera/Config")]
     public class CameraData : ScriptableObject
     {
-        [Header("Movement Settings")]
-        public Vector2 verticalClamp = new(-45f, 45f);
-        public Vector2 horizontalClamp = new(-90, 90f);
-        public Vector2 sensitivityAmount = new(10f, 10f);
-        public Vector2 smoothAmount = new(10f, 10f);
+        [Header("Sensitivity")]
+        public Vector2 sensitivityAmount = new(1f, 1f);
+        public float aimingSensitivityMultiplier = 0.5f;
 
-        [Header("Recenter Settings")]
-        [Min(0.1f)] public float recenterDuration = 1f;
+        [Header("Smoothing")]
+        public Vector2 smoothAmount = new(0.1f, 0.1f);
+        public float maxRotationSpeed = 1000f;
 
-        [Header("Aiming Settings")]
-        public AnimationCurve zoomCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-        [Range(20f, 60f)] public float zoomFOV = 45f;
-        [Range(0.1f, 1f)] public float zoomTransitionDuration = 0.3f;
+        [Header("Clamping")]
+        public Vector2 horizontalClamp = new(-90f, 90f);
+        public Vector2 verticalClamp = new(-45, 45f);
+
+        [Header("Recenter")]
+        public float recenterSharpness = 3f;
+
+        [Header("Zoom")]
+        public float zoomFOV = 30f;
+        public float zoomTransitionDuration = 0.3f;
+        public float zoomSharpness = 4f;
+
+        [Header("Movement Bob")]
+        public float walkBobIntensity = 0.05f;
+        public float runBobIntensity = 0.1f;
+        public float walkBobFrequency = 3.5f;
+        public float runBobFrequency = 4.5f;
+        public float bobSmoothTime = 0.1f;
+        public float bobReturnSmoothTime = 0.2f;
+        public float sinMultiplier = 2f;
     }
 }
