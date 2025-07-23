@@ -11,17 +11,22 @@ namespace Universal.Runtime.Components.Input
 {
     public class CombatInputReader : MonoBehaviour, ICombatActions, ICombatInputReader
     {
+        [SerializeField, Self] InputServicesManager services;
+
+        public Vector2 LookDirection => services.GameInputs.Combat.Look.ReadValue<Vector2>();
+
         public event Action OpenPauseScreen = delegate { };
         public event Action ToInvestigate = delegate { };
         public event Action ToMovement = delegate { };
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
-        public event Action<Vector2> Look = delegate { };
         public event Action Aim = delegate { };
         public event Action Attack = delegate { };
         public event Action Target = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<ICombatInputReader>(this);
+
+        public void OnLook(CallbackContext context) { }
 
         public void OnOpenPauseScreen(CallbackContext context)
         {
@@ -47,9 +52,6 @@ namespace Universal.Runtime.Components.Input
         {
             if (context.started) PreviousCharacter.Invoke();
         }
-
-        public void OnLook(CallbackContext context)
-        => Look.Invoke(context.ReadValue<Vector2>());
 
         public void OnAim(CallbackContext context)
         {

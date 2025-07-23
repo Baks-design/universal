@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using Universal.Runtime.Utilities.Helpers;
-using static Freya.Mathfs;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
+    using UnityEngine;
+    using System.Collections;
+
     public class CrouchHandler
     {
         readonly MonoBehaviour monoBehaviour;
@@ -19,11 +21,15 @@ namespace Universal.Runtime.Behaviours.Characters
         readonly float initialCameraHeight;
         readonly float crouchCameraHeight;
         readonly float crouchStandHeightDifference;
+
         Coroutine activeCrouchCoroutine;
         bool isDuringCrouchAnimation;
+        bool receivedCrouchInput;
 
-        public bool DuringCrouchAnimation => isDuringCrouchAnimation;
         public bool IsCrouching { get; private set; }
+        public bool DuringCrouchAnimation => isDuringCrouchAnimation;
+        public float InitialCameraHeight => initialCameraHeight;
+        public float CrouchCameraHeight => crouchCameraHeight;
 
         public CrouchHandler(
             MonoBehaviour monoBehaviour,
@@ -53,8 +59,19 @@ namespace Universal.Runtime.Behaviours.Characters
             crouchCameraHeight = initialCameraHeight - crouchStandHeightDifference;
         }
 
-        public void HandleCrouch()
+        /// <summary>
+        /// Call this from the new Input System's performed callback
+        /// </summary>
+        public void OnCrouchInput() => receivedCrouchInput = true;
+
+        /// <summary>
+        /// Should be called every frame to process crouch logic
+        /// </summary>
+        public void UpdateCrouch()
         {
+            if (!receivedCrouchInput) return;
+            receivedCrouchInput = false;
+
             if (!CanToggleCrouch()) return;
 
             ToggleCrouch();
@@ -64,7 +81,7 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             var isGrounded = collisionController.IsGrounded;
             var isBlockedByRoof = IsCrouching && collisionController.HasRoof;
-            return isGrounded && !isBlockedByRoof;
+            return isGrounded && !isBlockedByRoof && !isDuringCrouchAnimation;
         }
 
         void ToggleCrouch()
@@ -102,11 +119,11 @@ namespace Universal.Runtime.Behaviours.Characters
                 var t = movementSettings.crouchTransitionCurve.Evaluate(elapsedTime * inverseDuration);
 
                 // Smoothly interpolate values
-                characterController.height = Helpers.ExpDecay(startHeight, targetHeight, t);
-                characterController.center = Helpers.ExpDecay(startCenter, targetCenter, t);
+                characterController.height = Mathf.Lerp(startHeight, targetHeight, t);
+                characterController.center = Vector3.Lerp(startCenter, targetCenter, t);
 
                 var cameraPosition = cameraTransform.localPosition;
-                cameraPosition.y = Helpers.ExpDecay(startCameraHeight, targetCameraHeight, t);
+                cameraPosition.y = Mathf.Lerp(startCameraHeight, targetCameraHeight, t);
                 cameraTransform.localPosition = cameraPosition;
 
                 yield return null;

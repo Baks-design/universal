@@ -11,7 +11,6 @@ namespace Universal.Runtime.Utilities.Helpers
         public static void BeginScaledGUI()
         {
             var currentAspect = (float)Screen.width / Screen.height;
-            // scaleFactor = Wider than 16:9 : Taller or perfect 16:9
             var scaleFactor = currentAspect > REF_ASPECT ? Screen.height / REF_HEIGHT : Screen.width / REF_WIDTH;
             GUI.matrix = Matrix4x4.Scale(new Vector3(scaleFactor, scaleFactor, 1f));
         }

@@ -5,6 +5,8 @@ namespace Universal.Runtime.Components.Input
 {
     public interface IInvestigateInputReader
     {
+        Vector2 LookDirection { get;  }
+
         event Action OpenPauseScreen;
         event Action ToMovement;
         event Action ToCombat;
@@ -12,7 +14,6 @@ namespace Universal.Runtime.Components.Input
         event Action RemoveCharacter;
         event Action NextCharacter;
         event Action PreviousCharacter;
-        event Action<Vector2> Look;
         event Action Aim;
         event Action Interact;
     }

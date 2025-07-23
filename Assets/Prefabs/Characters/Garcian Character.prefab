@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 2676070784679009607, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
     - target: {fileID: 3184278700070070321, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: data
       value: 
@@ -112,6 +116,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 7338831354204029381, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: settings.objectsLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 8225837996919150562, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_Enabled
       value: 1

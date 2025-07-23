@@ -99,8 +99,8 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3040206364959241993}
-  - {fileID: 6518328737943928426}
   - {fileID: 7517224090028403351}
+  - {fileID: 6518328737943928426}
   - {fileID: 8519153528729452951}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -126,9 +126,9 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.90999997, z: 0}
 --- !u!114 &2335871156229631570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6597d92cdf6f3e4692b20894d41adf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  settings: {fileID: 0}
 --- !u!114 &535184503864609599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +184,6 @@ MonoBehaviour:
   cameraController: {fileID: 332088360065323903}
   collisionController: {fileID: 1088006068589443771}
   yawTransform: {fileID: 8322836403441853379}
-  data: {fileID: 0}
   headBobSettings:
     xCurve:
       serializedVersion: 2
@@ -192,23 +191,50 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: 3.633036
+        outSlope: 3.633036
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.15792277
+      - serializedVersion: 3
+        time: 0.5
+        value: 1
+        inSlope: 0.006286651
+        outSlope: 0.006286651
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+        value: 0
+        inSlope: -3.6192627
+        outSlope: -3.6192627
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.15006685
+      - serializedVersion: 3
+        time: 1.5
+        value: -1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2
+        value: 0
+        inSlope: 3.835659
+        outSlope: 3.835659
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.20751238
+        outWeight: 0.33333334
       m_PreInfinity: 2
-      m_PostInfinity: 2
+      m_PostInfinity: 1
       m_RotationOrder: 4
     yCurve:
       serializedVersion: 2
@@ -216,40 +242,65 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: 3.633036
+        outSlope: 3.633036
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.15792277
+      - serializedVersion: 3
+        time: 0.5
+        value: 1
+        inSlope: 0.006286651
+        outSlope: 0.006286651
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+        value: 0
+        inSlope: -3.6192627
+        outSlope: -3.6192627
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.15006685
+      - serializedVersion: 3
+        time: 1.5
+        value: -1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 2
+        value: 0
+        inSlope: 3.835659
+        outSlope: 3.835659
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.20751238
+        outWeight: 0.33333334
       m_PreInfinity: 2
-      m_PostInfinity: 2
+      m_PostInfinity: 1
       m_RotationOrder: 4
-    xAmplitude: 0.5
-    yAmplitude: 0.5
-    xFrequency: 0.5
-    yFrequency: 0.5
-    runAmplitudeMultiplier: 2
-    runFrequencyMultiplier: 2
-    crouchAmplitudeMultiplier: 0.5
-    crouchFrequencyMultiplier: 0.5
+    xAmplitude: 0.05
+    yAmplitude: 0.1
+    xFrequency: 2
+    yFrequency: 4
+    runAmplitudeMultiplier: 1.5
+    runFrequencyMultiplier: 1.5
+    crouchAmplitudeMultiplier: 0.2
+    crouchFrequencyMultiplier: 1
   movementSettings:
-    crouchSpeed: 1
-    walkSpeed: 2
-    runSpeed: 3
-    jumpSpeed: 5
+    walkSpeed: 3
     moveBackwardsSpeedPercent: 0.5
-    moveSideSpeedPercent: 0.75
-    canRunThreshold: 0.8
+    moveSideSpeedPercent: 0.7
+    runSpeed: 6
+    canRunThreshold: 0.7
     runTransitionCurve:
       serializedVersion: 2
       m_Curve:
@@ -260,22 +311,23 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: 2
+        outSlope: 2
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    crouchSpeed: 1
     crouchPercent: 0.6
-    crouchTransitionDuration: 1
+    crouchTransitionDuration: 0.5
     crouchTransitionCurve:
       serializedVersion: 2
       m_Curve:
@@ -286,8 +338,8 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -295,30 +347,39 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     lowLandAmount: 0.1
-    highLandAmount: 0.6
+    highLandAmount: 0.4
     landTimer: 0.5
-    landDuration: 1
+    landDuration: 0.5
     landCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: -6.524011
+        outSlope: -6.524011
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.02928031
+      - serializedVersion: 3
+        time: 0.2
+        value: -1
+        inSlope: -0.42737108
+        outSlope: -0.42737108
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -329,12 +390,12 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     gravityMultiplier: 2.5
-    stickToGroundForce: 5
-    smoothRotateSpeed: 10
+    stickToGroundForce: 1
+    smoothRotateSpeed: 100
     smoothInputSpeed: 10
-    smoothVelocitySpeed: 10
+    smoothVelocitySpeed: 3
     smoothFinalDirectionSpeed: 10
-    smoothHeadBobSpeed: 10
+    smoothHeadBobSpeed: 5
 --- !u!114 &1088006068589443771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,14 +413,14 @@ MonoBehaviour:
   settings:
     groundLayer:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 1025
     rayLength: 1
-    raySphereRadius: 0.1
+    raySphereRadius: 0.2
     obstacleLayers:
       serializedVersion: 2
-      m_Bits: 4294967295
-    rayObstacleLength: 1
-    rayObstacleSphereRadius: 0.1
+      m_Bits: 1025
+    rayObstacleLength: 0.4
+    rayObstacleSphereRadius: 0.4
 --- !u!1 &4504538062994894636
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,9 +482,9 @@ MonoBehaviour:
   settings:
     objectsLayers:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 256
     interactionRadius: 0.1
-    interactionRange: 2
+    interactionRange: 1
 --- !u!1 &5667496618357336784
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,22 +606,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 5932689844251830603}
-  cam: {fileID: 8322836403441853379}
+  controller: {fileID: 3093513152412344849}
+  cameraRoot: {fileID: 8322836403441853379}
   settings:
-    sensitivityAmount: {x: 1, y: 1}
-    aimingSensitivityMultiplier: 0.5
-    smoothAmount: {x: 0.1, y: 0.1}
-    maxRotationSpeed: 1000
-    horizontalClamp: {x: -90, y: 90}
     verticalClamp: {x: -45, y: 45}
+    sensitivityAmount: {x: 0.5, y: 0.5}
+    aimingSensitivityMultiplier: 0.25
+    rotationSmoothness: 5
     zoomFOV: 40
-    zoomTransitionDuration: 0.3
-    zoomSharpness: 4
-    swayAmount: 1
-    swaySpeed: 1
-    returnSpeed: 1
-    changeDirectionMultiplier: 1
-    swayCurve:
+    zoomTransitionDuration: 0.25
+    zoomCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    runFOV: 70
+    runTransitionDuration: 0.75
+    runReturnTransitionDuration: 0.5
+    runCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -570,8 +652,8 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -579,11 +661,45 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    swayAmount: 1
+    swaySpeed: 1
+    returnSpeed: 3
+    changeDirectionMultiplier: 4
+    swayCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2.6845634
+        outSlope: 2.6845634
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.055934515
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 0
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    transformTarget: 1
+    amplitude: 1
+    frequency: 0.5
+    x: 1
+    y: 1
+    z: 0
 --- !u!1 &8340735802089306174
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +747,9 @@ MonoBehaviour:
   tr: {fileID: 7517224090028403351}
   movement: {fileID: 535184503864609599}
   collision: {fileID: 1088006068589443771}
+  settings:
+    walkStepInterval: 0.5
+    runStepInterval: 0.3
   soundLibraries:
   - {fileID: 11400000, guid: 5d5fd1ab07e815545a3f4ade1572a96e, type: 2}
 --- !u!1001 &7716549760536062678

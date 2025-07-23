@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameData:
-    Name: 
-    CurrentLevelName: 
-    entityData: []
+    Name: New Game
+    CurrentLevelName: Demo
+    EntityData: []

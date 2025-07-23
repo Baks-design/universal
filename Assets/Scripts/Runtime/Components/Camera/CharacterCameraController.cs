@@ -9,15 +9,16 @@ namespace Universal.Runtime.Components.Camera
     public class CharacterCameraController : MonoBehaviour
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
-        [SerializeField] Transform cam;
+        [SerializeField, Parent] CharacterController controller;
+        [SerializeField] Transform cameraRoot;
         [SerializeField] CameraSettings settings;
-        Vector2 lookInput;
         IMovementInputReader movementInput;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
-        CameraSwaying cameraSwaying;
-        CameraRotation cameraRotation;
-        CameraAiming cameraAiming;
+        SwayingHandler swayingHandler;
+        RotationHandler rotationHandler;
+        AimingHandler aimingHandler;
+        BreathingHandler breathingHandler;
 
         void Awake()
         {
@@ -34,44 +35,39 @@ namespace Universal.Runtime.Components.Camera
 
         void InitClasses()
         {
-            cameraAiming = new CameraAiming(this, settings, cinemachine);
-            cameraRotation = new CameraRotation(settings, cam, cameraAiming);
-            cameraSwaying = new CameraSwaying(settings, cam);
+            aimingHandler = new AimingHandler(cinemachine, settings);
+            rotationHandler = new RotationHandler(
+                settings, cameraRoot, aimingHandler, movementInput, investigateInput, combatInput);
+            swayingHandler = new SwayingHandler(settings, cameraRoot);
+            breathingHandler = new BreathingHandler(cinemachine.transform, settings, controller);
         }
 
         void OnEnable()
         {
-            movementInput.Look += OnLook;
             movementInput.Aim += OnAim;
-
-            investigateInput.Look += OnLook;
             investigateInput.Aim += OnAim;
-
-            combatInput.Look += OnLook;
             combatInput.Aim += OnAim;
         }
 
         void OnDisable()
         {
-            movementInput.Look -= OnLook;
             movementInput.Aim -= OnAim;
-
-            investigateInput.Look -= OnLook;
             investigateInput.Aim -= OnAim;
-
-            combatInput.Look -= OnLook;
             combatInput.Aim -= OnAim;
         }
 
-        void OnLook(Vector2 value) => lookInput = value;
+        void OnAim() => aimingHandler.ChangeFOV(this);
 
-        void OnAim() => cameraAiming.ToggleZoom();
-
-        void LateUpdate() => cameraRotation.UpdateRotation(lookInput);
+        void LateUpdate()
+        {
+            rotationHandler.UpdateRotation();
+            breathingHandler.UpdateBreathing();
+        }
 
         public void HandleSway(Vector3 inputVector, float rawXInput)
-        => cameraSwaying.ApplySway(inputVector, rawXInput);
+        => swayingHandler.ApplySway(inputVector, rawXInput);
 
-        public void ChangeRunFOV(bool returning) => cameraAiming.SetZoom(returning);
+        public void ChangeRunFOV(bool returning)
+        => aimingHandler.ChangeRunFOV(this, returning);
     }
 }

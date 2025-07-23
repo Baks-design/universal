@@ -8,7 +8,6 @@ using static Freya.Random;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-
     public class CharacterSoundController : MonoBehaviour
     {
         [SerializeField, Self] Transform tr;
@@ -105,3 +104,4 @@ namespace Universal.Runtime.Behaviours.Characters
         }
     }
 }
+//TODO: Add Landed Sound

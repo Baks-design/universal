@@ -47,10 +47,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingCamera: {fileID: 778494837584201816}
-  document: {fileID: 2982761803289306356}
   sceneGroups:
   - GroupName: Init
     Scenes:
+    - Reference:
+        asset: {fileID: 102900000, guid: 2d3dfc8c107e1de478792926850eeb44, type: 3}
+        guid: 2d3dfc8c107e1de478792926850eeb44
+      SceneType: 0
     - Reference:
         asset: {fileID: 102900000, guid: f0017be0b3db3f4478f9aa53cd1398fd, type: 3}
         guid: f0017be0b3db3f4478f9aa53cd1398fd
@@ -59,10 +62,6 @@ MonoBehaviour:
         asset: {fileID: 102900000, guid: 12967ae04f27b8440b86cf7887554ca0, type: 3}
         guid: 12967ae04f27b8440b86cf7887554ca0
       SceneType: 3
-    - Reference:
-        asset: {fileID: 102900000, guid: 2d3dfc8c107e1de478792926850eeb44, type: 3}
-        guid: 2d3dfc8c107e1de478792926850eeb44
-      SceneType: 0
     - Reference:
         asset: {fileID: 102900000, guid: 06cdc9a970deeb846a8096c148ea32a3, type: 3}
         guid: 06cdc9a970deeb846a8096c148ea32a3

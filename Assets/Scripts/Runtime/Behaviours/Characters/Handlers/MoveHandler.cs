@@ -1,17 +1,20 @@
 using UnityEngine;
 using Universal.Runtime.Components.Camera;
+using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class MoveHandler
     {
+        readonly CharacterMovementController movementController;
         readonly CharacterController controller;
         readonly Transform yawTransform;
         readonly MovementSettings settings;
         readonly CharacterCollisionController collision;
         readonly CrouchHandler crouchHandler;
-        readonly MovementCalculator movementCalculator;
+        readonly IMovementInputReader movementInput;
+        readonly VelocityHandler velocityHandler;
         readonly HeadBobHandler headBobHandler;
         readonly CharacterCameraController cameraController;
         Vector3 smoothedMoveDirection;
@@ -19,71 +22,62 @@ namespace Universal.Runtime.Behaviours.Characters
         public Vector3 FinalMoveVector;
 
         public MoveHandler(
+            CharacterMovementController movementController,
             CharacterController controller,
             Transform yawTransform,
             MovementSettings settings,
             CharacterCollisionController collision,
-            MovementCalculator movementCalculator,
+            VelocityHandler velocityHandler,
             HeadBobHandler headBobHandler,
             CharacterCameraController cameraController,
-            CrouchHandler crouchHandler)
+            CrouchHandler crouchHandler,
+            IMovementInputReader movementInput)
         {
+            this.movementController = movementController;
             this.controller = controller;
             this.yawTransform = yawTransform;
             this.settings = settings;
             this.collision = collision;
-            this.movementCalculator = movementCalculator;
+            this.velocityHandler = velocityHandler;
             this.headBobHandler = headBobHandler;
             this.cameraController = cameraController;
             this.crouchHandler = crouchHandler;
-        }
-
-        public void UpdateMovement(InputMovement input)
-        {
-            RotateTowardsCamera();
-            SmoothMovementDirection();
-            CalculateFinalMovement();
-            HandleHeadBob(input);
-            HandleRunFOV(input);
+            this.movementInput = movementInput;
         }
 
         public void RotateTowardsCamera()
-        {
-            var currentYRotation = controller.transform.localEulerAngles.y;
-            var targetYRotation = yawTransform.localEulerAngles.y;
-            var smoothFactor = Time.deltaTime * settings.smoothRotateSpeed;
-
-            var smoothedYRotation = Mathf.LerpAngle(currentYRotation, targetYRotation, smoothFactor);
-            controller.transform.localEulerAngles = new Vector3(0f, smoothedYRotation, 0f);
-        }
+        => controller.transform.localRotation = Helpers.ExpDecayRotation(
+            Quaternion.Euler(0f, controller.transform.localRotation.y, 0f),
+            Quaternion.Euler(0f, yawTransform.localRotation.y, 0f),
+            Time.deltaTime * settings.smoothRotateSpeed);
 
         public void SmoothMovementDirection()
         => smoothedMoveDirection = Helpers.ExpDecay(
             smoothedMoveDirection,
-            movementCalculator.FinalMoveDirection,
+            velocityHandler.FinalMoveDirection,
             Time.deltaTime * settings.smoothFinalDirectionSpeed);
 
         public void CalculateFinalMovement()
         {
-            var horizontalMovement = smoothedMoveDirection * movementCalculator.FinalSmoothedSpeed;
+            var horizontalMovement = smoothedMoveDirection * velocityHandler.FinalSmoothedSpeed;
             FinalMoveVector = new Vector3(horizontalMovement.x, FinalMoveVector.y, horizontalMovement.z);
-
-            if (controller.isGrounded)
-                FinalMoveVector.y = horizontalMovement.y;
+            if (controller.isGrounded) FinalMoveVector.y = horizontalMovement.y;
         }
 
-        public void HandleHeadBob(InputMovement input)
+        public void HandleHeadBob()
         {
-            var shouldHeadBob = input.HasInput && collision.IsGrounded &&
+            var shouldHeadBob = movementInput.MoveDirection != Vector2.zero && collision.IsGrounded &&
                 !collision.HasObstacle && !crouchHandler.DuringCrouchAnimation;
+
+            // Get the base height based on current state (crouching or not)
+            var baseHeight = crouchHandler.IsCrouching ? crouchHandler.CrouchCameraHeight : crouchHandler.InitialCameraHeight;
 
             if (shouldHeadBob)
             {
-                var isRunning = input.IsRunning && movementCalculator.CanRun();
-                headBobHandler.ScrollHeadBob(isRunning, crouchHandler.IsCrouching, input.Move);
+                var isRunning = movementController.IsRunning && velocityHandler.CanRun();
+                headBobHandler.ScrollHeadBob(isRunning, crouchHandler.IsCrouching, movementInput.MoveDirection);
 
-                var targetPosition = (controller.transform.up * headBobHandler.CurrentStateHeight) +
-                    headBobHandler.FinalOffset;
+                var targetPosition = (controller.transform.up * baseHeight) + headBobHandler.FinalOffset;
 
                 yawTransform.localPosition = Helpers.ExpDecay(
                     yawTransform.localPosition,
@@ -98,7 +92,8 @@ namespace Universal.Runtime.Behaviours.Characters
 
                 if (!crouchHandler.DuringCrouchAnimation)
                 {
-                    var resetPosition = new Vector3(0f, headBobHandler.CurrentStateHeight, 0f);
+                    // Reset to base height without any headbob offset
+                    var resetPosition = new Vector3(0f, baseHeight, 0f);
                     yawTransform.localPosition = Helpers.ExpDecay(
                         yawTransform.localPosition,
                         resetPosition,
@@ -108,17 +103,19 @@ namespace Universal.Runtime.Behaviours.Characters
             }
         }
 
-        public void HandleRunFOV(InputMovement input)
+        public void HandleRunFOV()
         {
-            var shouldRun = input.HasInput && collision.IsGrounded &&
-                !collision.HasObstacle && input.IsRunning && movementCalculator.CanRun();
+            var shouldRun = movementInput.MoveDirection != Vector2.zero && collision.IsGrounded &&
+                !collision.HasObstacle && movementController.IsRunning && velocityHandler.CanRun();
 
             if (shouldRun && !isInRunAnimation)
             {
                 isInRunAnimation = true;
                 cameraController.ChangeRunFOV(false);
             }
-            else if ((!input.IsRunning || !input.HasInput || collision.HasObstacle) && isInRunAnimation)
+            else if ((!movementController.IsRunning ||
+                movementInput.MoveDirection == Vector2.zero ||
+                collision.HasObstacle) && isInRunAnimation)
             {
                 isInRunAnimation = false;
                 cameraController.ChangeRunFOV(true);

@@ -1,11 +1,10 @@
+using UnityEngine;
 using Universal.Runtime.Utilities.Helpers;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
 {
-    using UnityEngine;
-
-    public class CameraSwaying
+    public class SwayingHandler
     {
         readonly CameraSettings settings;
         readonly Transform transform;
@@ -14,27 +13,22 @@ namespace Universal.Runtime.Components.Camera
         float previousInput;
         bool isChangingDirection;
 
-        public CameraSwaying(CameraSettings settings, Transform transform)
+        public SwayingHandler(CameraSettings settings, Transform transform)
         {
             this.settings = settings;
             this.transform = transform;
         }
 
-        /// <summary>
-        /// Applies sway effect to the camera based on player input.
-        /// </summary>
-        /// <param name="inputVector">Normalized movement input.</param>
-        /// <param name="rawXInput">Raw horizontal input (for direction change detection).</param>
         public void ApplySway(Vector3 inputVector, float rawXInput)
         {
             currentInput = rawXInput;
 
-            if (Abs(rawXInput) > Epsilon) 
+            if (Abs(rawXInput) > Epsilon)
             {
                 CheckDirectionChange();
                 UpdateScrollSpeed(inputVector.x);
             }
-            else 
+            else
                 ResetSway();
 
             ClampScrollSpeed();

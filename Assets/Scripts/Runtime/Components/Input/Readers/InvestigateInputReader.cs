@@ -1,4 +1,5 @@
 using System;
+using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -8,20 +9,25 @@ using static Universal.Runtime.Components.Input.GameInputs;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader 
+    public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader
     {
+        [SerializeField, Self] InputServicesManager services;
+
+        public Vector2 LookDirection => services.GameInputs.Investigate.Look.ReadValue<Vector2>();
+
         public event Action OpenPauseScreen = delegate { };
         public event Action ToMovement = delegate { };
         public event Action ToCombat = delegate { };
         public event Action AddCharacter = delegate { };
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
-        public event Action<Vector2> Look = delegate { };
         public event Action Aim = delegate { };
         public event Action Interact = delegate { };
         public event Action RemoveCharacter = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<IInvestigateInputReader>(this);
+        
+        public void OnLook(CallbackContext context) { }
 
         public void OnOpenPauseScreen(CallbackContext context)
         {
@@ -58,9 +64,6 @@ namespace Universal.Runtime.Components.Input
             if (context.started) PreviousCharacter.Invoke();
         }
 
-        public void OnLook(CallbackContext context)
-        => Look.Invoke(context.ReadValue<Vector2>());
-
         public void OnAim(CallbackContext context)
         {
             if (context.interaction is not HoldInteraction) return;
@@ -76,5 +79,6 @@ namespace Universal.Runtime.Components.Input
         {
             if (context.started) Interact.Invoke();
         }
+
     }
 }
