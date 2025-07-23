@@ -97,7 +97,7 @@ namespace Universal.Runtime.Components.Input
         public void DisableGameInput() => GameInputs.Disable();
         #endregion
 
-        #region Gamepad Rumble
+        #region Force Rumble
         public void PulseRumble(
             float lowFreq, float highFreq, int pulses, float pulseDuration, float pauseDuration)
         {

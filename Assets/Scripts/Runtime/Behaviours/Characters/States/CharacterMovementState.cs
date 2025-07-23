@@ -1,14 +1,15 @@
+using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovementState : IState
     {
-        readonly CharacterPlayerController controller;
+        readonly IInputServices inputServices;
 
-        public CharacterMovementState(CharacterPlayerController controller)
-        => this.controller = controller;
+        public CharacterMovementState(IInputServices inputServices)
+        => this.inputServices = inputServices;
 
-        public void OnEnter() => controller.InputServices.ChangeToMovementMap();
+        public void OnEnter() => inputServices.ChangeToMovementMap();
     }
 }

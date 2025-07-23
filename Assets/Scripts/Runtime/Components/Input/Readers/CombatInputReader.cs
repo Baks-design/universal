@@ -11,8 +11,6 @@ namespace Universal.Runtime.Components.Input
 {
     public class CombatInputReader : MonoBehaviour, ICombatActions, ICombatInputReader
     {
-        [SerializeField, Self] InputServicesManager inputServices;
-
         public event Action OpenPauseScreen = delegate { };
         public event Action ToInvestigate = delegate { };
         public event Action ToMovement = delegate { };
@@ -22,7 +20,6 @@ namespace Universal.Runtime.Components.Input
         public event Action Aim = delegate { };
         public event Action Attack = delegate { };
         public event Action Target = delegate { };
-        public event Action<float> Selection = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<ICombatInputReader>(this);
 
@@ -68,17 +65,6 @@ namespace Universal.Runtime.Components.Input
         public void OnAttack(CallbackContext context)
         {
             if (context.started) Attack.Invoke();
-        }
-
-        public void OnTarget(CallbackContext context)
-        {
-            if (context.started) Target.Invoke();
-        }
-
-        public void OnSelection(CallbackContext context)
-        {
-            var value = context.ReadValue<float>();
-            if (value != 0f) Selection.Invoke(value);
         }
     }
 }

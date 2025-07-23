@@ -1,21 +1,17 @@
 using UnityEngine;
-using KBCore.Refs;
 using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
-using Unity.Cinemachine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterPlayerController : StatefulEntity, IEnableComponent, IPlayableCharacter
+    public class CharacterPlayerController : StatefulEntity
     {
-        public IInputServices InputServices;
-        [SerializeField, Self] Transform tr;
-        [SerializeField, Child] CinemachineCamera cinemachine;
-        [SerializeField, InlineEditor] CharacterData data;
+        [SerializeField, InlineEditor] CharacterSettings settings;
         ICharacterServices characterServices;
+        IInputServices inputServices;
         IMovementInputReader movementInput;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
@@ -23,10 +19,7 @@ namespace Universal.Runtime.Behaviours.Characters
         bool isInMovementState;
         bool isInCombatState;
 
-        public CharacterData CharacterData => data;
-        public Transform CharacterTransform => tr;
-        public Vector3 LastPosition { get; set; }
-        public Quaternion LastRotation { get; set; }
+        public CharacterSettings Settings => settings;
         public CharacterMovementState MovementState { get; private set; }
         public CharacterInvestigationState InvestigationState { get; private set; }
         public CharacterCombatState CombatState { get; private set; }
@@ -35,7 +28,7 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             base.Awake();
             ServiceLocator.Global.Get(out characterServices);
-            ServiceLocator.Global.Get(out InputServices);
+            ServiceLocator.Global.Get(out inputServices);
             ServiceLocator.Global.Get(out movementInput);
             ServiceLocator.Global.Get(out investigateInput);
             ServiceLocator.Global.Get(out combatInput);
@@ -82,7 +75,6 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = true;
             isInInvestigatingState = false;
             isInCombatState = false;
-            cinemachine.Priority = 1;
         }
 
         void OnToInvestigator()
@@ -90,7 +82,6 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = false;
             isInInvestigatingState = true;
             isInCombatState = false;
-            cinemachine.Priority = 9;
         }
 
         void OnToCombat()
@@ -98,7 +89,6 @@ namespace Universal.Runtime.Behaviours.Characters
             isInMovementState = false;
             isInInvestigatingState = false;
             isInCombatState = true;
-            cinemachine.Priority = 9;
         }
 
         void OnNextCharacter() => characterServices.NextCharacter();
@@ -107,9 +97,9 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void Start()
         {
-            MovementState = new CharacterMovementState(this);
-            InvestigationState = new CharacterInvestigationState(this);
-            CombatState = new CharacterCombatState(this);
+            MovementState = new CharacterMovementState(inputServices);
+            InvestigationState = new CharacterInvestigationState(inputServices);
+            CombatState = new CharacterCombatState(inputServices);
 
             At(MovementState, InvestigationState, () => isInInvestigatingState);
             At(MovementState, CombatState, () => isInCombatState);
@@ -121,21 +111,6 @@ namespace Universal.Runtime.Behaviours.Characters
             At(CombatState, InvestigationState, () => isInInvestigatingState);
 
             Set(MovementState);
-        }
-
-        public void Initialize(CharacterData data) => this.data = data;
-
-        public void Activate()
-        {
-            gameObject.SetActive(true);
-            tr.SetLocalPositionAndRotation(LastPosition, LastRotation);
-        }
-
-        public void Deactivate()
-        {
-            LastPosition = tr.localPosition;
-            LastRotation = tr.localRotation;
-            gameObject.SetActive(false);
         }
 
         void OnGUI()

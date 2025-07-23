@@ -76,8 +76,8 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
         {
             gameData = new GameData
             {
-                Name = "Demo",
-                CurrentLevelName = "Level1",
+                Name = "Game",
+                CurrentLevelName = "Demo",
                 EntityData = new List<EntityData>(),
             };
             SceneManager.LoadScene(gameData.CurrentLevelName);

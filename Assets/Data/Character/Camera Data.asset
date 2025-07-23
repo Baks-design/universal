@@ -22,10 +22,10 @@ MonoBehaviour:
   zoomFOV: 40
   zoomTransitionDuration: 0.3
   zoomSharpness: 4
-  walkBobIntensity: 0.05
-  runBobIntensity: 0.1
-  walkBobFrequency: 3.5
-  runBobFrequency: 4.5
-  bobSmoothTime: 0.1
-  bobReturnSmoothTime: 0.2
-  sinMultiplier: 2
+  stepDropAmount: 0.25
+  stepRaiseAmount: 0.1
+  stepDuration: 0.15
+  swayAmount: 0.05
+  swaySpeed: 3
+  tiltAngle: 5
+  tiltSpeed: 10

@@ -1,5 +1,4 @@
 using System;
-using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -9,10 +8,8 @@ using static Universal.Runtime.Components.Input.GameInputs;
 
 namespace Universal.Runtime.Components.Input
 {
-    public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader
+    public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader 
     {
-        [SerializeField, Self] InputServicesManager inputServices;
-
         public event Action OpenPauseScreen = delegate { };
         public event Action ToMovement = delegate { };
         public event Action ToCombat = delegate { };

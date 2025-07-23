@@ -2,8 +2,8 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public interface ICharacterServices
     {
-        bool ContainsCharacter(CharacterData data);
-        void AddCharacterToRoster(CharacterData characterData);
+        bool ContainsCharacter(CharacterSettings settings);
+        void AddCharacterToRoster(CharacterSettings settings);
         void RemoveCharacterFromRoster(int index);
         void NextCharacter();
         void PreviousCharacter();

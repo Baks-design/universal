@@ -23,13 +23,13 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void OnAddCharacter()
         {
-            if (!collision.HasCharacterHit) return;
+            if (!collision.HasObstacle) return;
 
-            if (collision.CharacterHit.collider.TryGetComponent(out CharacterPlayerController character))
+            if (collision.ObstacleHit.collider.TryGetComponent(out CharacterPlayerController character))
             {
-                if (!services.ContainsCharacter(character.CharacterData))
+                if (!services.ContainsCharacter(character.Settings))
                 {
-                    services.AddCharacterToRoster(character.CharacterData);
+                    services.AddCharacterToRoster(character.Settings);
                     RemoveCharacterFromScene(character.gameObject);
                 }
             }

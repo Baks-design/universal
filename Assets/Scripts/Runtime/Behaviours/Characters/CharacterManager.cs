@@ -7,21 +7,24 @@ using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Alchemy.Inspector;
 using static Freya.Mathfs;
+using Random = Freya.Random;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices //FIXME: Player Spawn
+    public class CharacterManager : MonoBehaviour, ICharacterServices
     {
         [SerializeField] GameObject[] spawnPoints;
-        [SerializeField, InlineEditor] CharacterData characterData;
-        Vector3 lastActivePosition;
-        Quaternion lastActiveRotation;
+        [SerializeField, InlineEditor] CharacterSettings characterData;
+        const int maxCharacters = 7;
+        readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
+        readonly HashSet<CharacterSettings> rosterData = new(maxCharacters);
+        Coroutine activeCoroutine;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
         IInputServices inputServices;
-        const int maxCharacters = 7;
-        readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
-        readonly HashSet<CharacterData> rosterData = new(maxCharacters);
+
+        public Vector3 LastActivePosition { get; private set; }
+        public Quaternion LastActiveRotation { get; private set; }
 
         void Awake()
         {
@@ -61,48 +64,55 @@ namespace Universal.Runtime.Behaviours.Characters
         public int GetCurrentCharacterIndex()
         => characterRoster.FindIndex(kvp => kvp.Key == currentCharacter || kvp.Value == enableComponent);
 
-        public bool ContainsCharacter(CharacterData data) => rosterData.Contains(data);
+        public bool ContainsCharacter(CharacterSettings settings) => rosterData.Contains(settings);
 
-        public void AddCharacterToRoster(CharacterData characterData)
+        public void AddCharacterToRoster(CharacterSettings settings)
         {
-            if (characterRoster.Count >= maxCharacters ||
-                rosterData.Contains(characterData)) return;
+            if (characterRoster.Count >= maxCharacters || rosterData.Contains(settings)) return;
 
-            var charObj = Addressables.InstantiateAsync(
-                characterData.characterPrefab,
-                transform
-            ).WaitForCompletion();
-            if (!charObj.TryGetComponent(out IPlayableCharacter character))
-            {
-                Addressables.ReleaseInstance(charObj);
-                return;
-            }
-            if (!charObj.TryGetComponent(out IEnableComponent enableComp))
+            var charObj = Addressables.InstantiateAsync(settings.characterPrefab, transform).WaitForCompletion();
+            if (!charObj.TryGetComponent(out IPlayableCharacter character) ||
+                !charObj.TryGetComponent(out IEnableComponent enableComp))
             {
                 Addressables.ReleaseInstance(charObj);
                 return;
             }
 
-            character.Initialize(characterData);
-
+            // Set positions BEFORE initialization
             if (characterRoster.Count == 0)
             {
-                // Set spawn position for first character
-                var randomPoint = Random.Range(0, spawnPoints.Length);
-                var spawnPoint = spawnPoints[randomPoint].transform;
-                character.CharacterTransform.SetLocalPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-                lastActivePosition = spawnPoint.position;
-                lastActiveRotation = spawnPoint.rotation;
+                var spawnPoint = GetRandomSpawnPoint();
+                character.LastPosition = spawnPoint.localPosition;
+                character.LastRotation = spawnPoint.localRotation;
             }
             else
-                // Use last active position for subsequent characters
-                character.CharacterTransform.SetLocalPositionAndRotation(lastActivePosition, lastActiveRotation);
+            {
+                character.LastPosition = LastActivePosition;
+                character.LastRotation = LastActiveRotation;
+            }
+
+            // Now initialize with the positions set
+            character.Initialize(characterData);
+
+            // Update active position tracking
+            if (characterRoster.Count == 0)
+            {
+                LastActivePosition = character.LastPosition;
+                LastActiveRotation = character.LastRotation;
+            }
 
             rosterData.Add(characterData);
             characterRoster.Add(new KeyValuePair<IPlayableCharacter, IEnableComponent>(character, enableComp));
             enableComp.Deactivate();
 
-            if (currentCharacter == null) SwitchCharacter(0);
+            if (currentCharacter == null)
+                SwitchCharacter(0);
+        }
+
+        Transform GetRandomSpawnPoint()
+        {
+            if (spawnPoints.Length == 0) return transform;
+            return spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
         }
 
         public void RemoveCharacterFromRoster(int index)
@@ -110,7 +120,7 @@ namespace Universal.Runtime.Behaviours.Characters
             if (index < 0 || index >= characterRoster.Count) return;
 
             var character = characterRoster[index];
-            rosterData.Remove(character.Key.CharacterData);
+            rosterData.Remove(character.Key.Settings);
 
             if (currentCharacter == character.Key)
             {
@@ -129,16 +139,20 @@ namespace Universal.Runtime.Behaviours.Characters
             if (index < 0 || index >= characterRoster.Count) return;
 
             var newCharacter = characterRoster[index];
-            StartCoroutine(SwitchCharacterRoutine(newCharacter.Key, newCharacter.Value));
+            if (activeCoroutine != null)
+                StopCoroutine(activeCoroutine);
+            activeCoroutine = StartCoroutine(SwitchCharacterRoutine(newCharacter.Key, newCharacter.Value));
         }
 
         IEnumerator SwitchCharacterRoutine(IPlayableCharacter newCharacter, IEnableComponent newEnableComponent)
         {
-            // Store current position before switching
+            // Save current character's position before switching
             if (currentCharacter != null)
             {
-                lastActivePosition = currentCharacter.CharacterTransform.localPosition;
-                lastActiveRotation = currentCharacter.CharacterTransform.localRotation;
+                LastActivePosition = currentCharacter.CharacterTransform.localPosition;
+                LastActiveRotation = currentCharacter.CharacterTransform.localRotation;
+                currentCharacter.LastPosition = LastActivePosition;
+                currentCharacter.LastRotation = LastActiveRotation;
                 enableComponent.Deactivate();
             }
 
@@ -146,11 +160,7 @@ namespace Universal.Runtime.Behaviours.Characters
             currentCharacter = newCharacter;
             enableComponent = newEnableComponent;
 
-            // Apply the stored position/rotation to the new character
-            currentCharacter.CharacterTransform.SetLocalPositionAndRotation(lastActivePosition, lastActiveRotation);
-
             enableComponent.Activate();
-
             yield return null;
         }
     }

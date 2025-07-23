@@ -8,16 +8,18 @@ using static Freya.Random;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
+
     public class CharacterSoundController : MonoBehaviour
     {
-        [Header("Dependencies")]
         [SerializeField, Self] Transform tr;
         [SerializeField, Parent] CharacterMovementController movement;
         [SerializeField, Parent] CharacterCollisionController collision;
+        [SerializeField] CharacterSoundSettings settings;
         [SerializeField, InlineEditor] FootstepsSoundLibrary[] soundLibraries;
         Dictionary<SurfaceType, FootstepsSoundLibrary> surfaceLookup;
         ISoundEffectsServices soundService;
         SoundBuilder soundBuilder;
+        float nextStepTime;
 
         void Awake()
         {
@@ -50,11 +52,22 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void HandleFootsteps()
         {
-            if (!movement.IsAnimating) return;
+            if (!movement.IsMoving)
+            {
+                nextStepTime = Time.time;
+                return;
+            }
 
-            var surface = GetCurrentSurface();
-            if (surface != null && surface.footstepSounds.Length > 0)
-                PlayRandomSound(surface.footstepSounds);
+            var stepInterval = movement.IsRunning ? settings.runStepInterval : settings.walkStepInterval;
+
+            if (Time.time >= nextStepTime)
+            {
+                var surface = GetCurrentSurface();
+                if (surface != null && surface.footstepSounds.Length > 0)
+                    PlayRandomSound(surface.footstepSounds);
+
+                nextStepTime = Time.time + stepInterval;
+            }
         }
 
         void HandleLanding()

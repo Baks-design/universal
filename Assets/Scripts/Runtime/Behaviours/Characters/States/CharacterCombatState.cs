@@ -1,14 +1,15 @@
+using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterCombatState : IState
     {
-        readonly CharacterPlayerController controller;
+        readonly IInputServices inputServices;
 
-        public CharacterCombatState(CharacterPlayerController controller)
-        => this.controller = controller;
+        public CharacterCombatState(IInputServices inputServices)
+        => this.inputServices = inputServices;
 
-        public void OnEnter() => controller.InputServices.ChangeToCombatMap();
+        public void OnEnter() => inputServices.ChangeToCombatMap();
     }
 }

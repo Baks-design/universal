@@ -1,110 +1,124 @@
-using Alchemy.Inspector;
 using KBCore.Refs;
 using UnityEngine;
+using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Components.Input;
+using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : MonoBehaviour, IGridMover
+    public class CharacterMovementController : MonoBehaviour, IEnableComponent, IPlayableCharacter
     {
-        [SerializeField, Self] CharacterCollisionController collision;
-        [SerializeField, Self] MovementCommandQueue commandQueue;
-        [SerializeField, Self] Transform tr;
-        [SerializeField, InlineEditor] CharacterData data;
-        readonly TurnRightCommand turnRightCommand = new();
-        readonly TurnLeftCommand turnLeftCommand = new();
-        readonly MoveForwardCommand moveForwardCommand = new();
-        readonly MoveBackwardCommand moveBackwardCommand = new();
-        readonly StrafeRightCommand strafeRightCommand = new();
-        readonly StrafeLeftCommand strafeLeftCommand = new();
-        IMovementAnimator movement;
-        IMovementAnimator rotation;
+        [SerializeField, Self] CharacterController controller;
+        [SerializeField, Child] CharacterCameraController cameraController;
+        [SerializeField, Self] CharacterCollisionController collisionController;
+        [SerializeField] Transform yawTransform;
+        [SerializeField] HeadBobSettings headBobSettings;
+        [SerializeField] MovementSettings movementSettings;
+        CharacterSettings settings;
         IMovementInputReader input;
+        InputMovement inputMovement;
+        CrouchHandler crouchHandler;
+        LandingHandler landingHandler;
+        JumpHandler jumpHandler;
+        MoveHandler moveHandler;
+        MovementCalculator movementCalculator;
+        HeadBobHandler headBobHandler;
 
-        public float GridSize => data.gridSize;
-        public bool IsAnimating { get; private set; }
-        public bool IsMoving => movement.IsAnimating;
-        public bool IsRunning { get; private set; }
-        public bool IsRotating => rotation.IsAnimating;
-        public Vector3 Position { get => tr.localPosition; set => tr.localPosition = value; }
-        public Quaternion Rotation { get => tr.rotation; set => tr.rotation = value; }
-        public CharacterCollisionController Collision => collision;
+        public CharacterSettings Settings => settings;
+        public Transform CharacterTransform => controller.transform;
+        public Vector3 LastPosition { get; set; }
+        public Quaternion LastRotation { get; set; }
+        public bool IsMoving => controller.velocity.sqrMagnitude > 0.1f;
+        public bool IsRunning => inputMovement.IsRunning;
+        public Vector3 Direction => movementCalculator.FinalMoveDirection;
 
         void Awake()
         {
             ServiceLocator.Global.Get(out input);
+            InitializeHandlers();
+        }
 
-            movement = new CurveBasedMovementAnimator(data);
-            rotation = new QuaternionRotationAnimator(data);
-
-            movement.AnimateMovement(tr.localPosition, tr.localPosition, 0f);
-            rotation.AnimateRotation(tr.localRotation, tr.localRotation, 0f);
+        void InitializeHandlers()
+        {
+            landingHandler = new LandingHandler(this, yawTransform, movementSettings, collisionController);
+            headBobHandler = new HeadBobHandler(
+                headBobSettings, movementSettings.moveBackwardsSpeedPercent, movementSettings.moveSideSpeedPercent);
+            crouchHandler = new CrouchHandler(this, controller, yawTransform, movementSettings, collisionController);
+            jumpHandler = new JumpHandler(movementSettings, collisionController, crouchHandler);
+            movementCalculator = new MovementCalculator(movementSettings, collisionController, crouchHandler, controller);
+            moveHandler = new MoveHandler(controller, yawTransform, movementSettings, collisionController,
+                movementCalculator, headBobHandler, cameraController, crouchHandler);
         }
 
         void OnEnable()
         {
-            input.TurnRight += TurnRightCommand;
-            input.TurnLeft += TurnLeftCommand;
-            input.Move += MoveCommand;
-            input.Run += RunForwardPress;
+            input.Move += OnGetMove;
+            input.Run += OnGetRun;
+            input.Crouch += OnGetCrouch;
+            input.Jump += OnGetJump;
         }
 
         void OnDisable()
         {
-            input.TurnRight -= TurnRightCommand;
-            input.TurnLeft -= TurnLeftCommand;
-            input.Move -= MoveCommand;
-            input.Run -= RunForwardPress;
+            input.Move -= OnGetMove;
+            input.Run -= OnGetRun;
+            input.Crouch -= OnGetCrouch;
+            input.Jump -= OnGetJump;
         }
 
-        void TurnRightCommand() => TryExecuteCommand(turnRightCommand);
+        void OnGetMove(Vector2 value) => inputMovement.Move = value;
 
-        void TurnLeftCommand() => TryExecuteCommand(turnLeftCommand);
+        void OnGetRun(bool value) => inputMovement.IsRunning = value;
 
-        void MoveCommand(Vector2 move)
-        {
-            if (move.y > 0f) TryExecuteCommand(moveForwardCommand);
-            if (move.y < 0f) TryExecuteCommand(moveBackwardCommand);
-            if (move.x > 0f) TryExecuteCommand(strafeRightCommand);
-            if (move.x < 0f) TryExecuteCommand(strafeLeftCommand);
-        }
+        void OnGetCrouch() => crouchHandler.HandleCrouch();
 
-        void RunForwardPress(bool value)
-        {
-            IsRunning = value;
-
-            if (value)
-                commandQueue.HandleForwardPress();
-            else
-                commandQueue.HandleForwardRelease();
-        }
-
-        public bool TryExecuteCommand(IMovementCommand command)
-        {
-            if (!command.CanExecute(this)) return false;
-            switch (command)
-            {
-                case GridMovementCommand gridCommand:
-                    var targetPos = tr.localPosition + gridCommand.GetMovementDirection(this) * data.gridSize;
-                    if (!Collision.IsPositionFree(targetPos)) return false;
-                    IsAnimating = movement.IsAnimating;
-                    movement.AnimateMovement(tr.localPosition, targetPos, data.moveDuration);
-                    break;
-                case GridTurnCommand turnCommand:
-                    var targetRot = tr.localRotation * Quaternion.Euler(0f, turnCommand.TurnAngle, 0f);
-                    rotation.AnimateRotation(tr.localRotation, targetRot, data.rotationDuration);
-                    break;
-            }
-            command.Execute(this);
-            return true;
-        }
+        void OnGetJump() => jumpHandler.TryJump(ref moveHandler.FinalMoveVector);
 
         void Update()
         {
-            movement.UpdateAnimation();
-            rotation.UpdateAnimation();
-            tr.SetLocalPositionAndRotation(movement.CurrentPosition, rotation.CurrentRotation);
+            moveHandler.RotateTowardsCamera();
+
+            movementCalculator.UpdateMovement(inputMovement);
+
+            moveHandler.SmoothMovementDirection();
+            moveHandler.CalculateFinalMovement();
+            landingHandler.UpdateInAirTime();
+            landingHandler.HandleLanding();
+            jumpHandler.ApplyGravity(ref moveHandler.FinalMoveVector);
+
+            controller.Move(moveHandler.FinalMoveVector * Time.deltaTime);
+
+            moveHandler.HandleHeadBob(inputMovement); 
+            moveHandler.HandleRunFOV(inputMovement);
+            cameraController.HandleSway(movementCalculator.SmoothInputVector, inputMovement.Move.x);
+        }
+
+        public void Initialize(CharacterSettings settings)
+        {
+            this.settings = settings;
+
+            controller.transform.SetLocalPositionAndRotation(LastPosition, LastRotation);
+        }
+
+        public void Activate()
+        {
+            gameObject.SetActive(true);
+            controller.transform.SetLocalPositionAndRotation(LastPosition, LastRotation);
+        }
+
+        public void Deactivate()
+        {
+            LastPosition = controller.transform.localPosition;
+            LastRotation = controller.transform.localRotation;
+            gameObject.SetActive(false);
         }
     }
 }
+
+//TODO: Fix Headbob
+//TODO: Fix Direction
+//TODO: Fix Atributtes Values
+//TODO: Fix Inputs(Jump, Crouch, Run)
+//TODO: Fix Spawn 
+//TODO: Fix Camera Rotation 

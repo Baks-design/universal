@@ -1,14 +1,15 @@
+using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterInvestigationState : IState
     {
-        readonly CharacterPlayerController controller;
+        readonly IInputServices inputServices;
 
-        public CharacterInvestigationState(CharacterPlayerController controller)
-        => this.controller = controller;
+        public CharacterInvestigationState(IInputServices inputServices)
+        => this.inputServices = inputServices;
 
-        public void OnEnter() => controller.InputServices.ChangeToInvestigateMap();
+        public void OnEnter() => inputServices.ChangeToInvestigateMap();
     }
 }

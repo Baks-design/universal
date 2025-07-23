@@ -16,17 +16,12 @@ MonoBehaviour:
   m_GUID: 2554508ff134f6c4ca28bfb5f0356d62
   m_SerializeEntries:
   - m_GUID: 06cdc9a970deeb846a8096c148ea32a3
-    m_Address: Assets/Scenes/Level 01.unity
+    m_Address: Assets/Scenes/Levels/Level 01.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12967ae04f27b8440b86cf7887554ca0
     m_Address: Assets/Scenes/HUD.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2d3dfc8c107e1de478792926850eeb44
-    m_Address: Assets/Scenes/Gameplay.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

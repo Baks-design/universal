@@ -9,11 +9,11 @@ namespace Universal.Runtime.Systems.ScenesManagement
     public class SceneLoaderManager : MonoBehaviour
     {
         [SerializeField, Child] CinemachineCamera loadingCamera; 
-        [SerializeField, Child] UIDocument document;
+        //[SerializeField, Child] UIDocument document;
         [SerializeField] SceneGroup[] sceneGroups;
-        VisualElement root;
-        ProgressBar loadingBar;
-        VisualElement loadingCanvas;
+        // VisualElement root;
+        // ProgressBar loadingBar;
+        // VisualElement loadingCanvas;
         const float fillSpeed = 0.5f;
         float targetProgress;
         bool isLoading;
@@ -21,31 +21,33 @@ namespace Universal.Runtime.Systems.ScenesManagement
 
         void Awake()
         {
-            root = document.rootVisualElement;
-            loadingBar = root.Q<ProgressBar>("loading-bar");
-            loadingCanvas = root.Q<VisualElement>("loading-canvas");
+            DontDestroyOnLoad(gameObject);
+            
+            // root = document.rootVisualElement;
+            // loadingBar = root.Q<ProgressBar>("loading-bar");
+            // loadingCanvas = root.Q<VisualElement>("loading-canvas");
 
             // Hide by default
-            EnableLoadingCanvas(false);
+            //EnableLoadingCanvas(false);
         }
 
         async void Start() => await LoadSceneGroup(0);
 
-        void Update() => LoadBar();
+        //void Update() => LoadBar();
 
-        void LoadBar()
-        {
-            if (!isLoading) return;
-            var currentFillAmount = loadingBar.value / 100f; // ProgressBar uses 0-100 range
-            var progressDifference = Abs(currentFillAmount - targetProgress);
-            var dynamicFillSpeed = progressDifference * fillSpeed;
-            var newFillAmount = Lerp(currentFillAmount, targetProgress, Time.deltaTime * dynamicFillSpeed);
-            loadingBar.value = newFillAmount * 100f;
-        }
+        // void LoadBar()
+        // {
+        //     if (!isLoading) return;
+        //     var currentFillAmount = loadingBar.value / 100f; 
+        //     var progressDifference = Abs(currentFillAmount - targetProgress);
+        //     var dynamicFillSpeed = progressDifference * fillSpeed;
+        //     var newFillAmount = Lerp(currentFillAmount, targetProgress, Time.deltaTime * dynamicFillSpeed);
+        //     loadingBar.value = newFillAmount * 100f;
+        // }
 
         public async Awaitable LoadSceneGroup(int index)
         {
-            loadingBar.value = 0f;
+            //loadingBar.value = 0f;
             targetProgress = 1f;
 
             if (index < 0 || index >= sceneGroups.Length) return;
@@ -61,7 +63,7 @@ namespace Universal.Runtime.Systems.ScenesManagement
         void EnableLoadingCanvas(bool enable = true)
         {
             isLoading = enable;
-            loadingCanvas.style.display = enable ? DisplayStyle.Flex : DisplayStyle.None;
+            //loadingCanvas.style.display = enable ? DisplayStyle.Flex : DisplayStyle.None;
             loadingCamera.gameObject.SetActive(enable);
         }
     }

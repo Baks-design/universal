@@ -1,72 +1,83 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
 {
     public class CameraAiming
     {
-        readonly CameraData data;
-        readonly CinemachineCamera target;
+        readonly CinemachineCamera targetCamera;
+        readonly MonoBehaviour coroutineRunner;
+        readonly CameraSettings settings;
         readonly float originalFOV;
-        Coroutine activeCoroutine;
+        Coroutine activeZoomCoroutine;
+        const float Epsilon = 0.001f;
 
-        public bool IsAiming { get; private set; }
+        public bool IsAiming { get; set; }
 
-        public CameraAiming(CameraData data, CinemachineCamera target)
+        public CameraAiming(
+            MonoBehaviour coroutineRunner,
+            CameraSettings settings,
+            CinemachineCamera targetCamera)
         {
-            this.data = data;
-            this.target = target;
-            originalFOV = target.Lens.FieldOfView;
+            this.coroutineRunner = coroutineRunner;
+            this.settings = settings;
+            this.targetCamera = targetCamera;
+
+            originalFOV = targetCamera.Lens.FieldOfView;
         }
 
-        public void ToggleZoom(MonoBehaviour mono)
+        public void ToggleZoom() => SetZoom(!IsAiming);
+
+        public void SetZoom(bool shouldAim)
         {
-            IsAiming = !IsAiming;
-            StartCoroutine(mono, ZoomRoutine());
+            if (IsAiming == shouldAim) return;
+
+            IsAiming = shouldAim;
+
+            StartZoomCoroutine();
         }
 
-        public void SetZoom(MonoBehaviour mono, bool zoomState)
+        void StartZoomCoroutine()
         {
-            if (IsAiming == zoomState) return;
-            IsAiming = zoomState;
-            StartCoroutine(mono, ZoomRoutine());
-        }
+            if (activeZoomCoroutine != null)
+                coroutineRunner.StopCoroutine(activeZoomCoroutine);
 
-        void StartCoroutine(MonoBehaviour mono, IEnumerator routine)
-        {
-            if (activeCoroutine != null)
-                mono.StopCoroutine(activeCoroutine);
-            activeCoroutine = mono.StartCoroutine(routine);
+            activeZoomCoroutine = coroutineRunner.StartCoroutine(ZoomRoutine());
         }
 
         IEnumerator ZoomRoutine()
         {
-            var startTime = Time.time;
-            var currentFOV = target.Lens.FieldOfView;
-            var targetFOV = IsAiming ? data.zoomFOV : originalFOV;
-            var remainingDistance = Abs(currentFOV - targetFOV);
+            var startFOV = targetCamera.Lens.FieldOfView;
+            var targetFOV = IsAiming ? settings.zoomFOV : originalFOV;
 
-            if (data.zoomTransitionDuration <= Epsilon)
+            // Handle instant transition
+            if (settings.zoomTransitionDuration <= Epsilon)
             {
-                target.Lens.FieldOfView = targetFOV;
+                SetFOVImmediate(targetFOV);
                 yield break;
             }
 
-            while (remainingDistance > 0.1f)
+            var elapsedTime = 0f;
+            var inverseDuration = 1f / settings.zoomTransitionDuration;
+
+            while (elapsedTime < settings.zoomTransitionDuration)
             {
-                var elapsed = Time.time - startTime;
-                var t = 1f - Exp(-data.zoomSharpness * elapsed * (1f / data.zoomTransitionDuration));
+                elapsedTime += Time.deltaTime;
+                var t = CalculateZoomProgress(elapsedTime * inverseDuration);
 
-                target.Lens.FieldOfView = Lerp(currentFOV, targetFOV, t);
-                remainingDistance = Abs(target.Lens.FieldOfView - targetFOV);
-
+                targetCamera.Lens.FieldOfView = Eerp(startFOV, targetFOV, t);
                 yield return null;
             }
 
-            target.Lens.FieldOfView = targetFOV;
-            activeCoroutine = null;
+            SetFOVImmediate(targetFOV);
+            activeZoomCoroutine = null;
         }
+
+        float CalculateZoomProgress(float normalizedTime) => 1f - Exp(-settings.zoomSharpness * normalizedTime);
+
+        void SetFOVImmediate(float fov) => targetCamera.Lens.FieldOfView = fov;
     }
 }

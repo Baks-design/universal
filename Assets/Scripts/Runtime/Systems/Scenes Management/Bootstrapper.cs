@@ -1,4 +1,5 @@
 using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -14,6 +15,7 @@ namespace Universal.Runtime.Systems.ScenesManagement
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Init()
         {
+            Logging.Log("Bootstrapper...");
 #if UNITY_EDITOR
             // Set the bootstrapper scene to be the play mode start scene when running in the editor
             // This will cause the bootstrapper scene to be loaded first (and only once) when entering

@@ -4,11 +4,9 @@ using Universal.Runtime.Utilities.Tools.ServiceLocator;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class PickupController : MonoBehaviour 
+    public class PickupController : MonoBehaviour
     {
-        [SerializeField] LayerMask objectsLayers;
-        [SerializeField] float interactionRadius = 0.1f;
-        [SerializeField] float interactionRange = 2f;
+        [SerializeField] PickupSettings settings;
         IInteractable interactable;
         IInvestigateInputReader input;
         Ray ray;
@@ -30,7 +28,7 @@ namespace Universal.Runtime.Systems.InteractionObjects
         void OnInteract()
         {
             if (interactable == null) return;
-            
+
             interactable.OnInteract(this);
             Debug.Log(true);
         }
@@ -40,9 +38,11 @@ namespace Universal.Runtime.Systems.InteractionObjects
         void ProcessDetection()
         {
             var ray = new Ray(mainCamera.localPosition, mainCamera.forward);
+
             isHit = Physics.SphereCast(
-                ray.origin, interactionRadius, ray.direction, out var hit,
-                interactionRange, objectsLayers, QueryTriggerInteraction.Ignore);
+                ray.origin, settings.interactionRadius, ray.direction, out var hit,
+               settings.interactionRange, settings.objectsLayers, QueryTriggerInteraction.Ignore);
+
             if (isHit)
                 hit.collider.TryGetComponent(out interactable);
         }
@@ -53,13 +53,13 @@ namespace Universal.Runtime.Systems.InteractionObjects
 
             // Draw interaction range
             Gizmos.color = isHit ? Color.green : Color.red;
-            Gizmos.DrawRay(ray.origin, ray.direction * interactionRange);
+            Gizmos.DrawRay(ray.origin, ray.direction * settings.interactionRange);
 
             // Draw sphere cast area
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
-            var sphereEnd = ray.origin + ray.direction * interactionRange;
-            Gizmos.DrawWireSphere(ray.origin, interactionRadius);
-            Gizmos.DrawWireSphere(sphereEnd, interactionRadius);
+            var sphereEnd = ray.origin + ray.direction * settings.interactionRange;
+            Gizmos.DrawWireSphere(ray.origin, settings.interactionRadius);
+            Gizmos.DrawWireSphere(sphereEnd, settings.interactionRadius);
         }
     }
 }

@@ -14,6 +14,5 @@ namespace Universal.Runtime.Components.Input
         event Action Aim;
         event Action Attack;
         event Action Target;
-        event Action<float> Selection;
     }
 }
