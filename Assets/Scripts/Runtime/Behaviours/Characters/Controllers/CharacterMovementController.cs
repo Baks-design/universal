@@ -83,6 +83,7 @@ namespace Universal.Runtime.Behaviours.Characters
             landingHandler.UpdateInAirTime();
             landingHandler.HandleLanding();
             gravityHandler.ApplyGravity(ref moveHandler.FinalMoveVector);
+            velocityHandler.ApplySliding(ref moveHandler.FinalMoveVector);
 
             controller.Move(moveHandler.FinalMoveVector * Time.deltaTime);
 

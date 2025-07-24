@@ -12,15 +12,15 @@ namespace Universal.Runtime.Components.Camera
         readonly IMovementInputReader movementInput;
         readonly IInvestigateInputReader investigateInput;
         readonly ICombatInputReader combatInput;
-        const float FrameRateNormalization = 60f;
         float currentYaw;
         float currentPitch;
         float targetYaw;
         float targetPitch;
 
         public RotationHandler(
-            CameraSettings settings, Transform transform, AimingHandler aimingHandler, IMovementInputReader movementInput,
-            IInvestigateInputReader investigateInput, ICombatInputReader combatInput)
+            CameraSettings settings, Transform transform, AimingHandler aimingHandler,
+            IMovementInputReader movementInput, IInvestigateInputReader investigateInput,
+            ICombatInputReader combatInput)
         {
             this.settings = settings;
             this.transform = transform;
@@ -33,7 +33,8 @@ namespace Universal.Runtime.Components.Camera
         public void SetRotationImmediately(Vector2 rotation)
         {
             targetYaw = currentYaw = rotation.x;
-            targetPitch = currentPitch = Helpers.ClampAngle(rotation.y, settings.verticalClamp.x, settings.verticalClamp.y);
+            targetPitch = currentPitch = Helpers.ClampAngle(
+                rotation.y, settings.verticalClamp.x, settings.verticalClamp.y);
             UpdateRotationHandler();
         }
 
@@ -48,11 +49,10 @@ namespace Universal.Runtime.Components.Camera
         {
             var lookInput = movementInput.LookDirection + investigateInput.LookDirection + combatInput.LookDirection;
 
-            var frameIndependentSensitivity = Time.deltaTime * FrameRateNormalization;
             var sensitivityMultiplier = aimingHandler.IsZooming ? settings.aimingSensitivityMultiplier : 1f;
 
-            targetYaw += lookInput.x * settings.sensitivityAmount.x * frameIndependentSensitivity * sensitivityMultiplier;
-            targetPitch -= lookInput.y * settings.sensitivityAmount.y * frameIndependentSensitivity * sensitivityMultiplier;
+            targetYaw += lookInput.x * settings.sensitivityAmount.x * Time.deltaTime * sensitivityMultiplier;
+            targetPitch -= lookInput.y * settings.sensitivityAmount.y * Time.deltaTime * sensitivityMultiplier;
 
             targetPitch = Helpers.ClampAngle(targetPitch, settings.verticalClamp.x, settings.verticalClamp.y);
         }
@@ -67,3 +67,4 @@ namespace Universal.Runtime.Components.Camera
         void UpdateRotationHandler() => transform.localRotation = Quaternion.Euler(currentPitch, currentYaw, 0f);
     }
 }
+//FIXME : Adjust input on new input system

@@ -69,8 +69,7 @@ namespace Universal.Runtime.Components.Input
 
         public void OnRun(CallbackContext context)
         {
-            if (context.started) Run.Invoke(true);
-            if (context.canceled) Run.Invoke(false);
+            Run.Invoke(context.interaction is HoldInteraction);
         }
 
         public void OnCrouch(CallbackContext context)

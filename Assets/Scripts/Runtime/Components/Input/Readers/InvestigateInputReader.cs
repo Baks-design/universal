@@ -79,6 +79,5 @@ namespace Universal.Runtime.Components.Input
         {
             if (context.started) Interact.Invoke();
         }
-
     }
 }

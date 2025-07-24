@@ -19,6 +19,9 @@ namespace Universal.Runtime.Components.Camera
         RotationHandler rotationHandler;
         AimingHandler aimingHandler;
         BreathingHandler breathingHandler;
+        RecoilHandler recoilHandler;
+
+        public RecoilHandler RecoilHandler => recoilHandler;
 
         void Awake()
         {
@@ -40,6 +43,7 @@ namespace Universal.Runtime.Components.Camera
                 settings, cameraRoot, aimingHandler, movementInput, investigateInput, combatInput);
             swayingHandler = new SwayingHandler(settings, cameraRoot);
             breathingHandler = new BreathingHandler(cinemachine.transform, settings, controller);
+            recoilHandler = new RecoilHandler(settings, cinemachine.transform);
         }
 
         void OnEnable()
@@ -62,6 +66,7 @@ namespace Universal.Runtime.Components.Camera
         {
             rotationHandler.UpdateRotation();
             breathingHandler.UpdateBreathing();
+            recoilHandler.UpdateRecoil();
         }
 
         public void HandleSway(Vector3 inputVector, float rawXInput)

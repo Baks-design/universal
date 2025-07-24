@@ -20,20 +20,60 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public void CheckIfRoof()
         {
-            HasRoof = Physics.SphereCast(
-                controller.transform.localPosition, settings.raySphereRadius, Vector3.up,
-                out var _, initHeight);
+            var radius = controller.radius; 
+            var height = controller.height; 
+
+            var center = controller.transform.localPosition + controller.center;
+            var point1 = center + controller.transform.up * (height / 2f - radius);
+            var point2 = center - controller.transform.up * (height / 2f - radius);
+
+            HasRoof = Physics.CapsuleCast(
+                point1,
+                point2,
+                radius,
+                controller.transform.up,
+                out _,
+                initHeight,
+                settings.roofLayers); 
         }
 
         public void DrawRoofCheckGizmo()
         {
             Gizmos.color = HasRoof ? Color.red : Color.green;
-            var position = controller.transform.localPosition;
-            Gizmos.DrawWireSphere(position, settings.raySphereRadius);
-            Gizmos.DrawLine(position, position + Vector3.up * initHeight);
-            Gizmos.DrawWireSphere(position + Vector3.up * initHeight, settings.raySphereRadius);
+
+            var radius = controller.radius;
+            var height = controller.height;
+            var center = controller.transform.localPosition + controller.center;
+
+            var point1 = center + controller.transform.up * (height / 2f - radius);
+            var point2 = center - controller.transform.up  * (height / 2f - radius);
+
+            DrawCapsuleGizmo(point1, point2, radius);
+
+            Gizmos.DrawLine(center, center + controller.transform.up * initHeight);
+
+            var endPoint = center + controller.transform.up * initHeight;
+            DrawCapsuleGizmo(
+                endPoint + controller.transform.up * (height / 2f - radius),
+                endPoint - controller.transform.up * (height / 2f - radius),
+                radius
+            );
+        }
+
+        void DrawCapsuleGizmo(Vector3 point1, Vector3 point2, float radius)
+        {
+            Gizmos.DrawLine(point1, point2);
+
+            Gizmos.DrawWireSphere(point1, radius);
+            Gizmos.DrawWireSphere(point2, radius);
+
+            var forward = controller.transform.forward * radius;
+            var right = controller.transform.right * radius;
+
+            Gizmos.DrawLine(point1 + forward, point2 + forward);
+            Gizmos.DrawLine(point1 - forward, point2 - forward);
+            Gizmos.DrawLine(point1 + right, point2 + right);
+            Gizmos.DrawLine(point1 - right, point2 - right);
         }
     }
 }
-
-//TODO: Change Sphere by Capsule

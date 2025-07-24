@@ -6,12 +6,13 @@ namespace Universal.Runtime.Behaviours.Characters
     public class CharacterCollisionController : MonoBehaviour
     {
         [SerializeField, Self] CharacterController controller;
-        [SerializeField, Self] CharacterMovementController movementController;
+        [SerializeField, Self] CharacterMovementController movement;
         [SerializeField] PhysicsSettings settings;
         GroundChecker groundChecker;
         ObstacleChecker obstacleChecker;
         RoofChecker roofChecker;
 
+        //Ground
         public bool IsGrounded
         {
             get => groundChecker.IsGrounded;
@@ -19,21 +20,26 @@ namespace Universal.Runtime.Behaviours.Characters
         }
         public bool JustLanded => groundChecker.JustLanded;
         public RaycastHit GroundHit => groundChecker.HitInfo;
+        public bool IsOnSteepSlope => groundChecker.IsOnSteepSlope;
+        public float SlopeAngle => groundChecker.SlopeAngle;
+        public Vector3 SlopeDirection => groundChecker.GetSlopeSlideDirection();
+        //Obstacle
         public bool HasObstacle => obstacleChecker.HasObstacle;
         public RaycastHit ObstacleHit => obstacleChecker.ObstacleHit;
+        //Roof
         public bool HasRoof => roofChecker.HasRoof;
 
         void Awake()
         {
             groundChecker = new GroundChecker(controller, settings);
-            obstacleChecker = new ObstacleChecker(controller, settings);
+            obstacleChecker = new ObstacleChecker(controller, settings, movement);
             roofChecker = new RoofChecker(controller, settings);
         }
 
         void Update()
         {
             groundChecker.CheckGround();
-            obstacleChecker.CheckObstacle(movementController.Direction);
+            obstacleChecker.CheckObstacle();
             roofChecker.CheckIfRoof();
         }
 
@@ -42,8 +48,10 @@ namespace Universal.Runtime.Behaviours.Characters
             if (!Application.isPlaying) return;
 
             groundChecker.DrawGroundCheckGizmo();
-            obstacleChecker.DrawObstacleCheckGizmo(movementController.Direction);
+            obstacleChecker.DrawObstacleCheckGizmo();
             roofChecker.DrawRoofCheckGizmo();
         }
     }
 }
+
+// TODO: Add rigidbody collisions

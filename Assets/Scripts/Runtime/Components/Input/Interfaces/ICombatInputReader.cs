@@ -13,7 +13,8 @@ namespace Universal.Runtime.Components.Input
         event Action NextCharacter;
         event Action PreviousCharacter;
         event Action Aim;
-        event Action Attack;
-        event Action Target;
+        event Action<bool> Attack;
+        event Action<bool> AttackHold;
+        event Action Reload;
     }
 }

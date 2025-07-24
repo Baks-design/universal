@@ -90,5 +90,11 @@ namespace Universal.Runtime.Behaviours.Characters
             var forwardAlignment = Vector3.Dot(camera.transform.forward, FinalMoveDirection.normalized);
             return forwardAlignment >= settings.canRunThreshold && !crouchHandler.IsCrouching;
         }
+
+        public void ApplySliding(ref Vector3 moveVector)
+        {
+            if (!collision.IsOnSteepSlope) return;
+            moveVector = settings.slideSpeed * Time.deltaTime * collision.SlopeDirection;
+        }
     }
 }

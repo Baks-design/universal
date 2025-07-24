@@ -823,6 +823,15 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""b49c971a-1770-4083-8bd5-65f6e4756af9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -911,6 +920,28 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""548eb289-e593-439f-af0c-87a9feab8cfa"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3b87b51-fbc9-4e3b-953d-c3bef99f7841"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1440,6 +1471,7 @@ namespace Universal.Runtime.Components.Input
             m_Combat_Look = m_Combat.FindAction("Look", throwIfNotFound: true);
             m_Combat_Aim = m_Combat.FindAction("Aim", throwIfNotFound: true);
             m_Combat_Attack = m_Combat.FindAction("Attack", throwIfNotFound: true);
+            m_Combat_Reload = m_Combat.FindAction("Reload", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_ClosePauseScreen = m_UI.FindAction("ClosePauseScreen", throwIfNotFound: true);
@@ -1934,6 +1966,7 @@ namespace Universal.Runtime.Components.Input
         private readonly InputAction m_Combat_Look;
         private readonly InputAction m_Combat_Aim;
         private readonly InputAction m_Combat_Attack;
+        private readonly InputAction m_Combat_Reload;
         /// <summary>
         /// Provides access to input actions defined in input action map "Combat".
         /// </summary>
@@ -1977,6 +2010,10 @@ namespace Universal.Runtime.Components.Input
             /// Provides access to the underlying input action "Combat/Attack".
             /// </summary>
             public InputAction @Attack => m_Wrapper.m_Combat_Attack;
+            /// <summary>
+            /// Provides access to the underlying input action "Combat/Reload".
+            /// </summary>
+            public InputAction @Reload => m_Wrapper.m_Combat_Reload;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -2027,6 +2064,9 @@ namespace Universal.Runtime.Components.Input
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
 
             /// <summary>
@@ -2062,6 +2102,9 @@ namespace Universal.Runtime.Components.Input
                 @Attack.started -= instance.OnAttack;
                 @Attack.performed -= instance.OnAttack;
                 @Attack.canceled -= instance.OnAttack;
+                @Reload.started -= instance.OnReload;
+                @Reload.performed -= instance.OnReload;
+                @Reload.canceled -= instance.OnReload;
             }
 
             /// <summary>
@@ -2533,6 +2576,13 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Reload" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnReload(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

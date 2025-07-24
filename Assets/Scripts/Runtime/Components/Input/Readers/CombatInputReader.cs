@@ -21,8 +21,9 @@ namespace Universal.Runtime.Components.Input
         public event Action NextCharacter = delegate { };
         public event Action PreviousCharacter = delegate { };
         public event Action Aim = delegate { };
-        public event Action Attack = delegate { };
-        public event Action Target = delegate { };
+        public event Action<bool> Attack = delegate { };
+        public event Action<bool> AttackHold = delegate { };
+        public event Action Reload = delegate { };
 
         void Awake() => ServiceLocator.Global.Register<ICombatInputReader>(this);
 
@@ -66,7 +67,17 @@ namespace Universal.Runtime.Components.Input
 
         public void OnAttack(CallbackContext context)
         {
-            if (context.started) Attack.Invoke();
+            switch (context.phase)
+            {
+                case InputActionPhase.Started: Attack.Invoke(true); break;
+                case InputActionPhase.Canceled: Attack.Invoke(false); break;
+            }
+            AttackHold.Invoke(context.interaction is HoldInteraction);
+        }
+
+        public void OnReload(CallbackContext context)
+        {
+            if (context.started) Reload.Invoke();
         }
     }
 }
