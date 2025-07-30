@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Systems.SoundEffects
@@ -15,11 +15,7 @@ namespace Universal.Runtime.Systems.SoundEffects
         const float crossFadeTime = 1f;
         readonly Queue<AudioClip> playlist = new();
 
-        void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-            ServiceLocator.Global.Register<IMusicServices>(this);
-        }
+        void Awake() => ServiceLocator.Global.Register<IMusicServices>(this);
 
         public void AddToPlaylist(AudioClip clip)
         {

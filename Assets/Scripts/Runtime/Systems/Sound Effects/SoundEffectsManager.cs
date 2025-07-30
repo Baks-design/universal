@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {
@@ -17,12 +17,8 @@ namespace Universal.Runtime.Systems.SoundEffects
         readonly List<SoundEmitter> activeSoundEmitters = new();
         public readonly LinkedList<SoundEmitter> FrequentSoundEmitters = new();
 
-        void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-            ServiceLocator.Global.Register<ISoundEffectsServices>(this);
-        }
-
+        void Awake() => ServiceLocator.Global.Register<ISoundEffectsServices>(this);
+        
         void Start() => InitializePool();
 
         public SoundBuilder CreateSoundBuilder() => new(this);
@@ -98,6 +94,7 @@ namespace Universal.Runtime.Systems.SoundEffects
         void OnDestroyPoolObject(SoundEmitter soundEmitter)
         {
             if (soundEmitter == null) return;
+            
             Destroy(soundEmitter.gameObject);
         }
     }

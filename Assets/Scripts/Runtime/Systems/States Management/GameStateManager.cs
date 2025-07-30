@@ -4,22 +4,16 @@ using Universal.Runtime.Components.Input;
 using Universal.Runtime.Components.UI;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.EventBus;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using Universal.Runtime.Utilities.Tools.StateMachine;
 
 namespace Universal.Runtime.Systems.StatesManagement
 {
     public class GameStateManager : StatefulEntity
     {
-        [NonSerialized] public IInputServices InputServices;
+        [NonSerialized] public IInputReaderServices InputServices;
         EventBinding<UIEvent> uiEventBinding;
         bool isPauseState;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            DontDestroyOnLoad(gameObject);
-        }
 
         void OnEnable()
         {

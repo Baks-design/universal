@@ -183,22 +183,13 @@ namespace Universal.Runtime.Components.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""8ad4fc31-6bb6-4372-b410-29ab6f5da658"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": ""WASD"",
                     ""id"": ""00ca640b-d935-4593-8157-c05846ea39b3"",
-                    ""path"": ""Dpad(mode=1)"",
+                    ""path"": ""Dpad"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -298,7 +289,7 @@ namespace Universal.Runtime.Components.Input
                     ""name"": """",
                     ""id"": ""e4476c52-aa91-4bb0-900c-91664d9dd90a"",
                     ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Aim"",
@@ -308,9 +299,9 @@ namespace Universal.Runtime.Components.Input
                 {
                     ""name"": """",
                     ""id"": ""d460809c-8d95-4e07-b229-ee4b97d9382e"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
+                    ""processors"": ""ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
@@ -321,7 +312,7 @@ namespace Universal.Runtime.Components.Input
                     ""id"": ""cdfe188c-72d1-48fb-a446-928fbc5af8af"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
@@ -410,7 +401,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -432,30 +423,8 @@ namespace Universal.Runtime.Components.Input
                     ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Crouch"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f07bd419-7db5-40ee-8de5-fbc05497aadd"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d2131345-7d4f-4638-85a6-3d19a7a00513"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -466,6 +435,17 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToCombat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73a20b54-699b-4782-81a1-9347717c9279"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""ToCombat"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -533,7 +513,7 @@ namespace Universal.Runtime.Components.Input
                 {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
-                    ""id"": ""3510e5d6-3546-473b-b4a4-4d9c3a3e4c98"",
+                    ""id"": ""584fdfbe-0e51-48d0-82f2-391e259a8b8a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -559,28 +539,6 @@ namespace Universal.Runtime.Components.Input
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""8e53ed2b-6790-4266-8ddc-cf680ab04fc3"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""53334bf5-7751-4b79-9959-c4fda74fa3d6"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""7fd36a12-4aa2-4480-8ec0-dcea6864a193"",
@@ -649,6 +607,28 @@ namespace Universal.Runtime.Components.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""b81a1ebb-41ae-484c-aea3-659649642b32"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7bb2244-8af6-40da-a8e8-ab4da2164d76"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""1b4089a6-2aec-4484-b551-c7a9f9f0cee0"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -698,6 +678,17 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToCombat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd89c81d-aa96-462e-8e52-c75520a0b346"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""ToCombat"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -800,7 +791,7 @@ namespace Universal.Runtime.Components.Input
                 {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
-                    ""id"": ""f2fd614d-4c3d-4241-97fd-0433bb73f674"",
+                    ""id"": ""a2321406-5ca0-42f6-bce8-2dca77d3079d"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -835,28 +826,6 @@ namespace Universal.Runtime.Components.Input
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""4707332e-1510-449d-add4-50bce6dac2c8"",
-                    ""path"": ""<Pointer>/delta"",
-                    ""interactions"": """",
-                    ""processors"": ""InvertVector2(invertX=false,invertY=false),ScaleVector2(x=0.5,y=0.5)"",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0127bfed-3cb4-41b1-823f-4296638a6a75"",
-                    ""path"": ""<Gamepad>/rightStick"",
-                    ""interactions"": """",
-                    ""processors"": ""StickDeadzone,InvertVector2(invertX=false,invertY=false),ScaleVector2(x=10,y=10)"",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""d806254e-2063-46a0-8362-93823760497a"",
@@ -903,6 +872,28 @@ namespace Universal.Runtime.Components.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""07e45590-85be-4149-8005-919831987b25"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6192043-8d4e-49d8-901a-b3b9489b282a"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=0.5,y=0.5),InvertVector2(invertX=false,invertY=false)"",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b8368745-36c8-410b-bb7f-852559ad0e52"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -937,7 +928,7 @@ namespace Universal.Runtime.Components.Input
                 {
                     ""name"": """",
                     ""id"": ""c3b87b51-fbc9-4e3b-953d-c3bef99f7841"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
@@ -1018,6 +1009,17 @@ namespace Universal.Runtime.Components.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ToMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3bbf5d09-38b0-42e2-b8b2-03f981836fa5"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""ToMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1300,7 +1302,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": ""*/{Submit}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
+                    ""groups"": ""Keyboard&Mouse;Touch;Joystick;XR"",
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1311,7 +1313,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": ""*/{Cancel}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
+                    ""groups"": ""Keyboard&Mouse;Touch;Joystick;XR"",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1388,7 +1390,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""ScrollWheel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1399,7 +1401,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""TrackedDevicePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1410,7 +1412,7 @@ namespace Universal.Runtime.Components.Input
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1434,6 +1436,17 @@ namespace Universal.Runtime.Components.Input
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Gamepad"",
+            ""bindingGroup"": ""Gamepad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -1449,7 +1462,6 @@ namespace Universal.Runtime.Components.Input
             m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
             m_Movement_Run = m_Movement.FindAction("Run", throwIfNotFound: true);
             m_Movement_Crouch = m_Movement.FindAction("Crouch", throwIfNotFound: true);
-            m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
             // Investigate
             m_Investigate = asset.FindActionMap("Investigate", throwIfNotFound: true);
             m_Investigate_OpenPauseScreen = m_Investigate.FindAction("OpenPauseScreen", throwIfNotFound: true);
@@ -1578,7 +1590,6 @@ namespace Universal.Runtime.Components.Input
         private readonly InputAction m_Movement_Move;
         private readonly InputAction m_Movement_Run;
         private readonly InputAction m_Movement_Crouch;
-        private readonly InputAction m_Movement_Jump;
         /// <summary>
         /// Provides access to input actions defined in input action map "Movement".
         /// </summary>
@@ -1630,10 +1641,6 @@ namespace Universal.Runtime.Components.Input
             /// Provides access to the underlying input action "Movement/Crouch".
             /// </summary>
             public InputAction @Crouch => m_Wrapper.m_Movement_Crouch;
-            /// <summary>
-            /// Provides access to the underlying input action "Movement/Jump".
-            /// </summary>
-            public InputAction @Jump => m_Wrapper.m_Movement_Jump;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1690,9 +1697,6 @@ namespace Universal.Runtime.Components.Input
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
             }
 
             /// <summary>
@@ -1734,9 +1738,6 @@ namespace Universal.Runtime.Components.Input
                 @Crouch.started -= instance.OnCrouch;
                 @Crouch.performed -= instance.OnCrouch;
                 @Crouch.canceled -= instance.OnCrouch;
-                @Jump.started -= instance.OnJump;
-                @Jump.performed -= instance.OnJump;
-                @Jump.canceled -= instance.OnJump;
             }
 
             /// <summary>
@@ -2357,6 +2358,19 @@ namespace Universal.Runtime.Components.Input
                 return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
             }
         }
+        private int m_GamepadSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme GamepadScheme
+        {
+            get
+            {
+                if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
+                return asset.controlSchemes[m_GamepadSchemeIndex];
+            }
+        }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Movement" which allows adding and removing callbacks.
         /// </summary>
@@ -2434,13 +2448,6 @@ namespace Universal.Runtime.Components.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCrouch(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnJump(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Investigate" which allows adding and removing callbacks.

@@ -44,8 +44,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
 
         void ChangeState(IState state)
         {
-            if (state == currentNode.State)
-                return;
+            if (state == currentNode.State) return;
 
             var previousState = currentNode.State;
             var nextState = nodes[state.GetType()].State;
@@ -70,7 +69,7 @@ namespace Universal.Runtime.Utilities.Tools.StateMachine
             foreach (var transition in currentNode.Transitions)
                 if (transition.Evaluate())
                     return transition;
-            
+
             return null;
         }
 

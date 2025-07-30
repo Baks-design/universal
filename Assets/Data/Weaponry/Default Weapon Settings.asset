@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd027920c7b87dd42b6acb4ac61eba89, type: 3}
   m_Name: Default Weapon Settings
   m_EditorClassIdentifier: 
-  triggerType: 0
-  ammoCount: 0
-  roundsPerSecond: 0
-  reloadDuration: 0
+  triggerType: 1
+  ammoCount: 20
+  roundsPerSecond: 5
+  reloadDuration: 2
   verticalRecoilMultiplier: 1
   horizontalRecoilMultiplier: 1
   recoilDuration: 0.1

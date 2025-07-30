@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Universal.Runtime.Utilities.Tools.ServiceLocator
+namespace Universal.Runtime.Utilities.Tools.ServicesLocator
 {
     [AddComponentMenu("ServiceLocator/ServiceLocator Global")]
     public class ServiceLocatorGlobal : Bootstrapper

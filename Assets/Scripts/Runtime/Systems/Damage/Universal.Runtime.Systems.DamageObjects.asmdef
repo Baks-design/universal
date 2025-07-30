@@ -1,0 +1,29 @@
+{
+    "name": "Universal.Runtime.Systems.DamageObjects",
+    "rootNamespace": "Universal.Runtime.Systems.DamageObjects",
+    "references": [
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "Unity.InputSystem",
+        "KBCore.Refs",
+        "Alchemy",
+        "MathfsAsmdef",
+        "Universal.Runtime.Components.Input",
+        "Universal.Runtime.Utilities.Tools.EventBus",
+        "Universal.Runtime.Components.Camera",
+        "Universal.Runtime.Utilities.Tools.ServicesLocator",
+        "Universal.Runtime.Utilities.Helpers"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

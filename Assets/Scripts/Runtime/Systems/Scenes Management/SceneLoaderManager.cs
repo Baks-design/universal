@@ -20,9 +20,7 @@ namespace Universal.Runtime.Systems.ScenesManagement
         public readonly SceneGroupManager manager = new();
 
         void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-            
+        {            
             // root = document.rootVisualElement;
             // loadingBar = root.Q<ProgressBar>("loading-bar");
             // loadingCanvas = root.Q<VisualElement>("loading-canvas");

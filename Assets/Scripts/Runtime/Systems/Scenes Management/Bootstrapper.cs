@@ -25,7 +25,5 @@ namespace Universal.Runtime.Systems.ScenesManagement
             );
 #endif
         }
-
-        void Awake() => DontDestroyOnLoad(gameObject);
     }
 }

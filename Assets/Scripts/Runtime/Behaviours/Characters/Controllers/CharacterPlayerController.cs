@@ -3,7 +3,7 @@ using Alchemy.Inspector;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.StateMachine;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
@@ -11,7 +11,7 @@ namespace Universal.Runtime.Behaviours.Characters
     {
         [SerializeField, InlineEditor] CharacterSettings settings;
         ICharacterServices characterServices;
-        IInputServices inputServices;
+        IInputReaderServices inputServices;
         IMovementInputReader movementInput;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
@@ -27,6 +27,7 @@ namespace Universal.Runtime.Behaviours.Characters
         protected override void Awake()
         {
             base.Awake();
+            
             ServiceLocator.Global.Get(out characterServices);
             ServiceLocator.Global.Get(out inputServices);
             ServiceLocator.Global.Get(out movementInput);

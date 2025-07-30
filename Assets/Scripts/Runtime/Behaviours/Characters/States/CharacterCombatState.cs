@@ -5,9 +5,9 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterCombatState : IState
     {
-        readonly IInputServices inputServices;
+        readonly IInputReaderServices inputServices;
 
-        public CharacterCombatState(IInputServices inputServices)
+        public CharacterCombatState(IInputReaderServices inputServices)
         => this.inputServices = inputServices;
 
         public void OnEnter() => inputServices.ChangeToCombatMap();

@@ -1,0 +1,22 @@
+{
+    "name": "Universal.Runtime.Utilities.Tools.Updates",
+    "rootNamespace": "Universal.Runtime.Utilities.Tools.Updates",
+    "references": [
+        "Unity.Mathematics",
+        "MathfsAsmdef",
+        "Universal.Runtime.Utilities.Tools.ServicesLocator",
+        "Universal.Runtime.Utilities.Helpers"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

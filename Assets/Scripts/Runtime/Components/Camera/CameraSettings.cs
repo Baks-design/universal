@@ -13,11 +13,17 @@ namespace Universal.Runtime.Components.Camera
     [Serializable]
     public class CameraSettings
     {
+        [Header("Input Scaling")]
+        public float mouseSensitivity = 1f;
+        public float gamepadSensitivity = 2f;
+        public AnimationCurve gamepadResponseCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
         [Header("Rotation Settings")]
-        public Vector2 verticalClamp = new(-45, 45f);
-        public Vector2 sensitivityAmount = new(250f, 250f);
-        public float aimingSensitivityMultiplier = 0.25f;
-        public float rotationSmoothness = 25f;
+        public Vector2 lookAngleMinMax = new(-45, 45f);
+
+        [Header("Smoothing")]
+        public float rotationSmoothTime = 0.1f;
+        public float aimingSensitivityMultiplier = 0.5f;
 
         [Header("Zoom Settings")]
         public float zoomFOV = 40f;
@@ -48,7 +54,7 @@ namespace Universal.Runtime.Components.Camera
         [Header("Recoil Settings")]
         public float recoilRotationSpeed = 6f;
         public float recoilReturnSpeed = 25f;
-        public Vector3 recoilRotationHipfire = new (2f, 0.5f, 0.25f);
-        public Vector3 recoilRotationAiming = new (1.2f, 0.3f, 0.15f);
+        public Vector3 recoilRotationHipfire = new(2f, 0.5f, 0.25f);
+        public Vector3 recoilRotationAiming = new(1.2f, 0.3f, 0.15f);
     }
 }

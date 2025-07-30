@@ -2,7 +2,7 @@ using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Components.UI
 {
@@ -13,7 +13,7 @@ namespace Universal.Runtime.Components.UI
         // Button resumeButton;
         // Button optionsButton;
         // Button mainMenuButton;
-        IInputServices inputServices;
+        IInputReaderServices inputServices;
 
         void Start()
         {

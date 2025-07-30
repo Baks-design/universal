@@ -1,8 +1,7 @@
 {
     "name": "Universal.Runtime.Utilities.Tools.EventBus",
     "rootNamespace": "Universal.Runtime.Utilities.Tools.EventBus",
-    "references": [
-    ],
+    "references": ["Universal.Runtime.Utilities.Helpers"],
     "includePlatforms": [
         "Editor",
         "WindowsStandalone64"

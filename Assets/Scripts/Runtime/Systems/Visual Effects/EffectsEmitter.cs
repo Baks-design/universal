@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.VFX;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {

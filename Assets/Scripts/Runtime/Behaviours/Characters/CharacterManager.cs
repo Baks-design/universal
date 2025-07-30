@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using System.Collections;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Alchemy.Inspector;
@@ -11,7 +11,7 @@ using Random = Freya.Random;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices
+    public class CharacterManager : MonoBehaviour, ICharacterServices //TODO: Refazer
     {
         [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterSettings characterData;
@@ -21,16 +21,12 @@ namespace Universal.Runtime.Behaviours.Characters
         Coroutine activeCoroutine;
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
-        IInputServices inputServices;
+        IInputReaderServices inputServices;
 
         public Vector3 LastActivePosition { get; private set; }
         public Quaternion LastActiveRotation { get; private set; }
 
-        void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-            ServiceLocator.Global.Register<ICharacterServices>(this);
-        }
+        void Awake() => ServiceLocator.Global.Register<ICharacterServices>(this);
 
         void Start()
         {

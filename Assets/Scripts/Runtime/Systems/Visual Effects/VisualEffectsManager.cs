@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Pool;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Helpers;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
-    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices 
+    public class VisualEffectsManager : MonoBehaviour, IVisualEffectsServices
     {
         [SerializeField] AssetReference effectEmitterPrefab;
         [SerializeField] bool collectionCheck = true;
@@ -24,11 +25,7 @@ namespace Universal.Runtime.Systems.VisualEffects
             set => frequentEffectEmitters = value;
         }
 
-        void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-            ServiceLocator.Global.Register<IVisualEffectsServices>(this);
-        }
+        void Awake() => ServiceLocator.Global.Register<IVisualEffectsServices>(this);
 
         void Start() => InitializePool();
 
@@ -47,7 +44,7 @@ namespace Universal.Runtime.Systems.VisualEffects
                 }
                 catch
                 {
-                    Debug.Log("effectEmitter is already released");
+                    Logging.Log("effectEmitter is already released");
                 }
                 return false;
             }

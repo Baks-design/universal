@@ -43,8 +43,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
         /// <param name="results">Collection of types where result should be added.</param>
         static void AddTypesFromAssembly(Type[] assemblyTypes, Type interfaceType, ICollection<Type> results)
         {
-            if (assemblyTypes == null)
-                return;
+            if (assemblyTypes == null)  return;
 
             for (var i = 0; i < assemblyTypes.Length; i++)
             {

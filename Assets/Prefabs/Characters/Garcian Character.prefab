@@ -24,6 +24,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 11400000, guid: 0609f9ee2ed88ae42a1aa3a915c40131, type: 2}
+    - target: {fileID: 1088006068589443771, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: settings.pushableLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 2368326732608848225, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: data
       value: 
@@ -55,6 +59,10 @@ PrefabInstance:
     - target: {fileID: 3588946117734807384, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: m_Name
       value: Garcian Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 4688738256653694665, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5368062122950305689, guid: 3e7d5503186f5544fa465ca3a90130b0, type: 3}
       propertyPath: data

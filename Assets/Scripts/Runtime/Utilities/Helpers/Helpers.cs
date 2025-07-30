@@ -5,6 +5,8 @@ namespace Universal.Runtime.Utilities.Helpers
 {
     public static class Helpers
     {
+        public static bool IsInLayerMask(int layer, LayerMask layerMask) => layerMask == (layerMask | (1 << layer));
+
         public static float ClampAngle(float angle, float min, float max)
         {
             angle = NormalizeAngle(angle);
@@ -12,7 +14,7 @@ namespace Universal.Runtime.Utilities.Helpers
             return Clamp(angle, min, max);
         }
 
-        public static float NormalizeAngle(float angle)
+        static float NormalizeAngle(float angle)
         {
             angle %= 360f;
             return angle < 0f ? angle + 360f : angle;

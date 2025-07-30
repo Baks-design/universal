@@ -74,7 +74,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5257845014107030152}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Player_Weapon_Right_Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1844578964055461682}
   - component: {fileID: 7680265933469335835}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: Weapon Handler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.90999997, z: 0}
 --- !u!114 &2335871156229631570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,11 +377,11 @@ MonoBehaviour:
     crouchAmplitudeMultiplier: 0.2
     crouchFrequencyMultiplier: 1
   movementSettings:
-    slideSpeed: 5
-    walkSpeed: 6
+    slideSpeed: 3
+    walkSpeed: 3
     moveBackwardsSpeedPercent: 0.5
     moveSideSpeedPercent: 0.7
-    runSpeed: 9
+    runSpeed: 6
     canRunThreshold: 0.7
     runTransitionCurve:
       serializedVersion: 2
@@ -407,7 +407,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    crouchSpeed: 3
+    crouchSpeed: 1
     crouchPercent: 0.6
     crouchTransitionDuration: 0.5
     crouchTransitionCurve:
@@ -495,9 +495,8 @@ MonoBehaviour:
   settings:
     groundLayers:
       serializedVersion: 2
-      m_Bits: 4294967295
-    rayLength: 0.1
-    raySphereRadius: 0.2
+      m_Bits: 1025
+    rayGroundLength: 0.1
     obstacleLayers:
       serializedVersion: 2
       m_Bits: 1025
@@ -506,6 +505,21 @@ MonoBehaviour:
     roofLayers:
       serializedVersion: 2
       m_Bits: 4294967295
+    pushPower: 5
+    pushForceMode: 1
+    maxPushedVelocity: 10
+    useCharacterForward: 1
+    verticalInfluence: 0
+    pushableLayers:
+      serializedVersion: 2
+      m_Bits: 256
+    scalePowerByMass: 1
+    minMass: 0.5
+    maxMass: 5
+    applyTorque: 1
+    torqueMultiplier: 0.1
+    enablePushCooldown: 1
+    cooldownTime: 0.2
 --- !u!1 &4504538062994894636
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +583,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 256
     interactionRadius: 0.3
-    interactionRange: 5
+    interactionRange: 1
 --- !u!1 &5667496618357336784
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,10 +708,35 @@ MonoBehaviour:
   controller: {fileID: 3093513152412344849}
   cameraRoot: {fileID: 8322836403441853379}
   settings:
-    verticalClamp: {x: -45, y: 45}
-    sensitivityAmount: {x: 200, y: 200}
+    mouseSensitivity: 1
+    gamepadSensitivity: 2
+    gamepadResponseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    lookAngleMinMax: {x: -45, y: 45}
+    rotationSmoothTime: 0.1
     aimingSensitivityMultiplier: 0.5
-    rotationSmoothness: 25
     zoomFOV: 40
     zoomTransitionDuration: 0.25
     zoomCurve:
@@ -833,6 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d61acd16b6d9f4b8ba9833ddda44b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 3093513152412344849}
   tr: {fileID: 7517224090028403351}
   movement: {fileID: 535184503864609599}
   collision: {fileID: 1088006068589443771}
@@ -849,6 +889,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5257845014107030152}
     m_Modifications:
+    - target: {fileID: 590933549902499447, guid: f430d71b30787694cb86681609ba7571, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 828389598511242612, guid: f430d71b30787694cb86681609ba7571, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4948262939013677151, guid: f430d71b30787694cb86681609ba7571, type: 3}
       propertyPath: weapon
       value: 
@@ -905,11 +953,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Weapon
       objectReference: {fileID: 0}
+    - target: {fileID: 7212819588243249050, guid: f430d71b30787694cb86681609ba7571, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7258538275319952787, guid: f430d71b30787694cb86681609ba7571, type: 3}
       propertyPath: m_VersionIndex
-      value: 30
+      value: 33
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8526498355002107856, guid: f430d71b30787694cb86681609ba7571, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8574208109452123521, guid: f430d71b30787694cb86681609ba7571, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5842129843338327578, guid: f430d71b30787694cb86681609ba7571, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -946,17 +1007,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlobShadow
       objectReference: {fileID: 0}
+    - target: {fileID: 3028406341300395039, guid: e32cde9918a906d468911b6603eff686, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8194214921975415592, guid: e32cde9918a906d468911b6603eff686, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8194214921975415592, guid: e32cde9918a906d468911b6603eff686, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8194214921975415592, guid: e32cde9918a906d468911b6603eff686, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8194214921975415592, guid: e32cde9918a906d468911b6603eff686, type: 3}
       propertyPath: m_LocalRotation.w

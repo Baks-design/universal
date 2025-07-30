@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 
-namespace Universal.Runtime.Utilities.Tools.ServiceLocator
+namespace Universal.Runtime.Utilities.Tools.ServicesLocator
 {
     public class ServiceManager
     {
@@ -13,13 +13,11 @@ namespace Universal.Runtime.Utilities.Tools.ServiceLocator
         public bool TryGet<T>(out T service) where T : class
         {
             var type = typeof(T);
-
             if (services.TryGetValue(type, out object obj))
             {
                 service = obj as T;
                 return true;
             }
-
             service = null;
             return false;
         }
@@ -27,20 +25,15 @@ namespace Universal.Runtime.Utilities.Tools.ServiceLocator
         public T Get<T>() where T : class
         {
             var type = typeof(T);
-
-            if (services.TryGetValue(type, out object obj))
-                return obj as T;
-
+            if (services.TryGetValue(type, out object obj)) return obj as T;
             throw new ArgumentException($"ServiceManager.Get: Service of type {type.FullName} not registered");
         }
 
         public ServiceManager Register<T>(T service)
         {
             var type = typeof(T);
-
             if (!services.TryAdd(type, service))
-                Debug.LogError($"ServiceManager.Register: Service of type {type.FullName} already registered");
-
+                Logging.LogError($"ServiceManager.Register: Service of type {type.FullName} already registered");
             return this;
         }
 
@@ -48,10 +41,8 @@ namespace Universal.Runtime.Utilities.Tools.ServiceLocator
         {
             if (!type.IsInstanceOfType(service))
                 throw new ArgumentException("Type of service does not match type of service interface", nameof(service));
-
             if (!services.TryAdd(type, service))
-                Debug.LogError($"ServiceManager.Register: Service of type {type.FullName} already registered");
-
+                Logging.LogError($"ServiceManager.Register: Service of type {type.FullName} already registered");
             return this;
         }
     }

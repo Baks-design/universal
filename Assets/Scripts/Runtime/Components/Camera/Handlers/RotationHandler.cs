@@ -1,6 +1,6 @@
 using UnityEngine;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Utilities.Helpers;
+using static Freya.Mathfs;
 
 namespace Universal.Runtime.Components.Camera
 {
@@ -12,15 +12,14 @@ namespace Universal.Runtime.Components.Camera
         readonly IMovementInputReader movementInput;
         readonly IInvestigateInputReader investigateInput;
         readonly ICombatInputReader combatInput;
-        float currentYaw;
-        float currentPitch;
-        float targetYaw;
-        float targetPitch;
+        readonly IInputDeviceServices deviceServices;
+        Vector3 currentRotation;
+        Vector3 rotationVelocity;
 
         public RotationHandler(
             CameraSettings settings, Transform transform, AimingHandler aimingHandler,
             IMovementInputReader movementInput, IInvestigateInputReader investigateInput,
-            ICombatInputReader combatInput)
+            ICombatInputReader combatInput, IInputDeviceServices deviceServices)
         {
             this.settings = settings;
             this.transform = transform;
@@ -28,43 +27,60 @@ namespace Universal.Runtime.Components.Camera
             this.movementInput = movementInput;
             this.investigateInput = investigateInput;
             this.combatInput = combatInput;
-        }
+            this.deviceServices = deviceServices;
 
-        public void SetRotationImmediately(Vector2 rotation)
-        {
-            targetYaw = currentYaw = rotation.x;
-            targetPitch = currentPitch = Helpers.ClampAngle(
-                rotation.y, settings.verticalClamp.x, settings.verticalClamp.y);
-            UpdateRotationHandler();
+            currentRotation = transform.localRotation.eulerAngles;
         }
 
         public void UpdateRotation()
         {
-            CalculateDesiredRotation();
-            ApplySmoothing();
-            UpdateRotationHandler();
+            var input = GetProcessedInput();
+            var targetRotation = CalculateTargetRotation(input);
+            ApplySmoothedRotation(targetRotation);
+            ApplyRotationToTransform();
         }
 
-        void CalculateDesiredRotation()
+        Vector2 GetProcessedInput()
         {
-            var lookInput = movementInput.LookDirection + investigateInput.LookDirection + combatInput.LookDirection;
+            var rawInput = GetCombinedInput();
 
-            var sensitivityMultiplier = aimingHandler.IsZooming ? settings.aimingSensitivityMultiplier : 1f;
+            if (deviceServices.IsGamepadLastActiveDevice)
+                rawInput = ApplyResponseCurve(rawInput);
 
-            targetYaw += lookInput.x * settings.sensitivityAmount.x * Time.deltaTime * sensitivityMultiplier;
-            targetPitch -= lookInput.y * settings.sensitivityAmount.y * Time.deltaTime * sensitivityMultiplier;
+            var sensitivity = deviceServices.IsGamepadLastActiveDevice ?
+                settings.gamepadSensitivity :
+                settings.mouseSensitivity;
 
-            targetPitch = Helpers.ClampAngle(targetPitch, settings.verticalClamp.x, settings.verticalClamp.y);
+            return rawInput * sensitivity;
         }
 
-        void ApplySmoothing()
+        Vector2 GetCombinedInput() => movementInput.LookDirection + investigateInput.LookDirection + combatInput.LookDirection;
+
+        Vector2 ApplyResponseCurve(Vector2 input) => input.normalized * settings.gamepadResponseCurve.Evaluate(input.magnitude);
+
+        Vector3 CalculateTargetRotation(Vector2 input)
         {
-            var dt = Time.deltaTime * settings.rotationSmoothness;
-            currentYaw = Helpers.ExpDecay(currentYaw, targetYaw, dt);
-            currentPitch = Helpers.ExpDecay(currentPitch, targetPitch, dt);
+            var targetRotation = currentRotation + new Vector3(-input.y, input.x, 0f);
+            targetRotation.x = Clamp(targetRotation.x, settings.lookAngleMinMax.x, settings.lookAngleMinMax.y);
+            return targetRotation;
         }
 
-        void UpdateRotationHandler() => transform.localRotation = Quaternion.Euler(currentPitch, currentYaw, 0f);
+        void ApplySmoothedRotation(Vector3 targetRotation)
+        => currentRotation = Vector3.SmoothDamp(
+            currentRotation, targetRotation,
+            ref rotationVelocity,
+            GetCurrentSmoothTime(),
+            Infinity,
+            Time.deltaTime);
+
+        float GetCurrentSmoothTime()
+        {
+            var baseSmoothTime = settings.rotationSmoothTime;
+            return aimingHandler.IsZooming
+                ? baseSmoothTime * settings.aimingSensitivityMultiplier
+                : baseSmoothTime;
+        }
+
+        void ApplyRotationToTransform() => transform.localRotation = Quaternion.Euler(currentRotation);
     }
 }
-//FIXME : Adjust input on new input system

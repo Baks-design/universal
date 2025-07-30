@@ -2,14 +2,16 @@ using KBCore.Refs;
 using UnityEngine;
 using Universal.Runtime.Systems.SoundEffects;
 using System.Collections.Generic;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
 using Alchemy.Inspector;
 using static Freya.Random;
+using Universal.Runtime.Utilities.Tools.Updates;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterSoundController : MonoBehaviour
+    public class CharacterSoundController : MonoBehaviour, IUpdatable //TODO: Adjustar footsteps
     {
+        [SerializeField, Parent] CharacterController controller;
         [SerializeField, Self] Transform tr;
         [SerializeField, Parent] CharacterMovementController movement;
         [SerializeField, Parent] CharacterCollisionController collision;
@@ -24,11 +26,12 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             InitializeServices();
             BuildSurfaceDictionary();
+            InitializeConfigs();
         }
 
         void InitializeServices()
         {
-            ServiceLocator.Global.TryGet(out soundService);
+            ServiceLocator.Global.Get(out soundService);
             soundBuilder = soundService.CreateSoundBuilder();
         }
 
@@ -43,13 +46,19 @@ namespace Universal.Runtime.Behaviours.Characters
             }
         }
 
-        void Update()
+        void InitializeConfigs() => nextStepTime = Time.time + settings.walkStepInterval;
+
+        void OnEnable() => this.AutoRegisterUpdates();
+
+        void OnDisable() => this.AutoUnregisterUpdates();
+
+        public void OnUpdate()
         {
             HandleFootsteps();
             HandleLanding();
         }
 
-        void HandleFootsteps()
+        void HandleFootsteps() 
         {
             if (!movement.IsMoving)
             {
@@ -71,7 +80,7 @@ namespace Universal.Runtime.Behaviours.Characters
 
         void HandleLanding()
         {
-            if (!collision.JustLanded || !collision.IsGrounded) return;
+            if (!collision.JustLanded || !collision.IsGrounded || controller.velocity.y >= 0f) return;
 
             var surface = GetCurrentSurface();
             if (surface != null && surface.landSounds.Length > 0)

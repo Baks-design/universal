@@ -1,4 +1,5 @@
 using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Systems.VisualEffects
 {
@@ -20,7 +21,7 @@ namespace Universal.Runtime.Systems.VisualEffects
         {
             if (effectsData == null)
             {
-                Debug.LogError("EffectsData is null");
+                Logging.LogError("EffectsData is null");
                 return;
             }
 

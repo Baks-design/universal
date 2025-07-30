@@ -3,11 +3,12 @@ using UnityEngine;
 using Universal.Runtime.Components.Camera;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
+using Universal.Runtime.Utilities.Tools.Updates;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterMovementController : MonoBehaviour, IEnableComponent, IPlayableCharacter
+    public class CharacterMovementController : MonoBehaviour, IEnableComponent, IPlayableCharacter, IUpdatable
     {
         [SerializeField, Self] CharacterController controller;
         [SerializeField, Child] CharacterCameraController cameraController;
@@ -28,31 +29,26 @@ namespace Universal.Runtime.Behaviours.Characters
         public Transform CharacterTransform => controller.transform;
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
-        public bool IsMoving => controller.velocity.sqrMagnitude > 0.1f;
+        public bool IsMoving => moveHandler.IsMoving;
         public bool IsRunning { get; private set; }
         public Vector3 Direction => velocityHandler.FinalMoveDirection;
 
         void Awake()
         {
             ServiceLocator.Global.Get(out input);
-            InitializeHandlers();
-        }
 
-        void InitializeHandlers()
-        {
             landingHandler = new LandingHandler(this, yawTransform, movementSettings, collisionController);
-            headBobHandler = new HeadBobHandler(
-                headBobSettings, movementSettings.moveBackwardsSpeedPercent, movementSettings.moveSideSpeedPercent);
+            headBobHandler = new HeadBobHandler(headBobSettings, movementSettings.moveBackwardsSpeedPercent, movementSettings.moveSideSpeedPercent);
             crouchHandler = new CrouchHandler(this, controller, yawTransform, movementSettings, collisionController);
             gravityHandler = new GravityHandler(movementSettings, collisionController);
-            velocityHandler = new VelocityHandler(
-                this, movementSettings, collisionController, crouchHandler, yawTransform, input);
-            moveHandler = new MoveHandler(this, controller, yawTransform, movementSettings, collisionController,
-                velocityHandler, headBobHandler, cameraController, crouchHandler, input);
+            velocityHandler = new VelocityHandler(this, movementSettings, collisionController, crouchHandler, yawTransform, input);
+            moveHandler = new MoveHandler(this, controller, yawTransform, movementSettings, collisionController, velocityHandler, headBobHandler, cameraController, crouchHandler, input);
         }
 
         void OnEnable()
         {
+            this.AutoRegisterUpdates();
+
             input.Run += OnGetRun;
             input.Crouch += OnGetCrouch;
         }
@@ -61,13 +57,15 @@ namespace Universal.Runtime.Behaviours.Characters
         {
             input.Run -= OnGetRun;
             input.Crouch -= OnGetCrouch;
+
+            this.AutoUnregisterUpdates();
         }
 
         void OnGetRun(bool value) => IsRunning = value;
 
         void OnGetCrouch() => crouchHandler.OnCrouchInput();
 
-        void Update()
+        public void OnUpdate()
         {
             moveHandler.RotateTowardsCamera();
 
@@ -95,7 +93,6 @@ namespace Universal.Runtime.Behaviours.Characters
         public void Initialize(CharacterSettings settings)
         {
             this.settings = settings;
-
             controller.transform.SetLocalPositionAndRotation(LastPosition, LastRotation);
         }
 

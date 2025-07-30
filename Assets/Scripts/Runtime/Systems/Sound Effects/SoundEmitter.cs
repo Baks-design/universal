@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KBCore.Refs;
 using UnityEngine;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using Random = UnityEngine.Random;
 
 namespace Universal.Runtime.Systems.SoundEffects
@@ -55,7 +55,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         IEnumerator WaitForSoundToEnd()
         {
-            yield return new WaitWhile(() => audioSource.isPlaying);
+            yield return new WaitWhile(() => audioSource.isPlaying); //TODO: Add metodo para nao alocar
             Stop();
         }
 

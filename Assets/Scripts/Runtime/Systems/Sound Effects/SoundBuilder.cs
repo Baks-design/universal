@@ -1,4 +1,5 @@
 using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Systems.SoundEffects
 {
@@ -26,7 +27,7 @@ namespace Universal.Runtime.Systems.SoundEffects
         {
             if (soundData == null)
             {
-                Debug.LogError("SoundData is null");
+                Logging.LogError("SoundData is null");
                 return;
             }
 

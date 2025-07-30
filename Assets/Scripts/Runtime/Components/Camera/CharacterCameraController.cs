@@ -2,11 +2,12 @@ using KBCore.Refs;
 using Unity.Cinemachine;
 using UnityEngine;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
+using Universal.Runtime.Utilities.Tools.Updates;
 
 namespace Universal.Runtime.Components.Camera
 {
-    public class CharacterCameraController : MonoBehaviour
+    public class CharacterCameraController : MonoBehaviour, ILateUpdatable
     {
         [SerializeField, Child] CinemachineCamera cinemachine;
         [SerializeField, Parent] CharacterController controller;
@@ -15,6 +16,7 @@ namespace Universal.Runtime.Components.Camera
         IMovementInputReader movementInput;
         IInvestigateInputReader investigateInput;
         ICombatInputReader combatInput;
+        IInputDeviceServices inputServices;
         SwayingHandler swayingHandler;
         RotationHandler rotationHandler;
         AimingHandler aimingHandler;
@@ -34,13 +36,14 @@ namespace Universal.Runtime.Components.Camera
             ServiceLocator.Global.Get(out movementInput);
             ServiceLocator.Global.Get(out investigateInput);
             ServiceLocator.Global.Get(out combatInput);
+            ServiceLocator.Global.Get(out inputServices);
         }
-
+        
         void InitClasses()
         {
             aimingHandler = new AimingHandler(cinemachine, settings);
             rotationHandler = new RotationHandler(
-                settings, cameraRoot, aimingHandler, movementInput, investigateInput, combatInput);
+                settings, cameraRoot, aimingHandler, movementInput, investigateInput, combatInput, inputServices);
             swayingHandler = new SwayingHandler(settings, cameraRoot);
             breathingHandler = new BreathingHandler(cinemachine.transform, settings, controller);
             recoilHandler = new RecoilHandler(settings, cinemachine.transform);
@@ -48,6 +51,8 @@ namespace Universal.Runtime.Components.Camera
 
         void OnEnable()
         {
+            this.AutoRegisterUpdates();
+
             movementInput.Aim += OnAim;
             investigateInput.Aim += OnAim;
             combatInput.Aim += OnAim;
@@ -58,11 +63,13 @@ namespace Universal.Runtime.Components.Camera
             movementInput.Aim -= OnAim;
             investigateInput.Aim -= OnAim;
             combatInput.Aim -= OnAim;
+
+            this.AutoUnregisterUpdates();
         }
 
         void OnAim() => aimingHandler.ChangeFOV(this);
 
-        void LateUpdate()
+        public void OnLateUpdate()
         {
             rotationHandler.UpdateRotation();
             breathingHandler.UpdateBreathing();

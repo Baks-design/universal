@@ -5,9 +5,9 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterMovementState : IState
     {
-        readonly IInputServices inputServices;
+        readonly IInputReaderServices inputServices;
 
-        public CharacterMovementState(IInputServices inputServices)
+        public CharacterMovementState(IInputReaderServices inputServices)
         => this.inputServices = inputServices;
 
         public void OnEnter() => inputServices.ChangeToMovementMap();

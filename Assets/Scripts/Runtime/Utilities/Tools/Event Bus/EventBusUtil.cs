@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Utilities.Tools.EventBus
 {
@@ -62,7 +63,7 @@ namespace Universal.Runtime.Utilities.Tools.EventBus
                 var eventType = EventTypes[i];
                 var busType = typedef.MakeGenericType(eventType);
                 eventBusTypes.Add(busType);
-                //Debug.Log($"Initialized EventBus<{eventType.Name}>");
+                Logging.Log($"Initialized EventBus<{eventType.Name}>");
             }
 
             return eventBusTypes;

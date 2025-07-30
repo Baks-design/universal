@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
+using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Utilities.Tools.Timers
 {
@@ -15,7 +16,7 @@ namespace Universal.Runtime.Utilities.Tools.Timers
 
             if (!InsertTimerManager<Update>(ref currentPlayerLoop, 0))
             {
-                Debug.LogWarning("Improved Timers not initialized, unable to register TimerManager into the Update loop.");
+                Logging.LogWarning("Improved Timers not initialized, unable to register TimerManager into the Update loop.");
                 return;
             }
             PlayerLoop.SetPlayerLoop(currentPlayerLoop);

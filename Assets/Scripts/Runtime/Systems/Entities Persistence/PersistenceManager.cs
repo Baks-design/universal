@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Alchemy.Inspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Systems.EntitiesPersistence 
 {
@@ -13,7 +13,6 @@ namespace Universal.Runtime.Systems.EntitiesPersistence
 
         void Awake()
         {
-            DontDestroyOnLoad(gameObject);
             ServiceLocator.Global.Register<IPersistenceServices>(this);
             dataService = new FileDataService(new JsonSerializer());
         }

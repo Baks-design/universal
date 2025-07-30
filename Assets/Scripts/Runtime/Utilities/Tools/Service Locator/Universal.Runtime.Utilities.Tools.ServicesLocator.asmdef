@@ -1,0 +1,20 @@
+{
+    "name": "Universal.Runtime.Utilities.Tools.ServicesLocator",
+    "rootNamespace": "Universal.Runtime.Utilities.Tools.ServicesLocator",
+    "references": [
+        "UnityUtils",
+        "Universal.Runtime.Utilities.Helpers"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

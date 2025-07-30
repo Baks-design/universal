@@ -3,7 +3,7 @@ using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using static UnityEngine.InputSystem.InputAction;
 using static Universal.Runtime.Components.Input.GameInputs;
 
@@ -11,9 +11,9 @@ namespace Universal.Runtime.Components.Input
 {
     public class InvestigateInputReader : MonoBehaviour, IInvestigateActions, IInvestigateInputReader
     {
-        [SerializeField, Self] InputServicesManager services;
+        [SerializeField, Self] InputReaderManager inputReader;
 
-        public Vector2 LookDirection => services.GameInputs.Investigate.Look.ReadValue<Vector2>();
+        public Vector2 LookDirection => inputReader.GameInputs.Investigate.Look.ReadValue<Vector2>();
 
         public event Action OpenPauseScreen = delegate { };
         public event Action ToMovement = delegate { };
@@ -31,37 +31,37 @@ namespace Universal.Runtime.Components.Input
 
         public void OnOpenPauseScreen(CallbackContext context)
         {
-            if (context.started) OpenPauseScreen.Invoke();
+            if (context.performed) OpenPauseScreen.Invoke();
         }
 
         public void OnToMovement(CallbackContext context)
         {
-            if (context.started) ToMovement.Invoke();
+            if (context.performed) ToMovement.Invoke();
         }
 
         public void OnToCombat(CallbackContext context)
         {
-            if (context.started) ToCombat.Invoke();
+            if (context.performed) ToCombat.Invoke();
         }
 
         public void OnAddCharacter(CallbackContext context)
         {
-            if (context.started) AddCharacter.Invoke();
+            if (context.performed) AddCharacter.Invoke();
         }
 
         public void OnRemoveCharacter(CallbackContext context)
         {
-            if (context.started) RemoveCharacter.Invoke();
+            if (context.performed) RemoveCharacter.Invoke();
         }
 
         public void OnNextCharacter(CallbackContext context)
         {
-            if (context.started) NextCharacter.Invoke();
+            if (context.performed) NextCharacter.Invoke();
         }
 
         public void OnPreviousCharacter(CallbackContext context)
         {
-            if (context.started) PreviousCharacter.Invoke();
+            if (context.performed) PreviousCharacter.Invoke();
         }
 
         public void OnAim(CallbackContext context)
@@ -77,7 +77,7 @@ namespace Universal.Runtime.Components.Input
 
         public void OnInteract(CallbackContext context)
         {
-            if (context.started) Interact.Invoke();
+            if (context.performed) Interact.Invoke();
         }
     }
 }

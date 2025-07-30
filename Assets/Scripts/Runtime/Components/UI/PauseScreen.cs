@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Tools.EventBus;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Components.UI
 {

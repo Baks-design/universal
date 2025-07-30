@@ -1,57 +1,64 @@
 using KBCore.Refs;
 using UnityEngine;
+using Universal.Runtime.Utilities.Tools.Updates;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterCollisionController : MonoBehaviour
+    public class CharacterCollisionController : MonoBehaviour, IUpdatable
     {
         [SerializeField, Self] CharacterController controller;
         [SerializeField, Self] CharacterMovementController movement;
         [SerializeField] PhysicsSettings settings;
-        GroundChecker groundChecker;
-        ObstacleChecker obstacleChecker;
-        RoofChecker roofChecker;
+        GroundHandler groundHandler;
+        ObstacleHandler obstacleHandler;
+        RoofHandler roofHandler;
+        RigidbodyHandler rigidbodyHandler;
 
         //Ground
         public bool IsGrounded
         {
-            get => groundChecker.IsGrounded;
-            set => groundChecker.IsGrounded = value;
+            get => groundHandler.IsGrounded;
+            set => groundHandler.IsGrounded = value;
         }
-        public bool JustLanded => groundChecker.JustLanded;
-        public RaycastHit GroundHit => groundChecker.HitInfo;
-        public bool IsOnSteepSlope => groundChecker.IsOnSteepSlope;
-        public float SlopeAngle => groundChecker.SlopeAngle;
-        public Vector3 SlopeDirection => groundChecker.GetSlopeSlideDirection();
+        public bool JustLanded => groundHandler.JustLanded;
+        public RaycastHit GroundHit => groundHandler.HitInfo;
+        public bool IsOnSteepSlope => groundHandler.IsOnSteepSlope;
+        public float SlopeAngle => groundHandler.SlopeAngle;
+        public Vector3 SlopeDirection => groundHandler.GetSlopeSlideDirection();
         //Obstacle
-        public bool HasObstacle => obstacleChecker.HasObstacle;
-        public RaycastHit ObstacleHit => obstacleChecker.ObstacleHit;
+        public bool HasObstacle => obstacleHandler.HasObstacle;
+        public RaycastHit ObstacleHit => obstacleHandler.ObstacleHit;
         //Roof
-        public bool HasRoof => roofChecker.HasRoof;
+        public bool HasRoof => roofHandler.HasRoof;
 
         void Awake()
         {
-            groundChecker = new GroundChecker(controller, settings);
-            obstacleChecker = new ObstacleChecker(controller, settings, movement);
-            roofChecker = new RoofChecker(controller, settings);
+            groundHandler = new GroundHandler(controller, settings);
+            obstacleHandler = new ObstacleHandler(controller, settings, movement);
+            roofHandler = new RoofHandler(controller, settings);
+            rigidbodyHandler = new RigidbodyHandler(controller, settings);
         }
 
-        void Update()
+        void OnEnable() => this.AutoRegisterUpdates();
+
+        void OnDisable() => this.AutoUnregisterUpdates();
+
+        public void OnUpdate()
         {
-            groundChecker.CheckGround();
-            obstacleChecker.CheckObstacle();
-            roofChecker.CheckIfRoof();
+            groundHandler.CheckGround();
+            obstacleHandler.CheckObstacle();
+            roofHandler.CheckIfRoof();
+            rigidbodyHandler.UpdateCooldowns();
         }
+
+        void OnControllerColliderHit(ControllerColliderHit hit) => rigidbodyHandler.PushRigidbody(hit);
 
         void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
-
-            groundChecker.DrawGroundCheckGizmo();
-            obstacleChecker.DrawObstacleCheckGizmo();
-            roofChecker.DrawRoofCheckGizmo();
+            groundHandler.DrawGroundCheckGizmo();
+            obstacleHandler.DrawObstacleCheckGizmo();
+            roofHandler.DrawRoofCheckGizmo();
         }
     }
 }
-
-// TODO: Add rigidbody collisions

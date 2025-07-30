@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using static UnityEngine.InputSystem.InputAction;
 using static Universal.Runtime.Components.Input.GameInputs;
 
@@ -14,7 +14,7 @@ namespace Universal.Runtime.Components.Input
 
         public void OnClosePauseScreen(CallbackContext context)
         {
-            if (context.started) ClosePauseScreen.Invoke();
+            if (context.performed) ClosePauseScreen.Invoke();
         }
 
         public void OnCancel(CallbackContext context) { }

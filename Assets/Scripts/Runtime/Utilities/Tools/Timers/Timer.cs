@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using static Freya.Mathfs;
 
 namespace Universal.Runtime.Utilities.Tools.Timers

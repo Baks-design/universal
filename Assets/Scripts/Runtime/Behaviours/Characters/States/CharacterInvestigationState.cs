@@ -5,9 +5,9 @@ namespace Universal.Runtime.Behaviours.Characters
 {
     public class CharacterInvestigationState : IState
     {
-        readonly IInputServices inputServices;
+        readonly IInputReaderServices inputServices;
 
-        public CharacterInvestigationState(IInputServices inputServices)
+        public CharacterInvestigationState(IInputReaderServices inputServices)
         => this.inputServices = inputServices;
 
         public void OnEnter() => inputServices.ChangeToInvestigateMap();

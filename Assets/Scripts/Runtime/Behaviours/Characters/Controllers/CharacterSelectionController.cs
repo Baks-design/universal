@@ -1,7 +1,7 @@
 using KBCore.Refs;
 using UnityEngine;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {

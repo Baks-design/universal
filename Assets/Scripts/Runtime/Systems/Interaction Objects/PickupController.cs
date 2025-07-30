@@ -1,10 +1,11 @@
 using UnityEngine;
 using Universal.Runtime.Components.Input;
-using Universal.Runtime.Utilities.Tools.ServiceLocator;
+using Universal.Runtime.Utilities.Tools.ServicesLocator;
+using Universal.Runtime.Utilities.Tools.Updates;
 
 namespace Universal.Runtime.Systems.InteractionObjects
 {
-    public class PickupController : MonoBehaviour
+    public class PickupController : MonoBehaviour, IUpdatable
     {
         [SerializeField] PickupSettings settings;
         IInteractable interactable;
@@ -13,27 +14,32 @@ namespace Universal.Runtime.Systems.InteractionObjects
         Transform mainCamera;
         bool isHit;
 
-        public Vector3 GetAimDirection => ray.direction;
-
         void Awake()
         {
             mainCamera = Camera.main.transform;
             ServiceLocator.Global.Get(out input);
         }
 
-        void OnEnable() => input.Interact += OnInteract;
+        void OnEnable()
+        {
+            this.AutoRegisterUpdates();
+            input.Interact += OnInteract;
+        }
 
-        void OnDisable() => input.Interact -= OnInteract;
+        void OnDisable()
+        {
+            this.AutoUnregisterUpdates();
+            input.Interact -= OnInteract;
+        }
 
         void OnInteract()
         {
             if (interactable == null) return;
 
             interactable.OnInteract(this);
-            Debug.Log(true);
         }
 
-        void Update() => ProcessDetection();
+        public void OnUpdate() => ProcessDetection();
 
         void ProcessDetection()
         {
