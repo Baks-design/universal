@@ -7,13 +7,11 @@ using Universal.Runtime.Components.Input;
 using Universal.Runtime.Utilities.Helpers;
 using Alchemy.Inspector;
 using static Freya.Mathfs;
-using Random = Freya.Random;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterManager : MonoBehaviour, ICharacterServices //TODO: Refazer
+    public class CharacterManager : MonoBehaviour, ICharacterServices
     {
-        [SerializeField] GameObject[] spawnPoints;
         [SerializeField, InlineEditor] CharacterSettings characterData;
         const int maxCharacters = 7;
         readonly List<KeyValuePair<IPlayableCharacter, IEnableComponent>> characterRoster = new(maxCharacters);
@@ -22,17 +20,17 @@ namespace Universal.Runtime.Behaviours.Characters
         IPlayableCharacter currentCharacter;
         IEnableComponent enableComponent;
         IInputReaderServices inputServices;
+        ISpawnServices spawnServices;
 
-        public Vector3 LastActivePosition { get; private set; }
-        public Quaternion LastActiveRotation { get; private set; }
+        public Vector3 LastActivePosition { get; set; }
+        public Quaternion LastActiveRotation { get; set; }
 
         void Awake() => ServiceLocator.Global.Register<ICharacterServices>(this);
 
         void Start()
         {
+            ServiceLocator.Global.Get(out spawnServices);
             ServiceLocator.Global.Get(out inputServices);
-            inputServices.ChangeToMovementMap();
-            AddCharacterToRoster(characterData);
         }
 
         public void NextCharacter()
@@ -62,11 +60,13 @@ namespace Universal.Runtime.Behaviours.Characters
 
         public bool ContainsCharacter(CharacterSettings settings) => rosterData.Contains(settings);
 
-        public void AddCharacterToRoster(CharacterSettings settings)
+        public void AddCharacterToRoster()
         {
-            if (characterRoster.Count >= maxCharacters || rosterData.Contains(settings)) return;
+            inputServices.ChangeToMovementMap();
 
-            var charObj = Addressables.InstantiateAsync(settings.characterPrefab, transform).WaitForCompletion();
+            if (characterRoster.Count >= maxCharacters || rosterData.Contains(characterData)) return;
+
+            var charObj = Addressables.InstantiateAsync(characterData.characterPrefab, transform).WaitForCompletion();
             if (!charObj.TryGetComponent(out IPlayableCharacter character) ||
                 !charObj.TryGetComponent(out IEnableComponent enableComp))
             {
@@ -77,9 +77,9 @@ namespace Universal.Runtime.Behaviours.Characters
             // Set positions BEFORE initialization
             if (characterRoster.Count == 0)
             {
-                var spawnPoint = GetRandomSpawnPoint();
-                character.LastPosition = spawnPoint.localPosition;
-                character.LastRotation = spawnPoint.localRotation;
+                var spawnPoint = spawnServices.GetSpawnPoint(); //FIXME
+                character.LastPosition = spawnPoint.Position;
+                character.LastRotation = spawnPoint.Rotation;
             }
             else
             {
@@ -103,12 +103,6 @@ namespace Universal.Runtime.Behaviours.Characters
 
             if (currentCharacter == null)
                 SwitchCharacter(0);
-        }
-
-        Transform GetRandomSpawnPoint()
-        {
-            if (spawnPoints.Length == 0) return transform;
-            return spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
         }
 
         public void RemoveCharacterFromRoster(int index)

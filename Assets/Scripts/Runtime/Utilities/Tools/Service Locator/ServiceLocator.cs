@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#if UNITY_EDITOR
 using UnityEditor;
+#endif
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtils;
@@ -9,7 +10,7 @@ using Universal.Runtime.Utilities.Helpers;
 
 namespace Universal.Runtime.Utilities.Tools.ServicesLocator
 {
-    public class ServiceLocator : MonoBehaviour //TODO: Remover coalescence
+    public class ServiceLocator : MonoBehaviour
     {
         static ServiceLocator global;
         static Dictionary<Scene, ServiceLocator> sceneContainers;
@@ -77,8 +78,12 @@ namespace Universal.Runtime.Utilities.Tools.ServicesLocator
             tmpSceneGameObjects.Clear();
             scene.GetRootGameObjects(tmpSceneGameObjects);
 
-            foreach (GameObject go in tmpSceneGameObjects.Where(go => go.GetComponent<ServiceLocatorScene>() != null))
+            for (var i = 0; i < tmpSceneGameObjects.Count; i++)
             {
+                var go = tmpSceneGameObjects[i];
+
+                if (go.GetComponent<ServiceLocatorScene>() == null) continue;
+
                 if (go.TryGetComponent(out ServiceLocatorScene bootstrapper) && bootstrapper.Container != mb)
                 {
                     bootstrapper.BootstrapOnDemand();
@@ -94,7 +99,15 @@ namespace Universal.Runtime.Utilities.Tools.ServicesLocator
         /// MonoBehaviour in hierarchy, the ServiceLocator for its scene, or the global ServiceLocator.
         /// </summary>
         public static ServiceLocator For(MonoBehaviour mb)
-        => mb.GetComponentInParent<ServiceLocator>().OrNull() ?? ForSceneOf(mb) ?? Global;
+        {
+            var parentLocator = mb.GetComponentInParent<ServiceLocator>().OrNull();
+            if (parentLocator != null) return parentLocator;
+
+            var sceneLocator = ForSceneOf(mb);
+            if (sceneLocator != null) return sceneLocator;
+
+            return Global;
+        }
 
         /// <summary>
         /// Registers a service to the ServiceLocator using the service's type.
@@ -180,12 +193,18 @@ namespace Universal.Runtime.Utilities.Tools.ServicesLocator
                 return false;
             }
 
-            container = transform.parent.OrNull()?.GetComponentInParent<ServiceLocator>().OrNull() ?? ForSceneOf(this);
-           
+            var parentTransform = transform.parent;
+            if (parentTransform != null)
+            {
+                container = parentTransform.GetComponentInParent<ServiceLocator>().OrNull();
+                if (container != null) return true;
+            }
+
+            container = ForSceneOf(this);
             return container != null;
         }
 
-        void OnDestroy() //TODO: Fix 
+        void OnDestroy()
         {
             if (this == global)
                 global = null;

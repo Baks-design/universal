@@ -8,7 +8,19 @@ namespace Universal.Runtime.Utilities.Tools.ServicesLocator
     {
         bool hasBeenBootstrapped;
         ServiceLocator container;
-        internal ServiceLocator Container => container.OrNull() ?? (container = GetComponent<ServiceLocator>());
+        internal ServiceLocator Container
+        {
+            get
+            {
+                var result = container.OrNull();
+                if (result == null)
+                {
+                    container = GetComponent<ServiceLocator>();
+                    result = container;
+                }
+                return result;
+            }
+        }
 
         void Awake() => BootstrapOnDemand();
 

@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
+using Universal.Runtime.Behaviours.Characters;
 using Universal.Runtime.Components.Input;
 using Universal.Runtime.Components.UI;
 using Universal.Runtime.Utilities.Helpers;
 using Universal.Runtime.Utilities.Tools.EventBus;
 using Universal.Runtime.Utilities.Tools.ServicesLocator;
 using Universal.Runtime.Utilities.Tools.StateMachine;
+using UnityUtils;
 
 namespace Universal.Runtime.Systems.StatesManagement
 {
@@ -14,6 +17,7 @@ namespace Universal.Runtime.Systems.StatesManagement
         [NonSerialized] public IInputReaderServices InputServices;
         EventBinding<UIEvent> uiEventBinding;
         bool isPauseState;
+        ICharacterServices characterServices;
 
         void OnEnable()
         {
@@ -25,10 +29,13 @@ namespace Universal.Runtime.Systems.StatesManagement
 
         void HandleUIEvent(UIEvent uIEvent) => isPauseState = uIEvent.IsPaused;
 
-        void Start()
+        IEnumerator Start()
         {
             GetServices();
             SetupStateMachine();
+            yield return WaitFor.EndOfFrame;
+            ServiceLocator.Global.Get(out characterServices);
+            characterServices.AddCharacterToRoster();
         }
 
         void GetServices() => ServiceLocator.Global.Get(out InputServices);

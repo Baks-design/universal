@@ -29,7 +29,7 @@ namespace Universal.Runtime.Behaviours.Characters
             {
                 if (!services.ContainsCharacter(character.Settings))
                 {
-                    services.AddCharacterToRoster(character.Settings);
+                    services.AddCharacterToRoster();
                     RemoveCharacterFromScene(character.gameObject);
                 }
             }

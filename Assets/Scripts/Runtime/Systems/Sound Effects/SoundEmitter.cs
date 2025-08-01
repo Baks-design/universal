@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using KBCore.Refs;
@@ -12,11 +13,16 @@ namespace Universal.Runtime.Systems.SoundEffects
         [SerializeField, Child] AudioSource audioSource;
         Coroutine playingCoroutine;
         ISoundEffectsServices soundEffectsServices;
+        WaitWhile waitWhileAudioPlaying;
 
         public SoundData Data { get; private set; }
         public LinkedListNode<SoundEmitter> Node { get; set; }
 
-        void Start() => ServiceLocator.Global.Get(out soundEffectsServices);
+        void Start()
+        {
+            ServiceLocator.Global.Get(out soundEffectsServices);
+            waitWhileAudioPlaying = new WaitWhile(() => audioSource.isPlaying);
+        }
 
         public void Initialize(SoundData data)
         {
@@ -55,7 +61,7 @@ namespace Universal.Runtime.Systems.SoundEffects
 
         IEnumerator WaitForSoundToEnd()
         {
-            yield return new WaitWhile(() => audioSource.isPlaying); //TODO: Add metodo para nao alocar
+            yield return waitWhileAudioPlaying;
             Stop();
         }
 

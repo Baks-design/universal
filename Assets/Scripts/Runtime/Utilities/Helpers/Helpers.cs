@@ -29,7 +29,7 @@ namespace Universal.Runtime.Utilities.Helpers
             if (distance > threshold)
                 return InverseDecay(current, target, sharpness * 2f, deltaTime);
             else
-                return ExpDecay(current, target, sharpness, deltaTime); 
+                return ExpDecay(current, target, sharpness, deltaTime);
         }
 
         public static Vector2 ExpDecay(Vector2 current, Vector2 target, float deltaTime, float decay = 16f)

@@ -30,7 +30,9 @@ namespace Universal.Runtime.Behaviours.Characters
         public Vector3 LastPosition { get; set; }
         public Quaternion LastRotation { get; set; }
         public bool IsMoving => moveHandler.IsMoving;
+        public bool IsWalking => moveHandler.IsMoving && !IsRunning;
         public bool IsRunning { get; private set; }
+        public bool IsCrouching => crouchHandler.IsCrouching;
         public Vector3 Direction => velocityHandler.FinalMoveDirection;
 
         void Awake()

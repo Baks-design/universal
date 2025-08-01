@@ -14,7 +14,6 @@
         "Universal.Runtime.Systems.EntitiesPersistence",
         "Universal.Runtime.Systems.DamageObjects",
         "Universal.Runtime.Systems.VisualEffects",
-        "Universal.Runtime.Utilities.Updates",
         "Universal.Runtime.Utilities.Helpers",
         "Universal.Runtime.Utilities.Tools.Updates",
         "Universal.Runtime.Utilities.Tools.ServicesLocator",

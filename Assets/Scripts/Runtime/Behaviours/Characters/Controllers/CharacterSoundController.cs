@@ -9,7 +9,7 @@ using Universal.Runtime.Utilities.Tools.ServicesLocator;
 
 namespace Universal.Runtime.Behaviours.Characters
 {
-    public class CharacterSoundController : MonoBehaviour, IUpdatable //TODO: Adjustar footsteps
+    public class CharacterSoundController : MonoBehaviour, IUpdatable
     {
         [SerializeField, Parent] CharacterController controller;
         [SerializeField, Self] Transform tr;
@@ -58,7 +58,7 @@ namespace Universal.Runtime.Behaviours.Characters
             HandleLanding();
         }
 
-        void HandleFootsteps() 
+        void HandleFootsteps()
         {
             if (!movement.IsMoving)
             {
@@ -66,16 +66,23 @@ namespace Universal.Runtime.Behaviours.Characters
                 return;
             }
 
-            var stepInterval = movement.IsRunning ? settings.runStepInterval : settings.walkStepInterval;
-
             if (Time.time >= nextStepTime)
             {
                 var surface = GetCurrentSurface();
                 if (surface != null && surface.footstepSounds.Length > 0)
                     PlayRandomSound(surface.footstepSounds);
 
-                nextStepTime = Time.time + stepInterval;
+                nextStepTime = Time.time + GetSpeedInterval();
             }
+        }
+
+        float GetSpeedInterval()
+        {
+            var stepInterval = 0f;
+            if (movement.IsWalking) stepInterval = settings.walkStepInterval;
+            else if (movement.IsRunning) stepInterval = settings.runStepInterval;
+            else if (movement.IsCrouching) stepInterval = settings.crouchStepInterval;
+            return stepInterval;
         }
 
         void HandleLanding()
